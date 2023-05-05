@@ -5,7 +5,6 @@ from tkinter import filedialog
 from pathlib import Path
 from ftplib import FTP
 from send2trash import send2trash
-
 # Interface
 
 def sort_name_reverse():
