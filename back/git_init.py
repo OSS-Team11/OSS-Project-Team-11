@@ -1,6 +1,5 @@
 import os
 
-def git_init(trace):
-    os.system('cd {0}'.format(trace))
+def git_init():
     result = os.popen('git init').read()
     print(result)
