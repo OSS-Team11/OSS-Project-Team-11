@@ -5,6 +5,10 @@ from tkinter import filedialog
 from pathlib import Path
 from ftplib import FTP
 from send2trash import send2trash
+
+from tkinter import *
+import tkinter.ttk as ttk
+
 # Interface
 
 def sort_name_reverse():
@@ -510,8 +514,47 @@ folder_hidden_icon = tk.PhotoImage(file="data/icon_folder_hidden.png")
 file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
+
+frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
+frame_git.pack(fill = "x", side="top")
+
+
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
+
+def getTextInput():
+    new_name=input.get(1.0, tk.END+"-1c")
+
+def commit_new_window():
+	global new
+	new = Toplevel()
+        
+def mv_new_window():
+    global new_mv
+    new_mv = Toplevel()
+    new_mv.title("mv")
+    input = Entry(new_mv, width=30)
+    input.pack()
+    cnfrm_button = Button(new_mv, text="확인", command=getTextInput)
+    cnfrm_button.pack()
+
+init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
+add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
+restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
+unstage_bttn = tk.Button(frame_git, text="restore --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20)
+rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
+rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13)
+mv_bttn = tk.Button(frame_git, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
+commit_bttn = tk.Button(frame_git, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
+init_bttn.pack(side="left", expand=1)
+add_bttn.pack(side="left", expand=1)
+restore_bttn.pack(side="left", expand=1)
+unstage_bttn.pack(side="left", expand=1)
+rm_bttn.pack(side="left", expand=1)
+rm_cached_bttn.pack(side="left", expand=1)
+mv_bttn.pack(side="left", expand=1)
+commit_bttn.pack(side="left", expand=1)
+
 tk.Button(frame_b, image=up_icon, width=25, height=32, relief="flat", bg="white", fg="black", command=move_up).grid(column=0, row=1)
 tk.Button(frame_b, image=home_icon, width=25, height=32, relief="flat", bg="white", fg="black", command=lambda:update_files(home_path)).grid(column=1, row=1)
 entry = tk.Entry(frame_up, font=("Arial", 12), justify="left", highlightcolor="white", highlightthickness=0, relief="groove", border=2)
@@ -523,7 +566,7 @@ label.pack(side="bottom",fill="both")
 tree_frame = tk.Frame(window, border=1, relief="flat", bg="white")
 tree_frame.pack(expand=1, fill="both")
 tree = ttk.Treeview(tree_frame, columns=(["#1"]), selectmode="extended", show="tree headings", style="mystyle.Treeview")
-tree.heading("#0", text="   Name ↑", anchor="w", command=sort_name_reverse)
+tree.heading("#0", text="   Name ↑", anchor="w", command=sort_name_reverse) 
 tree.heading("#1", text="Size", anchor="w", command=sort_size_reverse)
 tree.column("#0", anchor="w")
 tree.column("#1", anchor="e", stretch=False, width=120)
