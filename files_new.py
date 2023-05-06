@@ -5,6 +5,10 @@ from tkinter import filedialog
 from pathlib import Path
 from ftplib import FTP
 from send2trash import send2trash
+
+from tkinter import *
+import tkinter.ttk as ttk
+
 # Interface
 
 def sort_name_reverse():
@@ -512,6 +516,23 @@ home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
+
+frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
+frame_git.pack(side="top")
+
+def new_window():
+	global new
+	new = Toplevel()
+
+add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black")
+restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black")
+unstage_bttn = tk.Button(frame_git, text="unstage", font=("Arial", 12), relief="flat", bg="white", fg="black")
+commit_bttn = tk.Button(frame_git, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", command=new_window)
+add_bttn.grid(column=0, row=0)
+restore_bttn.grid(column=1, row=0)
+unstage_bttn.grid(column=2, row=0)
+commit_bttn.grid(column=3, row=0)
+
 tk.Button(frame_b, image=up_icon, width=25, height=32, relief="flat", bg="white", fg="black", command=move_up).grid(column=0, row=1)
 tk.Button(frame_b, image=home_icon, width=25, height=32, relief="flat", bg="white", fg="black", command=lambda:update_files(home_path)).grid(column=1, row=1)
 entry = tk.Entry(frame_up, font=("Arial", 12), justify="left", highlightcolor="white", highlightthickness=0, relief="groove", border=2)
