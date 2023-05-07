@@ -260,7 +260,7 @@ def rename():
 
 
 def update_files(orig_dirname: str):
-    #cd_dir(orig_dirname)
+    cd_dir(orig_dirname)
     def convert_size(var) -> tuple:
         if type(var) == type(1):
             byte_size = var
