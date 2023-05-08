@@ -9,7 +9,11 @@ from send2trash import send2trash
 from tkinter import *
 import tkinter.ttk as ttk
 
-from back import basic_instruction, git_add, git_init
+
+from back.basic_instruction import *
+from back.git_init import *
+from back.git_add import *
+from back.git_rm import *
 # Interface
 
 def sort_name_reverse():
@@ -41,7 +45,7 @@ def sort_size_reverse():
 
 
 def move_up():
-    basic_instruction.cd_move_up()
+    
     global last_lower_folder
     up_path = entry.get().rsplit("/" if ftp != None else slash, 1)
     last_lower_folder = up_path[1]
@@ -260,7 +264,7 @@ def rename():
 
 
 def update_files(orig_dirname: str):
-    basic_instruction.cd_dir(orig_dirname)
+    cd_dir(orig_dirname)
     def convert_size(var) -> tuple:
         if type(var) == type(1):
             byte_size = var
@@ -541,11 +545,11 @@ def mv_new_window():
     cnfrm_button = Button(new_mv, text="확인", command=getTextInput)
     cnfrm_button.pack()
 
-init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init.git_init)
-add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
+init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init)
+add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_add)
 restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
 unstage_bttn = tk.Button(frame_git, text="restore --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20)
-rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
+rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8,command=git_rm)
 rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13)
 mv_bttn = tk.Button(frame_git, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
 commit_bttn = tk.Button(frame_git, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
