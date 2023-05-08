@@ -1,5 +1,6 @@
 import os
 
+#0: staged 1: modified 2: untracked
 def git_status():
     i = 0
     result = os.popen('git status').read()
