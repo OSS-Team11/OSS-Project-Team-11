@@ -12,7 +12,7 @@ For Windows 10, available in "Releases" (download "files.zip", unpack and run fi
 - install: Python (v3.9 or higher)
 - depending on the version install: Tkinter or Kivy (+KivyMD) or PySimpleGUI
 - install Send2Trash (needed for Tkinter, PySimpleGUI versions)
-- download or clone this repo and in the project folder run via command line "python files_new.py" (files_cl.py, files_kivy.py, files_old.py)
+- download or clone this repo and in the project folder run via command line "python files_new.py" 
 
 
 # Features
