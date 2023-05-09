@@ -526,9 +526,49 @@ frame_git.pack(fill = "x", side="top")
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
+#add
+def add_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_add(e_path[1])
+
+#restore
+def restore_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_restore(e_path[1])
+
+
+#unstage
+def unstage_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_unstage(e_path[1])
+
+
+#remove
+def rm_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_rm(e_path[1])
+
+#rm_cached
+def rm_cached_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_rm_cached(e_path[1])
+
+
 # mv 
-def get_new_name():
+def mv_bttn_clicked():
     new_name=input.get(1.0, tk.END+"-1c") # 입력받은 새 이름 new_name에 저장
+     #git_mv(e_path[1], new_name)
+    print(new_name)
 
 def mv_new_window():
     global mv_new_win
@@ -536,11 +576,11 @@ def mv_new_window():
     mv_new_win.title("mv")
     input = Entry(mv_new_win, width=30)
     input.pack()
-    cnfrm_button = Button(mv_new_win, text="확인", relief="flat", bg="white", command=get_new_name)
+    cnfrm_button = Button(mv_new_win, text="move", relief="flat", bg="white", command=mv_bttn_clicked)
     cnfrm_button.pack()
 
 # commit
-def get_commit_message():
+def commit_bttn_clicked():
     commit_message=input.get(1.0, tk.END+"-1c") # 입력받은 commit message commit_message에 저장
 
 def commit_new_window():
@@ -562,7 +602,7 @@ def commit_new_window():
     label.pack()
     input = tk.Entry(frame_commit_message, bg="white", width=30)
     input.pack()
-    cnfrm_button = tk.Button(frame_commit_message, text="commit", bg="white", border=2, command=get_commit_message)
+    cnfrm_button = tk.Button(frame_commit_message, text="commit", bg="white", border=2, command=commit_bttn_clicked)
     cnfrm_button.pack()
 
 # git 관련 버튼
