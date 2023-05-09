@@ -11,6 +11,8 @@ import tkinter.ttk as ttk
 
 from back.basic_instruction import *
 from back.git_init import *
+
+
 # Interface
 
 def sort_name_reverse():
@@ -524,11 +526,22 @@ frame_git.pack(fill = "x", side="top")
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
-def get_commit_message():
-    commit_message=input.get(1.0, tk.END+"-1c") # 입력받은 commit message commit_message에 저장
-
+# mv 
 def get_new_name():
     new_name=input.get(1.0, tk.END+"-1c") # 입력받은 새 이름 new_name에 저장
+
+def mv_new_window():
+    global mv_new_win
+    mv_new_win = Toplevel()
+    mv_new_win.title("mv")
+    input = Entry(mv_new_win, width=30)
+    input.pack()
+    cnfrm_button = Button(mv_new_win, text="확인", relief="flat", bg="white", command=get_new_name)
+    cnfrm_button.pack()
+
+# commit
+def get_commit_message():
+    commit_message=input.get(1.0, tk.END+"-1c") # 입력받은 commit message commit_message에 저장
 
 def commit_new_window():
     global cmmt_new_win
@@ -551,19 +564,11 @@ def commit_new_window():
     input.pack()
     cnfrm_button = tk.Button(frame_commit_message, text="commit", bg="white", border=2, command=get_commit_message)
     cnfrm_button.pack()
-        
-def mv_new_window():
-    global mv_new_win
-    mv_new_win = Toplevel()
-    mv_new_win.title("mv")
-    input = Entry(mv_new_win, width=30)
-    input.pack()
-    cnfrm_button = Button(mv_new_win, text="확인", relief="flat", bg="white", command=get_new_name)
-    cnfrm_button.pack()
 
+# git 관련 버튼
 init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init)
-add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
-restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
+add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
+restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
 unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20)
 rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
 rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13)
