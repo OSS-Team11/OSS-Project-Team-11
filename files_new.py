@@ -534,13 +534,22 @@ def commit_new_window():
     global cmmt_new_win
     cmmt_new_win = Toplevel()
     cmmt_new_win.title("commit")
-    #frame_added_files = tk.Frame(cmmt_new_win, border=1, bg="white")
-    #frame_added_files.pack(fill="x", side="top")
-    label=tk.Label(cmmt_new_win, text="commit message를 입력하세요", bg="white")
+
+    frame_added_files = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
+    frame_added_files.pack(side="top", fill="both", expand=True)
+
+    frame_commit_message = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
+    frame_commit_message.pack(side="bottom", fill="both", expand=True)
+
+    add_files_text = Text(frame_added_files, bg="white")
+    add_files_text.insert(1.0, "<add 상태 파일 목록>")
+    add_files_text.pack()
+    
+    label=tk.Label(frame_commit_message, text="commit message를 입력하세요", bg="white")
     label.pack()
-    input = tk.Entry(cmmt_new_win, bg="white", width=30)
+    input = tk.Entry(frame_commit_message, bg="white", width=30)
     input.pack()
-    cnfrm_button = tk.Button(cmmt_new_win, text="commit", relief="flat", bg="white", command=get_commit_message)
+    cnfrm_button = tk.Button(frame_commit_message, text="commit", bg="white", border=2, command=get_commit_message)
     cnfrm_button.pack()
         
 def mv_new_window():
