@@ -14,6 +14,9 @@ from back.basic_instruction import *
 from back.git_init import *
 from back.git_add import *
 from back.git_rm import *
+from back.git_rm_cached import *
+from back.git_restore import *
+from back.git_restore_staged import *
 # Interface
 
 def sort_name_reverse():
@@ -547,10 +550,10 @@ def mv_new_window():
 
 init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init)
 add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_add)
-restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
-unstage_bttn = tk.Button(frame_git, text="restore --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20)
+restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_restore)
+unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=git_restore_staged)
 rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8,command=git_rm)
-rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13)
+rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13, command=git_rm_cached)
 mv_bttn = tk.Button(frame_git, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
 commit_bttn = tk.Button(frame_git, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
 init_bttn.pack(side="left", expand=1)
