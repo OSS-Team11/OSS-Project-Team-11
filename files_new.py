@@ -8,6 +8,7 @@ from send2trash import send2trash
 
 from tkinter import *
 import tkinter.ttk as ttk
+from functools import partial
 
 from back.basic_instruction import *
 from back.git_init import *
@@ -563,12 +564,13 @@ def rm_cached_bttn_clicked():
         e_path = r_path.rsplit(slash, 1)
      #git_rm_cached(e_path[1])
 
-
 # mv 
-def mv_bttn_clicked():
-    new_name=input.get(1.0, tk.END+"-1c") # 입력받은 새 이름 new_name에 저장
+def mv_bttn_clicked(input):
+    new_name=input.get() # 입력받은 새 이름 new_name에 저장
+    for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
      #git_mv(e_path[1], new_name)
-    print(new_name)
 
 def mv_new_window():
     global mv_new_win
@@ -576,12 +578,12 @@ def mv_new_window():
     mv_new_win.title("mv")
     input = Entry(mv_new_win, width=30)
     input.pack()
-    cnfrm_button = Button(mv_new_win, text="move", relief="flat", bg="white", command=mv_bttn_clicked)
+    cnfrm_button = Button(mv_new_win, text="move", relief="flat", bg="white", command=partial(mv_bttn_clicked, input))
     cnfrm_button.pack()
 
 # commit
-def commit_bttn_clicked():
-    commit_message=input.get(1.0, tk.END+"-1c") # 입력받은 commit message commit_message에 저장
+def commit_bttn_clicked(input):
+    commit_message=input.get() # 입력받은 commit message commit_message에 저장
 
 def commit_new_window():
     global cmmt_new_win
@@ -602,8 +604,9 @@ def commit_new_window():
     label.pack()
     input = tk.Entry(frame_commit_message, bg="white", width=30)
     input.pack()
-    cnfrm_button = tk.Button(frame_commit_message, text="commit", bg="white", border=2, command=commit_bttn_clicked)
+    cnfrm_button = tk.Button(frame_commit_message, text="commit", bg="white", border=2, command=partial(commit_bttn_clicked, input))
     cnfrm_button.pack()
+
 
 # git 관련 버튼
 init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init)
