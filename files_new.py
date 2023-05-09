@@ -521,24 +521,35 @@ up_icon = tk.PhotoImage(file="data/icon_up.png")
 frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_git.pack(fill = "x", side="top")
 
-
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
-def getTextInput():
-    new_name=input.get(1.0, tk.END+"-1c")
+def get_commit_message():
+    commit_message=input.get(1.0, tk.END+"-1c") # 입력받은 commit message commit_message에 저장
+
+def get_new_name():
+    new_name=input.get(1.0, tk.END+"-1c") # 입력받은 새 이름 new_name에 저장
 
 def commit_new_window():
-	global new
-	new = Toplevel()
+    global cmmt_new_win
+    cmmt_new_win = Toplevel()
+    cmmt_new_win.title("commit")
+    #frame_added_files = tk.Frame(cmmt_new_win, border=1, bg="white")
+    #frame_added_files.pack(fill="x", side="top")
+    label=tk.Label(cmmt_new_win, text="commit message를 입력하세요", bg="white")
+    label.pack()
+    input = tk.Entry(cmmt_new_win, bg="white", width=30)
+    input.pack()
+    cnfrm_button = tk.Button(cmmt_new_win, text="commit", relief="flat", bg="white", command=get_commit_message)
+    cnfrm_button.pack()
         
 def mv_new_window():
-    global new_mv
-    new_mv = Toplevel()
-    new_mv.title("mv")
-    input = Entry(new_mv, width=30)
+    global mv_new_win
+    mv_new_win = Toplevel()
+    mv_new_win.title("mv")
+    input = Entry(mv_new_win, width=30)
     input.pack()
-    cnfrm_button = Button(new_mv, text="확인", command=getTextInput)
+    cnfrm_button = Button(mv_new_win, text="확인", relief="flat", bg="white", command=get_new_name)
     cnfrm_button.pack()
 
 init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init)
