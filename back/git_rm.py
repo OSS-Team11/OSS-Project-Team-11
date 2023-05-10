@@ -25,10 +25,10 @@ import os
 
 # os.remove() >> 파일을 삭제하기 위해 사용 (경로를 써줌)
 
-path = './dir/sample.txt'
-os.remove(path)
-print(os.path.exists(path))
+# path = './dir/sample.txt'
+# os.remove(path)
+# print(os.path.exists(path))
 
 
 def git_rm(file_name):
-    os.system('git rr {0}'.format(file_name))
+    os.system('git rm {0}'.format(file_name))
