@@ -45,4 +45,4 @@ def git_status():
                 break
             result_dict['2'].append(result_lst[i])
             i += 1
-    print(result_dict)
+    return result_dict
