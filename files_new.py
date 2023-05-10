@@ -8,10 +8,11 @@ from send2trash import send2trash
 
 from tkinter import *
 import tkinter.ttk as ttk
-
+from functools import partial
 
 from back.basic_instruction import *
 from back.git_init import *
+
 from back.git_add import *
 from back.git_rm import *
 from back.git_rm_cached import *
@@ -48,7 +49,6 @@ def sort_size_reverse():
 
 
 def move_up():
-    
     global last_lower_folder
     up_path = entry.get().rsplit("/" if ftp != None else slash, 1)
     last_lower_folder = up_path[1]
@@ -528,32 +528,98 @@ up_icon = tk.PhotoImage(file="data/icon_up.png")
 frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_git.pack(fill = "x", side="top")
 
-
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
-def getTextInput():
-    new_name=input.get(1.0, tk.END+"-1c")
+#add
+def add_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_add(e_path[1])
 
-def commit_new_window():
-	global new
-	new = Toplevel()
-        
+#restore
+def restore_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_restore(e_path[1])
+
+
+#unstage
+def unstage_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_unstage(e_path[1])
+
+
+#remove
+def rm_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_rm(e_path[1])
+
+#rm_cached
+def rm_cached_bttn_clicked():
+     for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_rm_cached(e_path[1])
+
+# mv 
+def mv_bttn_clicked(input):
+    new_name=input.get() # 입력받은 새 이름 new_name에 저장
+    for i in tree.selection():
+        r_path = tree.item(i)["values"][1]
+        e_path = r_path.rsplit(slash, 1)
+     #git_mv(e_path[1], new_name)
+
 def mv_new_window():
-    global new_mv
-    new_mv = Toplevel()
-    new_mv.title("mv")
-    input = Entry(new_mv, width=30)
+    global mv_new_win
+    mv_new_win = Toplevel()
+    mv_new_win.title("mv")
+    input = Entry(mv_new_win, width=30)
     input.pack()
-    cnfrm_button = Button(new_mv, text="확인", command=getTextInput)
+    cnfrm_button = Button(mv_new_win, text="move", relief="flat", bg="white", command=partial(mv_bttn_clicked, input))
     cnfrm_button.pack()
 
+
+# commit
+def commit_bttn_clicked(input):
+    commit_message=input.get() # 입력받은 commit message commit_message에 저장
+
+def commit_new_window():
+    global cmmt_new_win
+    cmmt_new_win = Toplevel()
+    cmmt_new_win.title("commit")
+
+    frame_added_files = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
+    frame_added_files.pack(side="top", fill="both", expand=True)
+
+    frame_commit_message = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
+    frame_commit_message.pack(side="bottom", fill="both", expand=True)
+
+    add_files_text = Text(frame_added_files, bg="white")
+    add_files_text.insert(1.0, "<add 상태 파일 목록>")
+    add_files_text.pack()
+    
+    label=tk.Label(frame_commit_message, text="commit message를 입력하세요", bg="white")
+    label.pack()
+    input = tk.Entry(frame_commit_message, bg="white", width=30)
+    input.pack()
+    cnfrm_button = tk.Button(frame_commit_message, text="commit", bg="white", border=2, command=partial(commit_bttn_clicked, input))
+    cnfrm_button.pack()
+
+
+# git 관련 버튼
 init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init)
-add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_add)
-restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_restore)
-unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=git_restore_staged)
-rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8,command=git_rm)
-rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13, command=git_rm_cached)
+add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
+restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
+unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20)
+rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
+rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13)
 mv_bttn = tk.Button(frame_git, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
 commit_bttn = tk.Button(frame_git, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
 init_bttn.pack(side="left", expand=1)
