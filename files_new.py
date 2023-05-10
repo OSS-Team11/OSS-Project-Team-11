@@ -13,7 +13,11 @@ from functools import partial
 from back.basic_instruction import *
 from back.git_init import *
 
-
+from back.git_add import *
+from back.git_rm import *
+from back.git_rm_cached import *
+from back.git_restore import *
+from back.git_restore_staged import *
 # Interface
 
 def sort_name_reverse():
@@ -580,6 +584,7 @@ def mv_new_window():
     input.pack()
     cnfrm_button = Button(mv_new_win, text="move", relief="flat", bg="white", command=partial(mv_bttn_clicked, input))
     cnfrm_button.pack()
+
 
 # commit
 def commit_bttn_clicked(input):
