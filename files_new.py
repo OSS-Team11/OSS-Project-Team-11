@@ -541,13 +541,12 @@ frame_b.pack(side="left")
 
 
 def status_icon_append():
-     status = git_status()
-     for f in os.listdir(entry.get()):
-     for i in range(len(status)):
-        for j in range(len(status[str(i)])):
-            
-                if f.lower() == status[str(i)][j].lower():
-                    status.value
+    status = git_status()
+    for f in os.listdir(entry.get()):
+        for i in range(len(status)):
+            for j in range(len(status[str(i)])):
+                    if f.lower() == status[str(i)][j].lower():
+                        status.value
 
 
 #add
