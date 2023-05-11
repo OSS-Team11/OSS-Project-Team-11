@@ -1,56 +1,45 @@
-import os
+import subprocess
 
-#0: staged 1: modified 2: untracked
 def git_status():
-    i = 0
-    result = os.popen('git status').read()
-
-    result_lst = []
-    result_dict = {'0': [], '1':[], '2':[]}
-    sentence = ""
-
-    for word in result:
-        if word == '\n':
-            result_lst.append(sentence)
-            sentence = ""
-            continue
-        if word == '\t':
-            continue
-        sentence += word
-
-    if "On branch" in result_lst[i]:
-        i += 2
+    result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+    output = result.stdout.strip().split("\n")
+    files = {"untracked": [], "modified": [], "staged": [], "committed": []}
+    for line in output:
+        status = line[:2]
+        filename = line[3:]
+        if status == "??":
+            files["untracked"].append(filename)
+        elif status == " M":
+            files["modified"].append(filename)
+        elif status == "M " or status == "A " or status == "MM":
+            files["staged"].append(filename)
+        elif status == "R ":
+            files["staged"].append(line.split(' -> ')[1])
     
-    if "No commits yet" in result_lst[i]:
-        i += 2
+    # Get list of files without changes since last commit
+    result = subprocess.run(["git", "ls-files"], capture_output=True, text=True)
+    all_files = set(result.stdout.strip().split("\n"))
+    result = subprocess.run(["git", "diff", "--cached", "--name-only"], capture_output=True, text=True)
+    staged_files = set(result.stdout.strip().split("\n"))
+    committed_files = all_files - staged_files
+    for filename in committed_files:
+        if filename not in files["staged"] and filename not in files["modified"]:
+            files["committed"].append(filename)
 
-    if "Changes to be committed:" in result_lst:
-        i += 2
-        while True:
-            if result_lst[i] == '':
-                i += 1
-                break
-            word_lst = result_lst[i].split(' ')
-            result_dict['0'].append(word_lst[4]) 
-            i += 1
-        
-    if "Changes not staged for commit:" in result_lst:
-        i += 3
-        while True:
-            if result_lst[i] == '':
-                i += 1
-                break
-            word_lst = result_lst[i].split(' ')
-            result_dict['1'].append(word_lst[3])
-            i += 1
-    
-    if "Untracked files:" in result_lst:
-        i += 2
-        while True:
-            if result_lst[i] == '':
-                break
-            result_dict['2'].append(result_lst[i])
-            i += 1
-    return result_dict
+    return files
 
+# 예시 출력
+files = git_status()
+print("Untracked files:")
+for filename in files["untracked"]:
+    print(f"- {filename}")
+print("Modified files:")
+for filename in files["modified"]:
+    print(f"- {filename}")
+print("Staged files:")
+for filename in files["staged"]:
+    print(f"- {filename}")
+print("Committed files:")
+for filename in files["committed"]:
+    print(f"- {filename}")
 
