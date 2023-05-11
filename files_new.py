@@ -540,13 +540,19 @@ frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
 
-def status_icon_append():
-    status = git_status()
-    for f in os.listdir(entry.get()):
+def status_icon():
+     status = git_status()
+
+     for f in os.listdir(entry.get()):
         for i in range(len(status)):
             for j in range(len(status[str(i)])):
-                    if f.lower() == status[str(i)][j].lower():
-                        status.value
+                if f.lower() == status[str(i)][j].lower():
+                    if i == 0:
+                        icon = staged_icon
+                    if i == 1:
+                        icon = modified_icon
+                    if i == 2:
+                        icon = untracked_icon
 
 
 #add
@@ -578,6 +584,7 @@ def rm_bttn_clicked():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
      git_rm(e_path[1])
+     update_files(entry.get())
 
 #rm_cached
 def rm_cached_bttn_clicked():
@@ -637,6 +644,7 @@ def commit_new_window():
     status = git_status()
     for i in range(len(status['0'])):
         treeview.insert("", tk.END, text=status['0'][i], values="", open=False, image=file_icon)
+        #treeview.insert("", tk.END, image = staged_icon)
 
     # commit message 입력 영역
     frame_commit_message = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
