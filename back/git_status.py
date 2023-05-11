@@ -18,8 +18,14 @@ def git_status():
             continue
         sentence += word
 
+    if "On branch" in result_lst[i]:
+        i += 2
+    
+    if "No commits yet" in result_lst[i]:
+        i += 2
+
     if "Changes to be committed:" in result_lst:
-        i += 3
+        i += 2
         while True:
             if result_lst[i] == '':
                 i += 1
@@ -46,3 +52,5 @@ def git_status():
             result_dict['2'].append(result_lst[i])
             i += 1
     return result_dict
+
+
