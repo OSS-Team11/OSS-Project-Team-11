@@ -31,4 +31,4 @@ import os
 
 
 def git_rm(file_name):
-    os.system('git rm {0}'.format(file_name))
+    os.system('git rm -f "{0}"'.format(file_name))
