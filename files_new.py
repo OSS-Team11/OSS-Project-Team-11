@@ -13,11 +13,15 @@ from functools import partial
 from back.basic_instruction import *
 from back.git_init import *
 
+from back.git_status import *
 from back.git_add import *
 from back.git_rm import *
 from back.git_rm_cached import *
 from back.git_restore import *
 from back.git_restore_staged import *
+from back.git_mv import *
+from back.git_commit import *
+
 # Interface
 
 def sort_name_reverse():
@@ -525,25 +529,40 @@ file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
+staged_icon = tk.PhotoImage(file="data/staged.png")
+modified_icon = tk.PhotoImage(file="data/modified.png")
+untracked_icon = tk.PhotoImage(file="data/untracked.png")
+
 frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_git.pack(fill = "x", side="top")
 
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
+
+def status_icon_append():
+     status = git_status()
+     for f in os.listdir(entry.get()):
+     for i in range(len(status)):
+        for j in range(len(status[str(i)])):
+            
+                if f.lower() == status[str(i)][j].lower():
+                    status.value
+
+
 #add
 def add_bttn_clicked():
      for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     #git_add(e_path[1])
+     git_add(e_path[1])
 
 #restore
 def restore_bttn_clicked():
      for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     #git_restore(e_path[1])
+     git_restore(e_path[1])
 
 
 #unstage
@@ -551,22 +570,22 @@ def unstage_bttn_clicked():
      for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     #git_unstage(e_path[1])
-
+     git_restore_staged(e_path[1])
+     print(e_path[1])
 
 #remove
 def rm_bttn_clicked():
      for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     #git_rm(e_path[1])
+     git_rm(e_path[1])
 
 #rm_cached
 def rm_cached_bttn_clicked():
      for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     #git_rm_cached(e_path[1])
+     git_rm_cached(e_path[1])
 
 # mv 
 def mv_bttn_clicked(input):
@@ -574,12 +593,15 @@ def mv_bttn_clicked(input):
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     #git_mv(e_path[1], new_name)
+    git_mv(e_path[1], new_name)
+    update_files(entry.get())
 
 def mv_new_window():
     global mv_new_win
     mv_new_win = Toplevel()
     mv_new_win.title("mv")
+    label=tk.Label(mv_new_win, text="새 파일명을 입력하세요", bg="white")
+    label.pack()
     input = Entry(mv_new_win, width=30)
     input.pack()
     cnfrm_button = Button(mv_new_win, text="move", relief="flat", bg="white", command=partial(mv_bttn_clicked, input))
@@ -589,27 +611,43 @@ def mv_new_window():
 # commit
 def commit_bttn_clicked(input):
     commit_message=input.get() # 입력받은 commit message commit_message에 저장
+    git_commit(commit_message)
 
 def commit_new_window():
     global cmmt_new_win
     cmmt_new_win = Toplevel()
     cmmt_new_win.title("commit")
 
+    # staged 파일 목록 영역
     frame_added_files = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
     frame_added_files.pack(side="top", fill="both", expand=True)
+    
+    tree_frame = tk.Frame(frame_added_files, border=1, relief="flat", bg="white")
+    tree_frame.pack(expand=1, fill="both")
+    treeview = ttk.Treeview(tree_frame, selectmode="extended", show="tree headings", style="mystyle.Treeview")
+    treeview.pack(side="left", expand=1, fill="both")
+    treeview.heading("#0", text="added files")
+    style = ttk.Style()
+    style.configure("Treeview", rowheight=30, font=("Arial", 12))
+    style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
+    style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
+    scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=treeview.yview)
+    treeview.configure(yscroll=scrollbar.set)
+    scrollbar.pack(side="right",fill="y")
 
+    status = git_status()
+    for i in range(len(status['0'])):
+        treeview.insert("", tk.END, text=status['0'][i], values="", open=False, image=file_icon)
+
+    # commit message 입력 영역
     frame_commit_message = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
     frame_commit_message.pack(side="bottom", fill="both", expand=True)
-
-    add_files_text = Text(frame_added_files, bg="white")
-    add_files_text.insert(1.0, "<add 상태 파일 목록>")
-    add_files_text.pack()
-    
+     
     label=tk.Label(frame_commit_message, text="commit message를 입력하세요", bg="white")
     label.pack()
-    input = tk.Entry(frame_commit_message, bg="white", width=30)
+    input = tk.Entry(frame_commit_message, bg="white", width=50)
     input.pack()
-    cnfrm_button = tk.Button(frame_commit_message, text="commit", bg="white", border=2, command=partial(commit_bttn_clicked, input))
+    cnfrm_button = tk.Button(frame_commit_message, text="commit", relief="groove", bg="white", border=1, command=partial(commit_bttn_clicked, input))
     cnfrm_button.pack()
 
 
@@ -617,9 +655,9 @@ def commit_new_window():
 init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init)
 add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
 restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
-unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20)
-rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8)
-rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13)
+unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
+rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=rm_bttn_clicked)
+rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13, command=rm_cached_bttn_clicked)
 mv_bttn = tk.Button(frame_git, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
 commit_bttn = tk.Button(frame_git, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
 init_bttn.pack(side="left", expand=1)
