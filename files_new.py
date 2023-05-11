@@ -557,41 +557,41 @@ def status_icon():
 
 #add
 def add_bttn_clicked():
-     for i in tree.selection():
+    for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     git_add(e_path[1])
+    git_add(e_path[1])
 
 #restore
 def restore_bttn_clicked():
-     for i in tree.selection():
+    for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     git_restore(e_path[1])
+    git_restore(e_path[1])
 
 
 #unstage
 def unstage_bttn_clicked():
-     for i in tree.selection():
+    for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     git_restore_staged(e_path[1])
-     print(e_path[1])
+    git_restore_staged(e_path[1])
+    print(e_path[1])
 
 #remove
 def rm_bttn_clicked():
-     for i in tree.selection():
+    for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     git_rm(e_path[1])
-     update_files(entry.get())
+    git_rm(e_path[1])
+    update_files(entry.get())
 
 #rm_cached
 def rm_cached_bttn_clicked():
-     for i in tree.selection():
+    for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-     git_rm_cached(e_path[1])
+    git_rm_cached(e_path[1])
 
 # mv 
 def mv_bttn_clicked(input):
