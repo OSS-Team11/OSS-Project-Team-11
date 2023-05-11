@@ -599,8 +599,8 @@ def mv_bttn_clicked(input):
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    git_mv(e_path[1], new_name)
-    update_files(entry.get())
+    if(git_mv(e_path[1], new_name)):
+        update_files(entry.get())
 
 def mv_new_window():
     global mv_new_win

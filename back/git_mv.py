@@ -1,5 +1,7 @@
-import os
-
+import subprocess
 def git_mv(old_name, new_name):
-    result = os.popen('git mv {0} {1}'.format(old_name, new_name))
-    print(result)
+    try:
+        subprocess.check_call(["git", "mv", old_name, new_name])
+        return True
+    except subprocess.CalledProcessError:
+        return False
