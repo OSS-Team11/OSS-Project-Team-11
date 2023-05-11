@@ -529,7 +529,7 @@ file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
-staged_icon = tk.PhotoImage(file="data/stage.png")
+staged_icon = tk.PhotoImage(file="data/staged.png")
 modified_icon = tk.PhotoImage(file="data/modified.png")
 untracked_icon = tk.PhotoImage(file="data/untracked.png")
 
@@ -540,16 +540,14 @@ frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
 
-# def status_icon():
-#      for i in tree.selection():
-#         r_path = tree.item(i)["values"][1]
-#         e_path = r_path.rsplit(slash, 1)
-
-#      for f in os.listdir(entry.get()):
-#         if f.lower() == status.lower() and status.lower() != e_path[1].lower():
-#             info_text = "Name is taken"
-
-# status.value
+def status_icon_append():
+     status = git_status()
+     for f in os.listdir(entry.get()):
+     for i in range(len(status)):
+        for j in range(len(status[str(i)])):
+            
+                if f.lower() == status[str(i)][j].lower():
+                    status.value
 
 
 #add
@@ -602,6 +600,8 @@ def mv_new_window():
     global mv_new_win
     mv_new_win = Toplevel()
     mv_new_win.title("mv")
+    label=tk.Label(mv_new_win, text="새 파일명을 입력하세요", bg="white")
+    label.pack()
     input = Entry(mv_new_win, width=30)
     input.pack()
     cnfrm_button = Button(mv_new_win, text="move", relief="flat", bg="white", command=partial(mv_bttn_clicked, input))
