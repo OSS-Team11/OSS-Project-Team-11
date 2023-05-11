@@ -359,7 +359,7 @@ def update_files(orig_dirname: str):
                         else:
                             if not f.name.startswith("."):
                                 dirs_list.append([f.name, "dir", f.path, folder_icon])
-                    else:
+                    else: 
                         if sys.platform == "win32":
                             if bool(f_stat.st_file_attributes & stat.FILE_ATTRIBUTE_HIDDEN):
                                 dirs_list.append([f.name, "dir", f.path, folder_hidden_icon])
@@ -437,8 +437,30 @@ def update_files(orig_dirname: str):
         for i in dirs_list:
             tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
             count += 1
-        for i in files_list:
-            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
+
+        try:
+            status = git_status()
+        except IndexError:
+            ignore = True
+        print(status)
+        
+        for i in files_list:                    
+            inserted = False
+            for j in range(len(status)):
+                for k in range(len(status[str(j)])):
+                    if i[0] == status[str(j)][k]:
+                        if j == 0:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
+                            inserted = True
+                        elif j == 1:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_icon)
+                            inserted = True
+                        elif j == 2:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
+                            inserted = True
+
+            if inserted == False:
+                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
             count += 1
         #
         if ftp == None:
@@ -576,7 +598,6 @@ def unstage_bttn_clicked():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
     git_restore_staged(e_path[1])
-    print(e_path[1])
 
 #remove
 def rm_bttn_clicked():
