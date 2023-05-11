@@ -13,6 +13,7 @@ from functools import partial
 from back.basic_instruction import *
 from back.git_init import *
 
+from back.git_status import *
 from back.git_add import *
 from back.git_rm import *
 from back.git_rm_cached import *
@@ -528,11 +529,28 @@ file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
+staged_icon = tk.PhotoImage(file="data/stage.png")
+modified_icon = tk.PhotoImage(file="data/modified.png")
+untracked_icon = tk.PhotoImage(file="data/untracked.png")
+
 frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_git.pack(fill = "x", side="top")
 
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
+
+
+# def status_icon():
+#      for i in tree.selection():
+#         r_path = tree.item(i)["values"][1]
+#         e_path = r_path.rsplit(slash, 1)
+
+#      for f in os.listdir(entry.get()):
+#         if f.lower() == status.lower() and status.lower() != e_path[1].lower():
+#             info_text = "Name is taken"
+
+# status.value
+
 
 #add
 def add_bttn_clicked():
@@ -600,21 +618,36 @@ def commit_new_window():
     cmmt_new_win = Toplevel()
     cmmt_new_win.title("commit")
 
+    # staged 파일 목록 영역
     frame_added_files = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
     frame_added_files.pack(side="top", fill="both", expand=True)
+    
+    tree_frame = tk.Frame(frame_added_files, border=1, relief="flat", bg="white")
+    tree_frame.pack(expand=1, fill="both")
+    treeview = ttk.Treeview(tree_frame, selectmode="extended", show="tree headings", style="mystyle.Treeview")
+    treeview.pack(side="left", expand=1, fill="both")
+    treeview.heading("#0", text="added files")
+    style = ttk.Style()
+    style.configure("Treeview", rowheight=30, font=("Arial", 12))
+    style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
+    style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
+    scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=treeview.yview)
+    treeview.configure(yscroll=scrollbar.set)
+    scrollbar.pack(side="right",fill="y")
 
+    status = git_status()
+    for i in range(len(status['0'])):
+        treeview.insert("", tk.END, text=status['0'][i], values="", open=False, image=file_icon)
+
+    # commit message 입력 영역
     frame_commit_message = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
     frame_commit_message.pack(side="bottom", fill="both", expand=True)
-
-    add_files_text = Text(frame_added_files, bg="white")
-    add_files_text.insert(1.0, "<add 상태 파일 목록>")
-    add_files_text.pack()
-    
+     
     label=tk.Label(frame_commit_message, text="commit message를 입력하세요", bg="white")
     label.pack()
     input = tk.Entry(frame_commit_message, bg="white", width=50)
     input.pack()
-    cnfrm_button = tk.Button(frame_commit_message, text="commit", bg="white", border=2, command=partial(commit_bttn_clicked, input))
+    cnfrm_button = tk.Button(frame_commit_message, text="commit", relief="groove", bg="white", border=1, command=partial(commit_bttn_clicked, input))
     cnfrm_button.pack()
 
 
