@@ -4,7 +4,7 @@ def git_restore_staged(file_path):
     try:
         # 파일의 staged 상태를 이전 커밋 버전으로 복원합니다.
         subprocess.run(['git', 'restore', '--staged', file_path], check=True)
-        return True, None
+        return True, 'Success'
     except subprocess.CalledProcessError as e:
         # 파일이 Git 저장소에 커밋되어 있지 않은 경우
         if e.returncode == 128:
