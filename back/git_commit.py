@@ -1,5 +1,18 @@
-import os
+import subprocess
 
 def git_commit(message):
-    result = os.popen('git commit -m "{0}"'.format(message))
-    print(result)
+    try:
+        subprocess.check_call(['git', 'commit', '-m', message])
+        return True, None
+    except subprocess.CalledProcessError as e:
+        error_message = e.output.strip().decode('utf-8')
+        if 'nothing to commit' in error_message:
+            return False, 'No changes to commit.'
+        elif 'not a git repository' in error_message:
+            return False, 'Not a git repository.'
+        elif 'Changes not staged for commit' in error_message:
+            return False, 'Changes not staged for commit.'
+        elif 'Untracked files' in error_message:
+            return False, 'Untracked files.'
+        else:
+            return False, error_message
