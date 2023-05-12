@@ -6,6 +6,8 @@ def git_status():
     output = result.stdout.strip().split("\n")
     files = {"0": [], "1": [], "2": [], "3": []}
     for line in output:
+        if line == output[0]:
+            line = ' ' + line
         status = line[:2]
         filename = line[3:]
         if status == "??":
