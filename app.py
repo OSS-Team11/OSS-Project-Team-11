@@ -663,14 +663,6 @@ def rm_cached_bttn_clicked():
     show_message(message)
 
 # mv 
-# def mv_bttn_clicked(input):
-#     new_name=input.get() # 입력받은 새 이름 new_name에 저장
-#     for i in tree.selection():
-#         r_path = tree.item(i)["values"][1]
-#         e_path = r_path.rsplit(slash, 1)
-#     if(git_mv(e_path[1], new_name)):
-#         update_files(entry.get())
-#     mv_new_win.destroy()
 def mv_bttn_clicked(input):
     new_name=input.get() # 입력받은 새 이름 new_name에 저장
     for i in tree.selection():
@@ -699,7 +691,11 @@ def mv_new_window():
 # commit
 def commit_bttn_clicked(input):
     commit_message=input.get() # 입력받은 commit message commit_message에 저장
-    git_commit(commit_message)
+    success, message = git_commit(commit_message)
+    if success:
+        update_files(entry.get())
+    show_message(message)
+    cmmt_new_win.destroy()
 
 def commit_new_window():
     global cmmt_new_win
