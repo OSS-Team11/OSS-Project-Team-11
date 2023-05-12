@@ -557,10 +557,10 @@ home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
 # file status icon
-modified_icon = tk.PhotoImage(file="data/modified.png")
-untracked_icon = tk.PhotoImage(file="data/untracked.png")
-staged_icon = tk.PhotoImage(file="data/staged.png")
-commited_icon = tk.PhotoImage(file="data/commited.png")
+modified_icon = tk.PhotoImage(file="data/modified_file.png")
+untracked_icon = tk.PhotoImage(file="data/untracked_file.png")
+staged_icon = tk.PhotoImage(file="data/staged_file.png")
+commited_icon = tk.PhotoImage(file="data/commited_file.png")
 
 # directory status icon
 modified_folder_icon = tk.PhotoImage(file="data/modified_folder.png")
