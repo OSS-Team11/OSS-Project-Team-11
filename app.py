@@ -433,24 +433,47 @@ def update_files(orig_dirname: str):
         for item in tree.get_children():
             tree.delete(item)
         entry.delete(0, "end")
-        # Add new data
-        count = 0
-        for i in dirs_list:
-            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
-            count += 1
 
+        # Add new data
         try:
             status = git_status()
         except IndexError:
             ignore = True
+        except UnboundLocalError:
+            ignore = True
+
         print(status)
-        
+
+        count = 0
+        for i in dirs_list:
+            #tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
+            #count += 1
+            inserted = False
+            for j in range(len(status)):
+                for k in range(len(status[str(j)])):
+                    if i[0] == status[str(j)][k]:
+                        if j == 0:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
+                            inserted = True
+                        elif j == 1:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_folder_icon)
+                            inserted = True
+                        elif j == 2:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_folder_icon)
+                            inserted = True
+                        elif j == 3:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_folder_icon)
+                            inserted = True
+
+            if inserted == False:
+                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
+            count += 1
+        #
         for i in files_list:                    
             inserted = False
             for j in range(len(status)):
                 for k in range(len(status[str(j)])):
                     if i[0] == status[str(j)][k]:
-
                         if j == 0:
                             tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
                             inserted = True
@@ -676,7 +699,13 @@ def commit_new_window():
     treeview.configure(yscroll=scrollbar.set)
     scrollbar.pack(side="right",fill="y")
 
-    status = git_status()
+    try:
+        status = git_status()
+    except IndexError:
+        ignore = True
+    except UnboundLocalError:
+        ignore = True
+            
     for i in range(len(status['2'])):
         treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=file_icon)
         
