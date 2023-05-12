@@ -477,7 +477,7 @@ def update_files(orig_dirname: str):
                count += 1
 
             for i in files_list:
-                inserted_file = True                    
+                inserted_file = False                    
                 for j in range(len(result)):
                     for k in range(len(result[str(j)])):
                         if i[0] == result[str(j)][k]:
@@ -493,7 +493,7 @@ def update_files(orig_dirname: str):
                             elif j == 3:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_icon)
                                 inserted_file = True
-                if inserted_folder == False:
+                if inserted_file == False:
                     tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
                 count += 1
     #################################################################
