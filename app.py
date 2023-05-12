@@ -613,19 +613,33 @@ frame_git.pack(fill = "x", side="top")
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
+#init
+def init_bttn_clicked():
+    success, message = git_init()
+    if success == False:
+        show_message(message)
+    else: 
+        update_files(entry.get())
+        show_message(message)
 #add
 def add_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    git_add(e_path[1])
+    success, message = git_add(e_path[1])
+    if success:
+        update_files(entry.get())
+    show_message(message)
 
 #restore
 def restore_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    git_restore(e_path[1])
+    success, message = git_restore(e_path[1])
+    if success:
+        update_files(entry.get())
+    show_message(message)
 
 
 #unstage
@@ -633,43 +647,40 @@ def unstage_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    git_restore_staged(e_path[1])
+    success, message = git_restore_staged(e_path[1])
+    if success:
+        update_files(entry.get())
+    show_message(message)
 
 #remove
 def rm_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    git_rm(r_path)
-    update_files(entry.get())
+    success, message = git_rm(r_path)
+    if success:
+        update_files(entry.get())
+    show_message(message)
 
 #rm_cached
 def rm_cached_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    git_rm_cached(e_path[1])
+    success, message = git_rm_cached(e_path[1])
+    if success:
+        update_files(entry.get())
+    show_message(message)
 
 # mv 
-# def mv_bttn_clicked(input):
-#     new_name=input.get() # 입력받은 새 이름 new_name에 저장
-#     for i in tree.selection():
-#         r_path = tree.item(i)["values"][1]
-#         e_path = r_path.rsplit(slash, 1)
-#     if(git_mv(e_path[1], new_name)):
-#         update_files(entry.get())
-#     mv_new_win.destroy()
 def mv_bttn_clicked(input):
     new_name=input.get() # 입력받은 새 이름 new_name에 저장
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    success = git_mv(e_path[1], new_name)
+    success, message = git_mv(e_path[1], new_name)
     if success:
-        message = "파일 이름 수정이 성공적으로 완료되었습니다."
         update_files(entry.get())
-    else:
-        message = "파일 이름 수정 중 오류가 발생하였습니다."
     show_message(message)
     mv_new_win.destroy() # 새 창 닫기
 
@@ -690,7 +701,11 @@ def mv_new_window():
 # commit
 def commit_bttn_clicked(input):
     commit_message=input.get() # 입력받은 commit message commit_message에 저장
-    git_commit(commit_message)
+    success, message = git_commit(commit_message)
+    if success:
+        update_files(entry.get())
+    show_message(message)
+    cmmt_new_win.destroy()
 
 def commit_new_window():
     global cmmt_new_win
@@ -732,7 +747,7 @@ def commit_new_window():
 
 
 # git 관련 버튼
-init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init)
+init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=init_bttn_clicked)
 add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
 restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
 unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
