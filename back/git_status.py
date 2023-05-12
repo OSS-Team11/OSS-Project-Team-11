@@ -5,10 +5,8 @@ def git_status():
     result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
     output = result.stdout.strip().split("\n")
     files = {"0": [], "1": [], "2": [], "3": []}
-    # " M app.py"
-    # "M app.py"
     for line in output:
-        if line == output[0]:
+        if list(line)[2] != ' ':
             line = ' ' + line
         status = line[:2]
         filename = line[3:]
