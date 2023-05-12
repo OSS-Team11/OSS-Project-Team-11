@@ -637,7 +637,10 @@ def unstage_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    git_restore_staged(e_path[1])
+    success, message = git_restore_staged(e_path[1])
+    if success:
+        update_files(entry.get())
+    show_message(message)
 
 #remove
 def rm_bttn_clicked():
