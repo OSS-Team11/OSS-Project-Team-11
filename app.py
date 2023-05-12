@@ -463,12 +463,15 @@ def update_files(orig_dirname: str):
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
                                 inserted_folder = True
+                                break
                             elif j == 1:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_folder_icon)
                                 inserted_folder = True
+                                break
                             elif j == 2:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_folder_icon)
                                 inserted_folder = True
+                                break
                             elif j == 3:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_folder_icon) 
                                 inserted_folder = True
@@ -579,7 +582,7 @@ frame_up.pack(fill="x", side="top")
 
 # Top of window
 folder_icon = tk.PhotoImage(file="data/icon_folder.png")
-file_icon = tk.PhotoImage(file="data/icon_file.png")
+file_icon = tk.PhotoImage(file="data/untracked_file.png")
 folder_hidden_icon = tk.PhotoImage(file="data/icon_folder_hidden.png")
 file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
