@@ -437,15 +437,12 @@ def update_files(orig_dirname: str):
         # Add new data
         ################status icon 추가부분################
         count = 0
-        result = None
 
-        try:
-            result = git_status()
-        except IndexError:
-            Ignore = True
+        result = git_status()
         print(result)
 
         if result == None:
+            print("no exist .git")
             for i in dirs_list:
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
                 count += 1
