@@ -603,6 +603,12 @@ frame_git.pack(fill = "x", side="top")
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
+#init
+def init_bttn_clicked():
+    success, message = git_init()
+    if success == False:
+        show_message(message)
+    else: show_message(message)
 #add
 def add_bttn_clicked():
     for i in tree.selection():
@@ -722,7 +728,7 @@ def commit_new_window():
 
 
 # git 관련 버튼
-init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=git_init)
+init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=init_bttn_clicked)
 add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
 restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
 unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
