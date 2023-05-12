@@ -360,7 +360,7 @@ def update_files(orig_dirname: str):
                         else:
                             if not f.name.startswith("."):
                                 dirs_list.append([f.name, "dir", f.path, folder_icon])
-                    else:
+                    else: 
                         if sys.platform == "win32":
                             if bool(f_stat.st_file_attributes & stat.FILE_ATTRIBUTE_HIDDEN):
                                 dirs_list.append([f.name, "dir", f.path, folder_hidden_icon])
@@ -438,8 +438,34 @@ def update_files(orig_dirname: str):
         for i in dirs_list:
             tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
             count += 1
-        for i in files_list:
-            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
+
+        try:
+            status = git_status()
+        except IndexError:
+            ignore = True
+        print(status)
+        
+        for i in files_list:                    
+            inserted = False
+            for j in range(len(status)):
+                for k in range(len(status[str(j)])):
+                    if i[0] == status[str(j)][k]:
+                        
+                        if j == 0:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
+                            inserted = True
+                        elif j == 1:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_icon)
+                            inserted = True
+                        elif j == 2:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
+                            inserted = True
+                        elif j == 3:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_icon)
+                            inserted = True
+
+            if inserted == False:
+                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
             count += 1
         #
         if ftp == None:
@@ -530,31 +556,16 @@ file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
-staged_icon = tk.PhotoImage(file="data/staged.png")
 modified_icon = tk.PhotoImage(file="data/modified.png")
 untracked_icon = tk.PhotoImage(file="data/untracked.png")
+staged_icon = tk.PhotoImage(file="data/staged.png")
+commited_icon = tk.PhotoImage(file="data/commited.png")
 
 frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_git.pack(fill = "x", side="top")
 
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
-
-
-def status_icon():
-     status = git_status()
-
-     for f in os.listdir(entry.get()):
-        for i in range(len(status)):
-            for j in range(len(status[str(i)])):
-                if f.lower() == status[str(i)][j].lower():
-                    if i == 0:
-                        icon = staged_icon
-                    if i == 1:
-                        icon = modified_icon
-                    if i == 2:
-                        icon = untracked_icon
-
 
 #add
 def add_bttn_clicked():
@@ -577,7 +588,6 @@ def unstage_bttn_clicked():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
     git_restore_staged(e_path[1])
-    print(e_path[1])
 
 #remove
 def rm_bttn_clicked():
@@ -660,9 +670,9 @@ def commit_new_window():
     scrollbar.pack(side="right",fill="y")
 
     status = git_status()
-    for i in range(len(status['0'])):
-        treeview.insert("", tk.END, text=status['0'][i], values="", open=False, image=file_icon)
-        #treeview.insert("", tk.END, image = staged_icon)
+    for i in range(len(status['2'])):
+        treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=file_icon)
+        
 
     # commit message 입력 영역
     frame_commit_message = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
