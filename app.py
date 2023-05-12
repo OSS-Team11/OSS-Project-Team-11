@@ -608,13 +608,18 @@ def init_bttn_clicked():
     success, message = git_init()
     if success == False:
         show_message(message)
-    else: show_message(message)
+    else: 
+        update_files(entry.get())
+        show_message(message)
 #add
 def add_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    git_add(e_path[1])
+    success, message = git_add(e_path[1])
+    if success:
+        update_files(entry.get())
+    show_message(message)
 
 #restore
 def restore_bttn_clicked():
