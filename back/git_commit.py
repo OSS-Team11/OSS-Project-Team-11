@@ -7,12 +7,12 @@ def git_commit(message):
     except subprocess.CalledProcessError as e:
         error_message = e.output.strip().decode('utf-8')
         if 'nothing to commit' in error_message:
-            return False, 'No changes to commit.'
+            return False, 'Error: No changes to commit.'
         elif 'not a git repository' in error_message:
-            return False, 'Not a git repository.'
+            return False, 'Error: Not a git repository.'
         elif 'Changes not staged for commit' in error_message:
-            return False, 'Changes not staged for commit.'
+            return False, 'Error: Changes not staged for commit.'
         elif 'Untracked files' in error_message:
-            return False, 'Untracked files.'
+            return False, 'Error: Untracked files.'
         else:
             return False, error_message
