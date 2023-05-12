@@ -2,6 +2,7 @@ import os, stat, re, sys, platform, subprocess, string, shutil, configparser, tk
 from tkinter import ttk, simpledialog
 from tkinter.messagebox import askyesno
 from tkinter import filedialog
+from tkinter import messagebox
 from pathlib import Path
 from ftplib import FTP
 from send2trash import send2trash
@@ -594,13 +595,30 @@ def rm_cached_bttn_clicked():
     git_rm_cached(e_path[1])
 
 # mv 
+# def mv_bttn_clicked(input):
+#     new_name=input.get() # 입력받은 새 이름 new_name에 저장
+#     for i in tree.selection():
+#         r_path = tree.item(i)["values"][1]
+#         e_path = r_path.rsplit(slash, 1)
+#     if(git_mv(e_path[1], new_name)):
+#         update_files(entry.get())
+#     mv_new_win.destroy()
 def mv_bttn_clicked(input):
     new_name=input.get() # 입력받은 새 이름 new_name에 저장
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    if(git_mv(e_path[1], new_name)):
+    success = git_mv(e_path[1], new_name)
+    if success:
+        message = "파일 이름 수정이 성공적으로 완료되었습니다."
         update_files(entry.get())
+    else:
+        message = "파일 이름 수정 중 오류가 발생하였습니다."
+    show_message(message)
+    mv_new_win.destroy() # 새 창 닫기
+
+def show_message(message):
+    message_box = messagebox.showinfo("알림", message)
 
 def mv_new_window():
     global mv_new_win
