@@ -443,6 +443,7 @@ def update_files(orig_dirname: str):
             result = git_status()
         except IndexError:
             Ignore = True
+        print(result)
 
         if result == None:
             for i in dirs_list:
@@ -452,22 +453,50 @@ def update_files(orig_dirname: str):
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
                 count += 1
         else:
-            for i in files_list:                    
+            for i in dirs_list:
+               inserted_folder = False
+               for j in range(len(result)):
+                    for k in range(len(result[str(j)])):
+                        folder_name = result[str(j)][k].split('/', maxsplit = 1)[0]
+                        print(folder_name)
+                        if i[0] == folder_name:
+                            if j == 0:
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
+                                inserted_folder = True
+                            elif j == 1:
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_folder_icon)
+                                inserted_folder = True
+                            elif j == 2:
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_folder_icon)
+                                inserted_folder = True
+                            elif j == 3:
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_folder_icon) 
+                                inserted_folder = True
+               if inserted_folder == False:
+                   tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])                                       
+               count += 1
+
+            for i in files_list:
+                inserted_file = False                    
                 for j in range(len(result)):
                     for k in range(len(result[str(j)])):
                         if i[0] == result[str(j)][k]:
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
+                                inserted_file = True
                             elif j == 1:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_icon)
+                                inserted_file = True
                             elif j == 2:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
+                                inserted_file = True
                             elif j == 3:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_icon)
-
+                                inserted_file = True
+                if inserted_file == False:
+                    tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
+                count += 1
     #################################################################
-
-        #
         if ftp == None:
             last_path = dirname
             entry.insert("end", dirname)
