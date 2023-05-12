@@ -647,8 +647,10 @@ def rm_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    git_rm(r_path)
-    update_files(entry.get())
+    success, message = git_rm(r_path)
+    if success:
+        update_files(entry.get())
+    show_message(message)
 
 #rm_cached
 def rm_cached_bttn_clicked():
