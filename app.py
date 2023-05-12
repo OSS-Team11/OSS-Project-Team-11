@@ -676,12 +676,9 @@ def mv_bttn_clicked(input):
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
         e_path = r_path.rsplit(slash, 1)
-    success = git_mv(e_path[1], new_name)
+    success, message = git_mv(e_path[1], new_name)
     if success:
-        message = "파일 이름 수정이 성공적으로 완료되었습니다."
         update_files(entry.get())
-    else:
-        message = "파일 이름 수정 중 오류가 발생하였습니다."
     show_message(message)
     mv_new_win.destroy() # 새 창 닫기
 
