@@ -450,7 +450,7 @@ def update_files(orig_dirname: str):
             for j in range(len(status)):
                 for k in range(len(status[str(j)])):
                     if i[0] == status[str(j)][k]:
-                        
+
                         if j == 0:
                             tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
                             inserted = True
@@ -556,10 +556,17 @@ file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
-modified_icon = tk.PhotoImage(file="data/modified.png")
-untracked_icon = tk.PhotoImage(file="data/untracked.png")
-staged_icon = tk.PhotoImage(file="data/staged.png")
-commited_icon = tk.PhotoImage(file="data/commited.png")
+# file status icon
+modified_icon = tk.PhotoImage(file="data/modified_file.png")
+untracked_icon = tk.PhotoImage(file="data/untracked_file.png")
+staged_icon = tk.PhotoImage(file="data/staged_file.png")
+commited_icon = tk.PhotoImage(file="data/commited_file.png")
+
+# directory status icon
+modified_folder_icon = tk.PhotoImage(file="data/modified_folder.png")
+untracked_folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
+staged_folder_icon = tk.PhotoImage(file="data/staged_folder.png")
+commited_folder_icon = tk.PhotoImage(file="data/commited_folder.png")
 
 frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_git.pack(fill = "x", side="top")
