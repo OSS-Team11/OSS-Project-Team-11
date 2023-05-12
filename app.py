@@ -453,52 +453,59 @@ def update_files(orig_dirname: str):
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
                 count += 1
         else:
+            inserted_list = []
             for i in dirs_list:
-               inserted_folder = False
+               folder_inserted = False
                for j in range(len(result)):
                     for k in range(len(result[str(j)])):
                         folder_name = result[str(j)][k].split('/', maxsplit = 1)[0]
-                        print(folder_name)
-                        if i[0] == folder_name:
+                        #print(folder_name)
+                        if (i[0] == folder_name) and ((folder_name in inserted_list) == False):
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
-                                inserted_folder = True
+                                inserted_list.append(folder_name)
+                                folder_inserted = True
                                 break
                             elif j == 1:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_folder_icon)
-                                inserted_folder = True
+                                inserted_list.append(folder_name)
+                                folder_inserted = True
                                 break
                             elif j == 2:
+                                print(inserted_list)
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_folder_icon)
-                                inserted_folder = True
+                                inserted_list.append(folder_name)
+                                folder_inserted = True
                                 break
                             elif j == 3:
-                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_folder_icon) 
-                                inserted_folder = True
-               if inserted_folder == False:
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_folder_icon)
+                                inserted_list.append(folder_name) 
+                                folder_inserted = True
+               if folder_inserted == False:
                    tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])                                       
                count += 1
 
             for i in files_list:
-                inserted_file = False                    
+                file_inserted = False                    
                 for j in range(len(result)):
                     for k in range(len(result[str(j)])):
                         if i[0] == result[str(j)][k]:
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
-                                inserted_file = True
+                                file_inserted = True
                             elif j == 1:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_icon)
-                                inserted_file = True
+                                file_inserted = True
                             elif j == 2:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
-                                inserted_file = True
+                                file_inserted = True
                             elif j == 3:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_icon)
-                                inserted_file = True
-                if inserted_file == False:
+                                file_inserted = True
+                if file_inserted == False:
                     tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
                 count += 1
+            
     #################################################################
         if ftp == None:
             last_path = dirname
