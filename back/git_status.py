@@ -2,9 +2,12 @@ import subprocess
 
 # 0: untracked / 1: modified / 2: staged / 3: committed
 def git_status():
-    result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
-    output = result.stdout.strip().split("\n")
-    files = {"0": [], "1": [], "2": [], "3": []}
+    try:
+        result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+        output = result.stdout.strip().split("\n")
+        files = {"0": [], "1": [], "2": [], "3": []}
+    except result.returncode == 128:
+        return None
     for line in output:
         if list(line)[2] != ' ':
             line = ' ' + line

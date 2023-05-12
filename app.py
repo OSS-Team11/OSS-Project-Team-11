@@ -442,8 +442,6 @@ def update_files(orig_dirname: str):
         except UnboundLocalError:
             ignore = True
 
-        print(status)
-
         count = 0
         for i in dirs_list:
             #tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
@@ -474,6 +472,7 @@ def update_files(orig_dirname: str):
             for j in range(len(status)):
                 for k in range(len(status[str(j)])):
                     if i[0] == status[str(j)][k]:
+
                         if j == 0:
                             tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
                             inserted = True
