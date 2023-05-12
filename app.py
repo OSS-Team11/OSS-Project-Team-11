@@ -5,6 +5,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from pathlib import Path
 from ftplib import FTP
+from tokenize import Ignore
 from send2trash import send2trash
 
 from tkinter import *
@@ -434,13 +435,38 @@ def update_files(orig_dirname: str):
             tree.delete(item)
         entry.delete(0, "end")
         # Add new data
+        ################status icon 추가부분################
         count = 0
-        for i in dirs_list:
-            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
-            count += 1
-        for i in files_list:
-            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
-            count += 1
+        result = None
+
+        try:
+            result = git_status()
+        except IndexError:
+            Ignore = True
+
+        if result == None:
+            for i in dirs_list:
+                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
+                count += 1
+            for i in files_list:
+                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
+                count += 1
+        else:
+            for i in files_list:                    
+                for j in range(len(result)):
+                    for k in range(len(result[str(j)])):
+                        if i[0] == result[str(j)][k]:
+                            if j == 0:
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
+                            elif j == 1:
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_icon)
+                            elif j == 2:
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
+                            elif j == 3:
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_icon)
+
+    #################################################################
+
         #
         if ftp == None:
             last_path = dirname
