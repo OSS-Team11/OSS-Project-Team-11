@@ -663,9 +663,9 @@ def commit_new_window():
     scrollbar.pack(side="right",fill="y")
 
     status = git_status()
-    for i in range(len(status['0'])):
-        treeview.insert("", tk.END, text=status['0'][i], values="", open=False, image=file_icon)
-        #treeview.insert("", tk.END, image = staged_icon)
+    for i in range(len(status["staged"])):
+        treeview.insert("", tk.END, text=status["staged"][i], values="", open=False, image=file_icon)
+        
 
     # commit message 입력 영역
     frame_commit_message = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
