@@ -3,24 +3,29 @@ import subprocess
 # 0: untracked / 1: modified / 2: staged / 3: committed
 def git_status():
     try:
-        result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
-        output = result.stdout.strip().split("\n")
-        files = {"0": [], "1": [], "2": [], "3": []}
-    except result.returncode == 128:
-        return None
-    for line in output:
-        if list(line)[2] != ' ':
-            line = ' ' + line
-        status = line[:2]
-        filename = line[3:]
-        if status == "??":
-            files["0"].append(filename)
-        elif status == " M":
-            files["1"].append(filename)
-        elif status == "M " or status == "A " or status == "MM":
-            files["2"].append(filename)
-        elif status == "R ":
-            files["2"].append(line.split(' -> ')[1])
+        subprocess.check_output(["git", "status", "--porcelain"])
+    except subprocess.CalledProcessError as e:
+        if e.returncode == 128:
+            return None
+
+    result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+    output = result.stdout.strip().split("\n")
+    files = {"0": [], "1": [], "2": [], "3": []}
+    
+    if output != ['']:
+        for line in output:
+            if list(line)[2] != ' ':
+                line = ' ' + line
+            status = line[:2]
+            filename = line[3:]
+            if status == "??":
+                files["0"].append(filename)
+            elif status == " M":
+                files["1"].append(filename)
+            elif status == "M " or status == "A " or status == "MM":
+                files["2"].append(filename)
+            elif status == "R ":
+                files["2"].append(line.split(' -> ')[1])
     
     # Get list of files without changes since last commit
     result = subprocess.run(["git", "ls-files"], capture_output=True, text=True)
