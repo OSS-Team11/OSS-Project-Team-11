@@ -10,10 +10,10 @@ def git_restore(file_path):
         if e.returncode == 128:
             error_message = f"{file_path} is not a tracked file in the repository"
         # 파일이 삭제된 경우
-        elif e.returncode == 1 and "did not match any files" in e.output.decode():
+        elif e.returncode == 1 and e.stderr and "did not match any files" in e.stderr.decode():
             error_message = f"{file_path} has been deleted"
         # 변경 내용을 되돌릴 수 없는 경우
-        elif "could not restore untracked files from stash" in e.output.decode():
+        elif e.stderr and "could not restore untracked files from stash" in e.stderr.decode():
             error_message = f"Could not restore {file_path} from stash"
         # 그 외의 경우
         else:
