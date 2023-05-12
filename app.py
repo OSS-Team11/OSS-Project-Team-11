@@ -433,61 +433,13 @@ def update_files(orig_dirname: str):
         for item in tree.get_children():
             tree.delete(item)
         entry.delete(0, "end")
-
         # Add new data
-        try:
-            status = git_status()
-        except IndexError:
-            ignore = True
-        except UnboundLocalError:
-            ignore = True
-
         count = 0
         for i in dirs_list:
-            #tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
-            #count += 1
-            inserted = False
-            for j in range(len(status)):
-                for k in range(len(status[str(j)])):
-                    if i[0] == status[str(j)][k]:
-                        if j == 0:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
-                            inserted = True
-                        elif j == 1:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_folder_icon)
-                            inserted = True
-                        elif j == 2:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_folder_icon)
-                            inserted = True
-                        elif j == 3:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_folder_icon)
-                            inserted = True
-
-            if inserted == False:
-                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
+            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
             count += 1
-        #
-        for i in files_list:                    
-            inserted = False
-            for j in range(len(status)):
-                for k in range(len(status[str(j)])):
-                    if i[0] == status[str(j)][k]:
-
-                        if j == 0:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
-                            inserted = True
-                        elif j == 1:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_icon)
-                            inserted = True
-                        elif j == 2:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
-                            inserted = True
-                        elif j == 3:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_icon)
-                            inserted = True
-
-            if inserted == False:
-                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
+        for i in files_list:
+            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
             count += 1
         #
         if ftp == None:
@@ -670,7 +622,6 @@ def mv_new_window():
     cnfrm_button = Button(mv_new_win, text="move", relief="flat", bg="white", command=partial(mv_bttn_clicked, input))
     cnfrm_button.pack()
 
-
 # commit
 def commit_bttn_clicked(input):
     commit_message=input.get() # 입력받은 commit message commit_message에 저장
@@ -698,13 +649,7 @@ def commit_new_window():
     treeview.configure(yscroll=scrollbar.set)
     scrollbar.pack(side="right",fill="y")
 
-    try:
-        status = git_status()
-    except IndexError:
-        ignore = True
-    except UnboundLocalError:
-        ignore = True
-            
+    status = git_status()
     for i in range(len(status['2'])):
         treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=file_icon)
         
