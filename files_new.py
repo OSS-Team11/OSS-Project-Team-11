@@ -450,13 +450,16 @@ def update_files(orig_dirname: str):
                 for k in range(len(status[str(j)])):
                     if i[0] == status[str(j)][k]:
                         if j == 0:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
                             inserted = True
                         elif j == 1:
                             tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_icon)
                             inserted = True
                         elif j == 2:
-                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
+                            inserted = True
+                        elif j == 3:
+                            tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_icon)
                             inserted = True
 
             if inserted == False:
@@ -551,31 +554,16 @@ file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
-staged_icon = tk.PhotoImage(file="data/staged.png")
 modified_icon = tk.PhotoImage(file="data/modified.png")
 untracked_icon = tk.PhotoImage(file="data/untracked.png")
+staged_icon = tk.PhotoImage(file="data/staged.png")
+commited_icon = tk.PhotoImage(file="data/commited.png")
 
 frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_git.pack(fill = "x", side="top")
 
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
-
-
-def status_icon():
-     status = git_status()
-
-     for f in os.listdir(entry.get()):
-        for i in range(len(status)):
-            for j in range(len(status[str(i)])):
-                if f.lower() == status[str(i)][j].lower():
-                    if i == 0:
-                        icon = staged_icon
-                    if i == 1:
-                        icon = modified_icon
-                    if i == 2:
-                        icon = untracked_icon
-
 
 #add
 def add_bttn_clicked():
@@ -663,8 +651,8 @@ def commit_new_window():
     scrollbar.pack(side="right",fill="y")
 
     status = git_status()
-    for i in range(len(status["staged"])):
-        treeview.insert("", tk.END, text=status["staged"][i], values="", open=False, image=file_icon)
+    for i in range(len(status['2'])):
+        treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=file_icon)
         
 
     # commit message 입력 영역
