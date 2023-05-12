@@ -3,7 +3,7 @@ import subprocess
 def git_commit(message):
     try:
         subprocess.check_call(['git', 'commit', '-m', message])
-        return True, None
+        return True, 'Success'
     except subprocess.CalledProcessError as e:
         error_message = e.output.strip().decode('utf-8')
         if 'nothing to commit' in error_message:
