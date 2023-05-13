@@ -735,7 +735,7 @@ def commit_new_window():
 
     status = git_status()
     for i in range(len(status['2'])):
-        treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=file_icon)
+        treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=staged_file_icon)
         
 
     # commit message 입력 영역
