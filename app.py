@@ -5,7 +5,6 @@ from tkinter import filedialog
 from tkinter import messagebox
 from pathlib import Path
 from ftplib import FTP
-from tokenize import Ignore
 from send2trash import send2trash
 
 from tkinter import *
@@ -454,12 +453,9 @@ def update_files(orig_dirname: str):
                folder_inserted = False
                for j in range(len(result)):
                     for k in range(len(result[str(j)])):
-                        #folder_name = result[str(j)][k].split('/', maxsplit = 1)[0]
                         folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0]
                         git_path = os.popen('git rev-parse --show-toplevel').read().strip() + '/'
-                        print(i[2].replace(git_path, ''), folder_name)
                         if (i[2].replace(git_path, '') == folder_name) and ((folder_name in inserted_list) == False):
-                            print("status directory:"+folder_name)
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
                                 inserted_list.append(folder_name)
@@ -471,7 +467,6 @@ def update_files(orig_dirname: str):
                                 folder_inserted = True
                                 break
                             elif j == 2:
-                                # print(inserted_list)
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_folder_icon)
                                 inserted_list.append(folder_name)
                                 folder_inserted = True

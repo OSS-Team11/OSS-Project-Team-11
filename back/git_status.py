@@ -39,18 +39,3 @@ def git_status():
 
     return files
 
-# 예시 출력
-# files = git_status()
-# print("Untracked files:")
-# for filename in files["untracked"]:
-#     print(f"- {filename}")
-# print("Modified files:")
-# for filename in files["modified"]:
-#     print(f"- {filename}")
-# print("Staged files:")
-# for filename in files["staged"]:
-#     print(f"- {filename}")
-# print("Committed files:")
-# for filename in files["committed"]:
-#     print(f"- {filename}")
-
