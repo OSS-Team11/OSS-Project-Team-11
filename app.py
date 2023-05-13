@@ -488,16 +488,16 @@ def update_files(orig_dirname: str):
                     for k in range(len(result[str(j)])):
                         if i[0] == result[str(j)][k]:
                             if j == 0:
-                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_file_icon)
                                 file_inserted = True
                             elif j == 1:
-                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_icon)
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_file_icon)
                                 file_inserted = True
                             elif j == 2:
-                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_file_icon)
                                 file_inserted = True
                             elif j == 3:
-                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_icon)
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_file_icon)
                                 file_inserted = True
                 if file_inserted == False:
                     tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
@@ -585,7 +585,7 @@ frame_up = tk.Frame(window, border=1, bg="white")
 frame_up.pack(fill="x", side="top")
 
 # Top of window
-folder_icon = tk.PhotoImage(file="data/icon_folder.png")
+folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 file_icon = tk.PhotoImage(file="data/untracked_file.png")
 folder_hidden_icon = tk.PhotoImage(file="data/icon_folder_hidden.png")
 file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
@@ -593,10 +593,10 @@ home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
 # file status icon
-modified_icon = tk.PhotoImage(file="data/modified_file.png")
-untracked_icon = tk.PhotoImage(file="data/untracked_file.png")
-staged_icon = tk.PhotoImage(file="data/staged_file.png")
-commited_icon = tk.PhotoImage(file="data/commited_file.png")
+modified_file_icon = tk.PhotoImage(file="data/modified_file.png")
+untracked_file_icon = tk.PhotoImage(file="data/untracked_file.png")
+staged_file_icon = tk.PhotoImage(file="data/staged_file.png")
+commited_file_icon = tk.PhotoImage(file="data/commited_file.png")
 
 # directory status icon
 modified_folder_icon = tk.PhotoImage(file="data/modified_folder.png")
