@@ -456,7 +456,6 @@ def update_files(orig_dirname: str):
                for j in range(len(result)):
                     for k in range(len(result[str(j)])):
                         folder_name = result[str(j)][k].split('/', maxsplit = 1)[0]
-                        #print(folder_name)
                         if (i[0] == folder_name) and ((folder_name in inserted_list) == False):
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
@@ -486,7 +485,8 @@ def update_files(orig_dirname: str):
                 file_inserted = False                    
                 for j in range(len(result)):
                     for k in range(len(result[str(j)])):
-                        if i[0] == result[str(j)][k]:
+                        print(i[0], result[str(j)][k].split('/')[-1])
+                        if i[0] == result[str(j)][k].split('/')[-1]:
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
                                 file_inserted = True
