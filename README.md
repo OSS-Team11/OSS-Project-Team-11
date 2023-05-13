@@ -1,52 +1,54 @@
-# Python file explorer
+# 📌 Git Version Control
 
-<<<<<<< Updated upstream
-Tkinter version (files_new.py) works on Windows, Linux (should work on MacOS).
-For Windows 10, available in "Releases" (download "files.zip", unpack and run files.exe)
-=======
+- This program is developed based in **MacOS**.
+    - It also works in **Windows**, but the UI may break or cause unexpected errors.
+- The goal of this program is to provide a **simple GUI-based git repository management service**.
+    
+    ![example.png](/readme_png/example.png)
+    
+    - **Feature #1: File explorer**
+        
+        > The service provides a GUI for browsing files and directories on your computer.
+        > 
+        - The file browsing starts from the root directory of the computer of the most recently visited directory.
+        - All files and directories included in the current directory are displayed with their icon, name, and extension.
+        - A user can browse a directory by double clicking its icon.
+    - **Feature #2: Git repository creation**
+        
+        > The service supports to turn any local directory into a git repository
+        > 
+        - It provides a menu for a git repository creation only if a current directory in the browser is not managed by git yet.
+        - Once the repository creation is requested, the service creates a new git repository for the current working directory.
+    - **Feature #3: Version controlling**
+        
+        > The service supports the version controlling of a git repository
+        > 
+        - Files with different status have a different mark on their icon.
+        - It provides a different menu depending on the status of a selected file.
+        - This program can execute the following **git command**
+            - `git init`
+            - `git add`
+            - `git commit`
+            - `git mv`
+            - `git rm`
+            - `git rm —cached`
+            - `git restore`
+            - `git restore —staged`
 
->>>>>>> Stashed changes
+# ⚙️ How to execute this program
 
-<img title="Screenshot from Windows 10" src="https://github.com/lestec-al/files/raw/main/data/pic_new_win.png" width="541" height="366"/>
-<img title="Screenshot from Linux Ubuntu" src="https://github.com/lestec-al/files/raw/main/data/pic_new_linux.png" width="541" height="366"/>
+- **`Python 3.9 or later` must be installed**
+- Depending on the version install: `Tkinter`
 
+<aside>
+📌 Follow the instructions belows if you want to execute this program
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
-
-# Install and run as Python script
-- install: Python (v3.9 or higher)
-- depending on the version install: Tkinter or Kivy (+KivyMD) or PySimpleGUI
-- install Send2Trash (needed for Tkinter, PySimpleGUI versions)
-- download or clone this repo and in the project folder run via command line "python files_new.py" 
-
-
-<<<<<<< Updated upstream
-# Features
-- connect to ftp servers (e.g. ftp://ftp.us.debian.org) and download files from there (tkinter, command line)
-- copy/paste to/from another file manager (windows, tkinter, command line)
-- catalog, files creation (tkinter, kivy, command line)
-- open files by default program (tkinter, command line)
-- local disks buttons (tkinter)
-- keyboard navigation, copy/paste support (arrows, enter, backspace, ctrl-c/ctrl-v, tkinter)
-- select multiple files/catalogs by holding Ctrl and clicking with the mouse (tkinter)
-- copy, paste, rename, delete to trash (in command line ver: remove to trash, delete permanently)
-- sorts by name and size
-- shows hidden files
-- resizability
-- the command line version has navigation by typing short commands
-=======
 1. download or clone this repo and go to this project folder
 2. run via command line `pip3 install -r requirements.txt`
 3. `python3 app.py`
 </aside>
 
 # 📍Features
-
-
-
 ## 🚥 Git status
 
 - *untracked*
@@ -105,4 +107,4 @@ For Windows 10, available in "Releases" (download "files.zip", unpack and run fi
 **→ How does one file/directory represent if it has multiple statuses (e.g. staged & untracked, staged & modified, etc.)?**
 
 **It is expressed by setting priorities in the order of untracked > modified > staged > committed.**
->>>>>>> Stashed changes
+
