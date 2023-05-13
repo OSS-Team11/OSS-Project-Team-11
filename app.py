@@ -456,8 +456,6 @@ def update_files(orig_dirname: str):
                         folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0] # 폴더명만 추출
                         folder_name2 = result[str(j)][k].split('/', maxsplit=1)[0]
                         git_path = os.popen('git rev-parse --show-toplevel').read().strip() + '/'  
-                        print(i[2].replace('\\', '/').replace(git_path, '')) 
-                        print("folder name" + folder_name)                
                         if ((i[2].replace('\\', '/').replace(git_path, '') == folder_name and ((folder_name in inserted_folder_list) == False))) or ((i[2].replace('\\', '/').replace(git_path, '') == folder_name2) and ((folder_name2 in inserted_folder_list) == False)):
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
