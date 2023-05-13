@@ -20,12 +20,15 @@ def git_status():
             filename = line[3:]
             if status == "??":
                 files["0"].append(filename)
-            elif status == " M" or status == "MM" or status == "AM":
+            elif status == " M":
                 files["1"].append(filename)
             elif status == "M " or status == "A ":
                 files["2"].append(filename)
             elif status == "R ":
                 files["2"].append(line.split(' -> ')[1])
+            elif status == "MM" or status == "AM":
+                files["1"].append(filename)
+                files["2"].append(filename)
     
     # Get list of files without changes since last commit
     result = subprocess.run(["git", "ls-files", "--full-name"], capture_output=True, text=True)
