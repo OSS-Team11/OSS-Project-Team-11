@@ -20,9 +20,9 @@ def git_status():
             filename = line[3:]
             if status == "??":
                 files["0"].append(filename)
-            elif status == " M":
+            elif status == " M" or status == "MM" or status == "AM":
                 files["1"].append(filename)
-            elif status == "M " or status == "A " or status == "MM":
+            elif status == "M " or status == "A ":
                 files["2"].append(filename)
             elif status == "R ":
                 files["2"].append(line.split(' -> ')[1])
