@@ -10,7 +10,7 @@
     - It also works in **Windows**, but the UI may break or cause unexpected errors.
 - The goal of this program is to provide a **simple GUI-based git repository management service**.
     
-    ![스크린샷 2023-05-14 오전 2.05.49.png](readme%20%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB%2025873be4872e4ae7b4385183c5e5a965/%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2023-05-14_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%258C%25E1%2585%25A5%25E1%2586%25AB_2.05.49.png)
+    ![example.png](/readme_png/example.png)
     
     - **Feature #1: File explorer**
         
@@ -67,12 +67,12 @@
     
     - directory
         
-        ![untracked_folder.png](readme%20%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB%2025873be4872e4ae7b4385183c5e5a965/untracked_folder.png)
+        ![untracked_folder.png](/readme_png/untracked_folder.png)
         
     
     - file
         
-        ![untracked_file.png](readme%20%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB%2025873be4872e4ae7b4385183c5e5a965/untracked_file.png)
+        ![untracked_file.png](/readme_png/untracked_file.png)
         
 
 - *modified*
@@ -80,12 +80,12 @@
     
     - directory
         
-        ![modified_folder.png](readme%20%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB%2025873be4872e4ae7b4385183c5e5a965/modified_folder.png)
+        ![modified_folder.png](/readme_png/modified_folder.png)
         
     
     - file
         
-        ![modified_file.png](readme%20%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB%2025873be4872e4ae7b4385183c5e5a965/modified_file.png)
+        ![modified_file.png](/readme_png/modified_file.png)
         
 
 - *staged*
@@ -93,12 +93,12 @@
     
     - directory
         
-        ![staged_folder.png](readme%20%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB%2025873be4872e4ae7b4385183c5e5a965/staged_folder.png)
+        ![staged_folder.png](/readme_png/staged_folder.png)
         
     
     - file
         
-        ![staged_file.png](readme%20%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB%2025873be4872e4ae7b4385183c5e5a965/staged_file.png)
+        ![staged_file.png](/readme_png/staged_file.png)
         
 
 - *committed*
@@ -106,12 +106,12 @@
     
     - directory
         
-        ![commited_folder.png](readme%20%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB%2025873be4872e4ae7b4385183c5e5a965/commited_folder.png)
+        ![commited_folder.png](readme_png/commited_folder.png)
         
     
     - file
         
-        ![commited_file.png](readme%20%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB%2025873be4872e4ae7b4385183c5e5a965/commited_file.png)
+        ![commited_file.png](/readme_png/commited_file.png)
         
     
 
