@@ -28,7 +28,7 @@ def git_status():
                 files["2"].append(line.split(' -> ')[1])
     
     # Get list of files without changes since last commit
-    result = subprocess.run(["git", "ls-files"], capture_output=True, text=True)
+    result = subprocess.run(["git", "ls-files", "--full-name"], capture_output=True, text=True)
     all_files = set(result.stdout.strip().split("\n"))
     result = subprocess.run(["git", "diff", "--cached", "--name-only"], capture_output=True, text=True)
     staged_files = set(result.stdout.strip().split("\n"))
