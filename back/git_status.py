@@ -20,15 +20,15 @@ def git_status():
             filename = line[3:]
             if status == "??":
                 files["0"].append(filename)
-            elif status == " M":
+            elif status == " M" or status == "MM" or status == "AM":
                 files["1"].append(filename)
-            elif status == "M " or status == "A " or status == "MM":
+            elif status == "M " or status == "A ":
                 files["2"].append(filename)
             elif status == "R ":
                 files["2"].append(line.split(' -> ')[1])
     
     # Get list of files without changes since last commit
-    result = subprocess.run(["git", "ls-files"], capture_output=True, text=True)
+    result = subprocess.run(["git", "ls-files", "--full-name"], capture_output=True, text=True)
     all_files = set(result.stdout.strip().split("\n"))
     result = subprocess.run(["git", "diff", "--cached", "--name-only"], capture_output=True, text=True)
     staged_files = set(result.stdout.strip().split("\n"))
@@ -38,19 +38,4 @@ def git_status():
             files["3"].append(filename)
 
     return files
-
-# 예시 출력
-# files = git_status()
-# print("Untracked files:")
-# for filename in files["untracked"]:
-#     print(f"- {filename}")
-# print("Modified files:")
-# for filename in files["modified"]:
-#     print(f"- {filename}")
-# print("Staged files:")
-# for filename in files["staged"]:
-#     print(f"- {filename}")
-# print("Committed files:")
-# for filename in files["committed"]:
-#     print(f"- {filename}")
 
