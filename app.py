@@ -448,54 +448,64 @@ def update_files(orig_dirname: str):
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
                 count += 1
         else:
-            inserted_list = []
+            inserted_folder_list = []
             for i in dirs_list:
                folder_inserted = False
                for j in range(len(result)):
                     for k in range(len(result[str(j)])):
-                        folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0]
-                        git_path = os.popen('git rev-parse --show-toplevel').read().strip() + '/'
-                        if (i[2].replace(git_path, '') == folder_name) and ((folder_name in inserted_list) == False):
+                        folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0] # 폴더명만 추출
+                        git_path = os.popen('git rev-parse --show-toplevel').read().strip() + '/'                   
+                        if (i[2].replace('\\', '/').replace(git_path, '') == folder_name) and ((folder_name in inserted_folder_list) == False):
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
-                                inserted_list.append(folder_name)
+                                inserted_folder_list.append(folder_name)
                                 folder_inserted = True
                                 break
                             elif j == 1:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_folder_icon)
-                                inserted_list.append(folder_name)
+                                inserted_folder_list.append(folder_name)
                                 folder_inserted = True
                                 break
                             elif j == 2:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_folder_icon)
-                                inserted_list.append(folder_name)
+                                inserted_folder_list.append(folder_name)
                                 folder_inserted = True
                                 break
                             elif j == 3:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_folder_icon)
-                                inserted_list.append(folder_name) 
+                                inserted_folder_list.append(folder_name) 
                                 folder_inserted = True
                if folder_inserted == False:
                    tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])                                       
                count += 1
 
+            inserted_file_list = []
             for i in files_list:
                 file_inserted = False                    
                 for j in range(len(result)):
                     for k in range(len(result[str(j)])):
-                        if i[0] == result[str(j)][k].split('/')[-1]:
+                        if (i[0] == result[str(j)][k].split('/')[-1]) and ((i[0] in inserted_file_list) == False):
                             if j == 0:
-                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_icon)
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_file_icon)
+                                inserted_file_list.append(i[0])
                                 file_inserted = True
+                                break
                             elif j == 1:
-                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_icon)
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_file_icon)
+                                inserted_file_list.append(i[0])
+                                inserted_file_list.append(i[0])
                                 file_inserted = True
+                                break
                             elif j == 2:
-                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_icon)
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=staged_file_icon)
+                                inserted_file_list.append(i[0])
                                 file_inserted = True
+                                break
                             elif j == 3:
-                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_icon)
+                                tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=commited_file_icon)
+                                inserted_file_list.append(i[0])
                                 file_inserted = True
+                                break
                 if file_inserted == False:
                     tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
                 count += 1
@@ -582,7 +592,7 @@ frame_up = tk.Frame(window, border=1, bg="white")
 frame_up.pack(fill="x", side="top")
 
 # Top of window
-folder_icon = tk.PhotoImage(file="data/icon_folder.png")
+folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 file_icon = tk.PhotoImage(file="data/untracked_file.png")
 folder_hidden_icon = tk.PhotoImage(file="data/icon_folder_hidden.png")
 file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
@@ -590,10 +600,10 @@ home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
 # file status icon
-modified_icon = tk.PhotoImage(file="data/modified_file.png")
-untracked_icon = tk.PhotoImage(file="data/untracked_file.png")
-staged_icon = tk.PhotoImage(file="data/staged_file.png")
-commited_icon = tk.PhotoImage(file="data/commited_file.png")
+modified_file_icon = tk.PhotoImage(file="data/modified_file.png")
+untracked_file_icon = tk.PhotoImage(file="data/untracked_file.png")
+staged_file_icon = tk.PhotoImage(file="data/staged_file.png")
+commited_file_icon = tk.PhotoImage(file="data/commited_file.png")
 
 # directory status icon
 modified_folder_icon = tk.PhotoImage(file="data/modified_folder.png")
@@ -725,7 +735,7 @@ def commit_new_window():
 
     status = git_status()
     for i in range(len(status['2'])):
-        treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=file_icon)
+        treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=staged_file_icon)
         
 
     # commit message 입력 영역
