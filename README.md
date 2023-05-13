@@ -1,7 +1,3 @@
-# readme 최종본
-
-완료: No
-
 # 📌 Git Version Control
 
 ---
@@ -45,7 +41,7 @@
 
 ---
 
-- `**Python 3.9 or later` must be installed**
+- **`Python 3.9 or later` must be installed**
 - Depending on the version install: `Tkinter`
 
 <aside>
