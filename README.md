@@ -39,6 +39,7 @@
 
 - **`Python 3.9 or later` must be installed**
 - Depending on the version install: `Tkinter`
+- **Please run the program in `zsh`, not bash**
 
 <aside>
 📌 Follow the instructions belows if you want to execute this program
