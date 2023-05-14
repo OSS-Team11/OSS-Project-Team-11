@@ -1,5 +1,4 @@
 import subprocess
-import subprocess
 
 def git_mv(old_path, new_path):
     try:
