@@ -1,4 +1,4 @@
-# 📌 Git Version Control
+# 📌 Git Version Control for MacOS
 
 - This program is developed based in **MacOS**.
     - It also works in **Windows**, but the UI may break or cause unexpected errors.
