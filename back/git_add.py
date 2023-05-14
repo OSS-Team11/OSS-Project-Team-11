@@ -1,5 +1,3 @@
-import tkinter as tk
-from tkinter import messagebox
 import subprocess
 
 def git_add(file_path):
