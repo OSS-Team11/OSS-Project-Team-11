@@ -435,11 +435,10 @@ def update_files(orig_dirname: str):
         # Add new data
         ################status icon 추가부분################
         count = 0
-
         result = git_status()
         print(result)
 
-        if result == None:
+        if result == None: # .git이 없는 디렉토리인 경우
             print("no exist .git")
             for i in dirs_list:
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
@@ -447,14 +446,14 @@ def update_files(orig_dirname: str):
             for i in files_list:
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
                 count += 1
-        else:
+        else: # .git이 있는 디렉토리인 경우
             inserted_folder_list = []
             for i in dirs_list:
                folder_inserted = False
                for j in range(len(result)):
                     for k in range(len(result[str(j)])):
                         folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0] # 폴더명만 추출
-                        folder_name2 = result[str(j)][k].split('/', maxsplit=1)[0]
+                        folder_name2 = result[str(j)][k].split('/', maxsplit=1)[0] # 최상위 폴더명만 추출
                         git_path = os.popen('git rev-parse --show-toplevel').read().strip() + '/'  
                         if ((i[2].replace('\\', '/').replace(git_path, '') == folder_name and ((folder_name in inserted_folder_list) == False))) or ((i[2].replace('\\', '/').replace(git_path, '') == folder_name2) and ((folder_name2 in inserted_folder_list) == False)):
                             if j == 0:
@@ -505,8 +504,7 @@ def update_files(orig_dirname: str):
                                 break
                             elif j == 1:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=modified_file_icon)
-                                inserted_file_list.append(i[0])
-                                inserted_file_list.append(i[0])
+                                inserted_file_list.append(i[0])                               
                                 file_inserted = True
                                 break
                             elif j == 2:
@@ -624,6 +622,7 @@ untracked_folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 staged_folder_icon = tk.PhotoImage(file="data/staged_folder.png")
 commited_folder_icon = tk.PhotoImage(file="data/commited_folder.png")
 
+#git 명령어 영역 Frame 추가
 frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_git.pack(fill = "x", side="top")
 
@@ -669,7 +668,7 @@ def unstage_bttn_clicked():
         update_files(entry.get())
     show_message(message)
 
-#remove
+# remove
 def rm_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
@@ -679,7 +678,7 @@ def rm_bttn_clicked():
         update_files(entry.get())
     show_message(message)
 
-#rm_cached
+# rm_cached
 def rm_cached_bttn_clicked():
     for i in tree.selection():
         r_path = tree.item(i)["values"][1]
