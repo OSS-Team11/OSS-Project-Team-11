@@ -610,13 +610,13 @@ file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
-# file status icon
+# file state icon
 modified_file_icon = tk.PhotoImage(file="data/modified_file.png")
 untracked_file_icon = tk.PhotoImage(file="data/untracked_file.png")
 staged_file_icon = tk.PhotoImage(file="data/staged_file.png")
 commited_file_icon = tk.PhotoImage(file="data/commited_file.png")
 
-# directory status icon
+# directory state icon
 modified_folder_icon = tk.PhotoImage(file="data/modified_folder.png")
 untracked_folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 staged_folder_icon = tk.PhotoImage(file="data/staged_folder.png")
@@ -745,9 +745,9 @@ def commit_new_window():
     treeview.configure(yscroll=scrollbar.set)
     scrollbar.pack(side="right",fill="y")
 
-    status = git_status()
-    for i in range(len(status['2'])):
-        treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=staged_file_icon)
+    state = git_status()
+    for i in range(len(state['2'])):
+        treeview.insert("", tk.END, text=state['2'][i], values="", open=False, image=staged_file_icon)
         
 
     # commit message 입력 영역
