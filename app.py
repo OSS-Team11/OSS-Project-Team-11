@@ -433,13 +433,13 @@ def update_files(orig_dirname: str):
             tree.delete(item)
         entry.delete(0, "end")
         # Add new data
-        ################status icon 추가부분################
+        ################state icon 추가부분################
         count = 0
 
         result = git_status()
         print(result)
 
-        if result == None:
+        if result == None: # .git 파일이 없는 디렉토리인 경우
             print("no exist .git")
             for i in dirs_list:
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
@@ -447,15 +447,18 @@ def update_files(orig_dirname: str):
             for i in files_list:
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
                 count += 1
-        else:
+        else: # .git 파일이 있는 디렉토리인 경우
+             # directory insert
             inserted_folder_list = []
             for i in dirs_list:
                folder_inserted = False
                for j in range(len(result)):
                     for k in range(len(result[str(j)])):
-                        folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0] # 폴더명만 추출
-                        folder_name2 = result[str(j)][k].split('/', maxsplit=1)[0]
+                        folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0] # 파일명 제외한 폴더 경로 추출
+                        folder_name2 = result[str(j)][k].split('/', maxsplit=1)[0] # 최상위 폴더명만 추출
                         git_path = os.popen('git rev-parse --show-toplevel').read().strip() + '/'  
+                        print("1 " + i[2].replace('\\', '/').replace(git_path, ''))
+                        print("2 " + folder_name)
                         if ((i[2].replace('\\', '/').replace(git_path, '') == folder_name and ((folder_name in inserted_folder_list) == False))) or ((i[2].replace('\\', '/').replace(git_path, '') == folder_name2) and ((folder_name2 in inserted_folder_list) == False)):
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
@@ -488,10 +491,11 @@ def update_files(orig_dirname: str):
                                 else:
                                     inserted_folder_list.append(folder_name2) 
                                 folder_inserted = True
-               if folder_inserted == False:
+               if folder_inserted == False: # 숨김 처리된 디렉토리 표시하기 위해(윈도우만 가능)
                    tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])                                       
                count += 1
 
+            # file insert
             inserted_file_list = []
             for i in files_list:
                 file_inserted = False                    
@@ -519,7 +523,7 @@ def update_files(orig_dirname: str):
                                 inserted_file_list.append(i[0])
                                 file_inserted = True
                                 break
-                if file_inserted == False:
+                if file_inserted == False: # 숨김 처리된 파일 표시하기 위해(윈도우만 가능)
                     tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
                 count += 1
             
@@ -601,6 +605,15 @@ window = tk.Tk()
 window.resizable(True, True)
 window.iconphoto(True, tk.PhotoImage(file="data/icon.png"))
 window.minsize(width=800, height=500)
+
+tab = ttk.Notebook(window)
+notebook.pack()
+#tab.grid(row=0, column=0)
+frame_workspace = tk.Frame(tab)
+frame_branch = tk.Frame(tab)
+tab.add(frame_workspace, text="Workspace")
+tab.add(frame_branch, text="Branch")
+
 frame_up = tk.Frame(window, border=1, bg="white")
 frame_up.pack(fill="x", side="top")
 
@@ -612,13 +625,13 @@ file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
-# file status icon
+# file state icon
 modified_file_icon = tk.PhotoImage(file="data/modified_file.png")
 untracked_file_icon = tk.PhotoImage(file="data/untracked_file.png")
 staged_file_icon = tk.PhotoImage(file="data/staged_file.png")
 commited_file_icon = tk.PhotoImage(file="data/commited_file.png")
 
-# directory status icon
+# directory state icon
 modified_folder_icon = tk.PhotoImage(file="data/modified_folder.png")
 untracked_folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 staged_folder_icon = tk.PhotoImage(file="data/staged_folder.png")
