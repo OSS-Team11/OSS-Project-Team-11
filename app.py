@@ -606,15 +606,17 @@ window.resizable(True, True)
 window.iconphoto(True, tk.PhotoImage(file="data/icon.png"))
 window.minsize(width=800, height=500)
 
+#tab 추가
 tab = ttk.Notebook(window)
-notebook.pack()
-#tab.grid(row=0, column=0)
+tab.pack()
 frame_workspace = tk.Frame(tab)
 frame_branch = tk.Frame(tab)
+frame_history = tk.Frame(tab)
 tab.add(frame_workspace, text="Workspace")
 tab.add(frame_branch, text="Branch")
+tab.add(frame_history, text="Commit History")
 
-frame_up = tk.Frame(window, border=1, bg="white")
+frame_up = tk.Frame(frame_workspace, border=1, bg="white")
 frame_up.pack(fill="x", side="top")
 
 # Top of window
@@ -798,11 +800,11 @@ tk.Button(frame_b, image=up_icon, width=25, height=32, relief="flat", bg="white"
 tk.Button(frame_b, image=home_icon, width=25, height=32, relief="flat", bg="white", fg="black", command=lambda:update_files(home_path)).grid(column=1, row=1)
 entry = tk.Entry(frame_up, font=("Arial", 12), justify="left", highlightcolor="white", highlightthickness=0, relief="groove", border=2)
 entry.pack(side="right",fill="both", expand=1)
-label = tk.Label(window, font=("Arial", 12), anchor="w", bg="white", foreground="grey", border=2)
+label = tk.Label(frame_workspace, font=("Arial", 12), anchor="w", bg="white", foreground="grey", border=2)
 label.pack(side="bottom",fill="both")
 
 # Tree view
-tree_frame = tk.Frame(window, border=1, relief="flat", bg="white")
+tree_frame = tk.Frame(frame_workspace, border=1, relief="flat", bg="white")
 tree_frame.pack(expand=1, fill="both")
 tree = ttk.Treeview(tree_frame, columns=(["#1"]), selectmode="extended", show="tree headings", style="mystyle.Treeview")
 tree.heading("#0", text="   Name ↑", anchor="w", command=sort_name_reverse) 
