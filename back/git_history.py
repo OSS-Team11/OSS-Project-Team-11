@@ -20,3 +20,18 @@ def git_history_list():
 def git_history_detail(commit_sum):
     command = ['git', 'show', '--stat', commit_sum]
     result = subprocess.run(command, capture_output=True, text=True)
+    result_lst = []
+
+    if result.returncode == 128:
+        error = result.stderr.strip()
+        result_lst.append(error)
+    else:
+        output = result.stdout.strip()
+        for line in output.split('\n'):
+            result_lst.append(line)
+        
+        print(result.returncode, result_lst)
+        return result.returncode, result_lst
+
+# git_history_list()
+# git_history_detail('0331a677d40d9')
