@@ -17,8 +17,8 @@ def git_history_list():
     print(result.returncode, result_lst)
     return result.returncode, result_lst
 
-def git_history_detail(commit_sum):
-    command = ['git', 'show', '--stat', commit_sum]
+def git_history_detail(checksum):
+    command = ['git', 'show', '--stat', checksum]
     result = subprocess.run(command, capture_output=True, text=True)
     result_lst = []
 
