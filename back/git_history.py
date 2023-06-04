@@ -1,37 +1,33 @@
 import subprocess
 
 def git_history_list():
-    result_lst = []
-    command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[%d][%s][%an][%h7]']
-    result = subprocess.run(command, capture_output=True, text=True)
-    
-    ##error
-    if result.returncode == 128:
-        error = result.stderr.strip()
-        result_lst.append(error)
-    else:
-        output = result.stdout.strip()   
-        for line in output.split('\n'):
-            result_lst.append(line)
-
-    print(result.returncode, result_lst)
-    return result.returncode, result_lst
-
-def git_history_detail(checksum):
-    command = ['git', 'show', '--stat', checksum]
-    result = subprocess.run(command, capture_output=True, text=True)
-    result_lst = []
-
-    if result.returncode == 128:
-        error = result.stderr.strip()
-        result_lst.append(error)
-    else:
+    try:
+        result_lst = []
+        command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[%d][%s][%an][%h7]']
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        
         output = result.stdout.strip()
         for line in output.split('\n'):
             result_lst.append(line)
         
-        print(result.returncode, result_lst)
-        return result.returncode, result_lst
+        return 0, result_lst
+    
+    except subprocess.CalledProcessError as e:
+        error = e.stderr.strip()
+        return e.returncode, [error]
 
-# git_history_list()
-# git_history_detail('0331a677d40d9')
+def git_history_detail(checksum):
+    try:
+        result_lst = []
+        command = ['git', 'show', '--stat', checksum]
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        
+        output = result.stdout.strip()
+        for line in output.split('\n'):
+            result_lst.append(line)
+        
+        return 0, result_lst
+    
+    except subprocess.CalledProcessError as e:
+        error = e.stderr.strip()
+        return e.returncode, [error]
