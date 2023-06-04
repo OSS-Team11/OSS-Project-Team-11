@@ -608,17 +608,22 @@ window.minsize(width=800, height=500)
 
 #tab 추가
 tab = ttk.Notebook(window)
-tab.pack()
-frame_workspace = tk.Frame(tab)
+tab.pack(expand=1, fill="both")
+frame_vc = tk.Frame(tab)
 frame_branch = tk.Frame(tab)
 frame_history = tk.Frame(tab)
-tab.add(frame_workspace, text="Workspace")
+tab.add(frame_vc, text="Version Control")
 tab.add(frame_branch, text="Branch")
 tab.add(frame_history, text="Commit History")
 
-frame_up = tk.Frame(frame_workspace, border=1, bg="white")
+frame_up = tk.Frame(frame_vc, border=1, bg="white")
 frame_up.pack(fill="x", side="top")
+frame_vc_command = tk.Frame(frame_up, border=2, relief="groove", bg="white")
+frame_vc_command.pack(fill = "x", side="top")
+frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
+frame_b.pack(side="left")
 
+##############version control 영역#############
 # Top of window
 folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 file_icon = tk.PhotoImage(file="data/untracked_file.png")
@@ -638,12 +643,6 @@ modified_folder_icon = tk.PhotoImage(file="data/modified_folder.png")
 untracked_folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 staged_folder_icon = tk.PhotoImage(file="data/staged_folder.png")
 commited_folder_icon = tk.PhotoImage(file="data/commited_folder.png")
-
-frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
-frame_git.pack(fill = "x", side="top")
-
-frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
-frame_b.pack(side="left")
 
 #init
 def init_bttn_clicked():
@@ -778,15 +777,15 @@ def commit_new_window():
     cnfrm_button.pack()
 
 
-# git 관련 버튼
-init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=init_bttn_clicked)
-add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
-restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
-unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
-rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=rm_bttn_clicked)
-rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13, command=rm_cached_bttn_clicked)
-mv_bttn = tk.Button(frame_git, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
-commit_bttn = tk.Button(frame_git, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
+# version control 관련 버튼
+init_bttn = tk.Button(frame_vc_command, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=init_bttn_clicked)
+add_bttn = tk.Button(frame_vc_command, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
+restore_bttn = tk.Button(frame_vc_command, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
+unstage_bttn = tk.Button(frame_vc_command, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
+rm_bttn = tk.Button(frame_vc_command, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=rm_bttn_clicked)
+rm_cached_bttn = tk.Button(frame_vc_command, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13, command=rm_cached_bttn_clicked)
+mv_bttn = tk.Button(frame_vc_command, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
+commit_bttn = tk.Button(frame_vc_command, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
 init_bttn.pack(side="left", expand=1)
 add_bttn.pack(side="left", expand=1)
 restore_bttn.pack(side="left", expand=1)
@@ -800,11 +799,11 @@ tk.Button(frame_b, image=up_icon, width=25, height=32, relief="flat", bg="white"
 tk.Button(frame_b, image=home_icon, width=25, height=32, relief="flat", bg="white", fg="black", command=lambda:update_files(home_path)).grid(column=1, row=1)
 entry = tk.Entry(frame_up, font=("Arial", 12), justify="left", highlightcolor="white", highlightthickness=0, relief="groove", border=2)
 entry.pack(side="right",fill="both", expand=1)
-label = tk.Label(frame_workspace, font=("Arial", 12), anchor="w", bg="white", foreground="grey", border=2)
+label = tk.Label(frame_vc, font=("Arial", 12), anchor="w", bg="white", foreground="grey", border=2)
 label.pack(side="bottom",fill="both")
 
 # Tree view
-tree_frame = tk.Frame(frame_workspace, border=1, relief="flat", bg="white")
+tree_frame = tk.Frame(frame_vc, border=1, relief="flat", bg="white")
 tree_frame.pack(expand=1, fill="both")
 tree = ttk.Treeview(tree_frame, columns=(["#1"]), selectmode="extended", show="tree headings", style="mystyle.Treeview")
 tree.heading("#0", text="   Name ↑", anchor="w", command=sort_name_reverse) 
@@ -826,6 +825,17 @@ if hidden == False:
     hidden_menu.set(0)
 if hidden == True:
     hidden_menu.set(1)
+#############################
+
+##########commit history 영역##########
+canvas = Canvas(frame_history, bg="white")
+canvas.pack(expand=1, fill="both")
+pos_x_circle = 10
+pos_y_circle = 10
+circle = canvas.create_oval(pos_x_circle, pos_y_circle, pos_x_circle+6, pos_y_circle+6, fill="black")
+text = canvas.create_text(20, 13, text= "test message",fill="black",anchor="w", font=("Arial", 12))
+
+#########################
 
 # Right click menu
 right_menu = tk.Menu(tree_frame, tearoff=0, font=("Arial", 12))
