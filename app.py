@@ -1,4 +1,4 @@
-import os, stat, re, sys, platform, subprocess, string, shutil, configparser, tkinter as tk
+import os,getpass, stat, re, sys, platform, subprocess, string, shutil, configparser, tkinter as tk
 from tkinter import ttk, simpledialog
 from tkinter.messagebox import askyesno
 from tkinter import filedialog
@@ -729,38 +729,55 @@ def commit_new_window():
     cmmt_new_win = Toplevel()
     cmmt_new_win.title("commit")
 
-    # staged 파일 목록 영역
-    frame_added_files = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
-    frame_added_files.pack(side="top", fill="both", expand=True)
+#git clone
+def clone_github_repository():
+    repository_url = input("GitHub repository address: ")
+    is_private = input("Is it a private repository? (y/n): ").lower() == "y"
     
-    tree_frame = tk.Frame(frame_added_files, border=1, relief="flat", bg="white")
-    tree_frame.pack(expand=1, fill="both")
-    treeview = ttk.Treeview(tree_frame, selectmode="extended", show="tree headings", style="mystyle.Treeview")
-    treeview.pack(side="left", expand=1, fill="both")
-    treeview.heading("#0", text="added files")
-    style = ttk.Style()
-    style.configure("Treeview", rowheight=30, font=("Arial", 12))
-    style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
-    style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
-    scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=treeview.yview)
-    treeview.configure(yscroll=scrollbar.set)
-    scrollbar.pack(side="right",fill="y")
+    if is_private:
+        username = input("GitHub username: ")
+        token = getpass.getpass("GitHub access token: ")
+        clone_command = f"git clone https://{username}:{token}@{repository_url}"
+    else:
+        clone_command = f"git clone https://{repository_url}"
+    
+    os.system(clone_command)
+    print("Repository cloned successfully.")
 
-    status = git_status()
-    for i in range(len(status['2'])):
+clone_github_repository()
+
+# staged 파일 목록 영역
+frame_added_files = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
+frame_added_files.pack(side="top", fill="both", expand=True)
+    
+tree_frame = tk.Frame(frame_added_files, border=1, relief="flat", bg="white")
+tree_frame.pack(expand=1, fill="both")
+treeview = ttk.Treeview(tree_frame, selectmode="extended", show="tree headings", style="mystyle.Treeview")
+treeview.pack(side="left", expand=1, fill="both")
+treeview.heading("#0", text="added files")
+style = ttk.Style()
+style.configure("Treeview", rowheight=30, font=("Arial", 12))
+style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
+style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
+scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=treeview.yview)
+treeview.configure(yscroll=scrollbar.set)
+scrollbar.pack(side="right",fill="y")
+
+status = git_status()
+for i in range(len(status['2'])):
         treeview.insert("", tk.END, text=status['2'][i], values="", open=False, image=staged_file_icon)
         
 
-    # commit message 입력 영역
-    frame_commit_message = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
-    frame_commit_message.pack(side="bottom", fill="both", expand=True)
+# commit message 입력 영역
+frame_commit_message = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
+frame_commit_message.pack(side="bottom", fill="both", expand=True)
      
-    label=tk.Label(frame_commit_message, text="commit message를 입력하세요", bg="white")
-    label.pack()
-    input = tk.Entry(frame_commit_message, bg="white", width=50)
-    input.pack()
-    cnfrm_button = tk.Button(frame_commit_message, text="commit", relief="groove", bg="white", border=1, command=partial(commit_bttn_clicked, input))
-    cnfrm_button.pack()
+label=tk.Label(frame_commit_message, text="commit message를 입력하세요", bg="white")
+label.pack()
+input = tk.Entry(frame_commit_message, bg="white", width=50)
+input.pack()
+cnfrm_button = tk.Button(frame_commit_message, text="commit", relief="groove", bg="white", border=1, command=partial(commit_bttn_clicked, input))
+cnfrm_button.pack()
 
 
 # git 관련 버튼
