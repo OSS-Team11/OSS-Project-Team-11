@@ -6,7 +6,7 @@ def show_git_commit_graph_with_author_and_branch():
     command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[%d][%s][%an]']
     result = subprocess.run(command, capture_output=True, text=True)
     output = result.stdout.strip()
-    print(output)
+    #print(output)
 
     for line in output.split('\n'):
 
@@ -14,4 +14,4 @@ def show_git_commit_graph_with_author_and_branch():
     print(result_lst)
     return result_lst
 
-show_git_commit_graph_with_author_and_branch()
+#show_git_commit_graph_with_author_and_branch()
