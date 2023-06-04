@@ -1,17 +1,37 @@
 import subprocess
-import re
 
 def git_history_list():
     result_lst = []
-    command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[%d][%s][%an]']
+    command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[%d][%s][%an][%h7]']
     result = subprocess.run(command, capture_output=True, text=True)
-    output = result.stdout.strip()
-    #print(output)
+    
+    ##error
+    if result.returncode == 128:
+        error = result.stderr.strip()
+        result_lst.append(error)
+    else:
+        output = result.stdout.strip()   
+        for line in output.split('\n'):
+            result_lst.append(line)
 
-    for line in output.split('\n'):
+    print(result.returncode, result_lst)
+    return result.returncode, result_lst
 
-        result_lst.append(line)
-    print(result_lst)
-    return result_lst
+def git_history_detail(checksum):
+    command = ['git', 'show', '--stat', checksum]
+    result = subprocess.run(command, capture_output=True, text=True)
+    result_lst = []
 
+    if result.returncode == 128:
+        error = result.stderr.strip()
+        result_lst.append(error)
+    else:
+        output = result.stdout.strip()
+        for line in output.split('\n'):
+            result_lst.append(line)
+        
+        print(result.returncode, result_lst)
+        return result.returncode, result_lst
 
+# git_history_list()
+# git_history_detail('0331a677d40d9')
