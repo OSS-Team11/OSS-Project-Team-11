@@ -22,6 +22,7 @@ from back.git_restore import *
 from back.git_restore_staged import *
 from back.git_mv import *
 from back.git_commit import *
+from back.git_history import *
 # Interface
 
 def sort_name_reverse():
@@ -437,7 +438,7 @@ def update_files(orig_dirname: str):
         count = 0
 
         result = git_status()
-        print(result)
+        #print(result)
 
         if result == None: # .git 파일이 없는 디렉토리인 경우
             print("no exist .git")
@@ -457,8 +458,8 @@ def update_files(orig_dirname: str):
                         folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0] # 파일명 제외한 폴더 경로 추출
                         folder_name2 = result[str(j)][k].split('/', maxsplit=1)[0] # 최상위 폴더명만 추출
                         git_path = os.popen('git rev-parse --show-toplevel').read().strip() + '/'  
-                        print("1 " + i[2].replace('\\', '/').replace(git_path, ''))
-                        print("2 " + folder_name)
+                        #print("1 " + i[2].replace('\\', '/').replace(git_path, ''))
+                        #print("2 " + folder_name)
                         if ((i[2].replace('\\', '/').replace(git_path, '') == folder_name and ((folder_name in inserted_folder_list) == False))) or ((i[2].replace('\\', '/').replace(git_path, '') == folder_name2) and ((folder_name2 in inserted_folder_list) == False)):
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
@@ -526,6 +527,8 @@ def update_files(orig_dirname: str):
                 if file_inserted == False: # 숨김 처리된 파일 표시하기 위해(윈도우만 가능)
                     tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
                 count += 1
+
+                
             
     #################################################################
         if ftp == None:
@@ -606,6 +609,46 @@ window.resizable(True, True)
 window.iconphoto(True, tk.PhotoImage(file="data/icon.png"))
 window.minsize(width=800, height=500)
 
+
+
+def show_commit_history():
+    x_circle = 10
+    y_circle = 10
+    x_txt = 20
+    y_txt = 14
+    prev_index = 0;
+    index = 0
+
+    return_code, history_list = git_history_list()
+
+    if(return_code == 128):
+        print("Error")
+        print(history_list)
+    else:
+        print(history_list)
+        for i in history_list:
+            index = history_list[i].find('*')
+            if index != -1:
+                if index > prev_index:
+                    x_circle += 15*index
+                    y_circle += 20
+                    circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
+                    x_txt += 15*index
+                if index < prev_index:
+                    x_circle -= 15*index
+                    y_circle -= 20
+                    circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
+                    x_txt -= 15*index
+                prev_index = index
+
+            canvas.create_line(x_circle+4, y_circle+4, x_circle+4, y_circle-16)
+            
+            text = canvas.create_text(x_txt, y_txt, text= "test message",fill="black",anchor="w", font=("Arial", 12))
+            y_txt += 20
+            #pos_x_circle += 15S
+
+
+
 #tab 추가
 tab = ttk.Notebook(window)
 tab.pack(expand=1, fill="both")
@@ -622,6 +665,7 @@ frame_vc_command = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_vc_command.pack(fill = "x", side="top")
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
+
 
 ##############version control 영역#############
 # Top of window
@@ -830,10 +874,61 @@ if hidden == True:
 ##########commit history 영역##########
 canvas = Canvas(frame_history, bg="white")
 canvas.pack(expand=1, fill="both")
-pos_x_circle = 10
-pos_y_circle = 10
-circle = canvas.create_oval(pos_x_circle, pos_y_circle, pos_x_circle+6, pos_y_circle+6, fill="black")
-text = canvas.create_text(20, 13, text= "test message",fill="black",anchor="w", font=("Arial", 12))
+
+
+def tab_changed(event):
+    selected_tab = event.widget.select()
+    tab_text = event.widget.tab(selected_tab, "text")
+    if tab_text == "Commit History":
+
+        return_code, history_list = git_history_list()
+
+        
+        if(return_code == 128):
+            print("Error")           
+        else:
+            pos_y = 15
+            for i in range(len(history_list)):
+                pos_x = 15
+                for j in history_list[i]:
+                    if(j == '*'):
+                        canvas.create_oval(pos_x-5, pos_y-5, pos_x+5, pos_y+5, fill="black")
+                        pos_x += 15
+                    elif(j == '|'):
+                        canvas.create_line(pos_x, pos_y-5, pos_x, pos_y+5)
+                        pos_x += 15
+                    elif(j == '/'):
+                        canvas.create_line(pos_x+5, pos_y-5, pos_x-5, pos_y+5)
+                        pos_x += 15
+                    # elif(j == '\\'):
+                    #     canvas.create_line(pos_x, pos_y, pos_x, pos_y+25)
+                    #     pos_x += 15
+                splited_history_list = history_list[i].split('[', maxsplit = 1)
+                canvas.create_text(pos_x, pos_y, text= splited_history_list[1], fill="black",anchor="w", font=("Arial", 12))
+                pos_y += 30
+
+            # for i in range(len(history_list)):
+            #     cur_index = history_list[i].find("*")
+            #     if cur_index != -1:
+            #         if cur_index > prev_index:
+            #             prev_x_circle = x_circle
+            #             x_circle += 15*cur_index                                            
+            #             x_txt += 15*cur_index
+            #         elif cur_index < prev_index:
+            #             prev_x_circle = x_circle
+            #             x_circle -= 15*cur_index                                           
+            #             x_txt -= 15*cur_index
+            #         prev_index = cur_index
+                                   
+            #     canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="black")             
+            #     canvas.create_text(x_txt, y_txt, text= history_list[i],fill="black",anchor="w", font=("Arial", 12))
+            #     canvas.create_line(prev_x_circle+4, prev_y_circle+4, x_circle+4, y_circle+4)
+            #     prev_y_circle = y_circle
+            #     y_circle += 25
+            #     y_txt += 25
+               
+   
+tab.bind("<<NotebookTabChanged>>", tab_changed)
 
 #########################
 
