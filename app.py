@@ -880,10 +880,11 @@ canvas.pack(expand=1, fill="both")
 
 def history_clicked(sum):
     print(sum)
+    error, result_lst = git_history_detail(sum)
     global mv_new_win
     mv_new_win = Toplevel()
     mv_new_win.title("Commit History Detail")
-    label=tk.Label(mv_new_win, text="Detailed Commit History", bg="white")
+    label=tk.Label(mv_new_win, text=result_lst, bg="white")
     label.pack()
    
     
@@ -910,38 +911,18 @@ def tab_changed(event):
                         canvas.create_line(pos_x, pos_y-10, pos_x, pos_y+10)
                         pos_x += 15
                     elif(j == '/'):
-                        canvas.create_line(pos_x+5, pos_y-10, pos_x-5, pos_y+10)
+                        canvas.create_line(pos_x, pos_y-10, pos_x-5, pos_y+10)
                         pos_x += 15
-                    # elif(j == '\\'):
-                    #     canvas.create_line(pos_x-5, pos_y+10, pos_x+5, pos_y-10)
-                    #     pos_x += 15
+                    elif(j == '\\'):
+                        canvas.create_line(pos_x-5, pos_y-10, pos_x, pos_y+10)
+                        pos_x += 15
                 if '[' in history_list[i][0]: #그래프만 존재하는 경우 pass
                     commit_objects = history_list[i][0].split('[', maxsplit = 1)[1]
                     text = canvas.create_text(pos_x, pos_y, text= commit_objects, fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
                     canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= history_list[i][1]: history_clicked(sum))
                 pos_y += 30
 
-            # for i in range(len(history_list)):
-            #     cur_index = history_list[i].find("*")
-            #     if cur_index != -1:
-            #         if cur_index > prev_index:
-            #             prev_x_circle = x_circle
-            #             x_circle += 15*cur_index                                            
-            #             x_txt += 15*cur_index
-            #         elif cur_index < prev_index:
-            #             prev_x_circle = x_circle
-            #             x_circle -= 15*cur_index                                           
-            #             x_txt -= 15*cur_index
-            #         prev_index = cur_index
-                                   
-            #     canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="black")             
-            #     canvas.create_text(x_txt, y_txt, text= history_list[i],fill="black",anchor="w", font=("Arial", 12))
-            #     canvas.create_line(prev_x_circle+4, prev_y_circle+4, x_circle+4, y_circle+4)
-            #     prev_y_circle = y_circle
-            #     y_circle += 25
-            #     y_txt += 25
-               
-   
+           
 tab.bind("<<NotebookTabChanged>>", tab_changed)
 
 #########################
