@@ -9,13 +9,10 @@ def git_history_list():
         if result.stdout is not None:
             output = result.stdout.strip()
             for line in output.split('\n'):
-                line_lst = []
-                commitmessage_lst = []
-                checksum_lst = []
                 result = list(line.split('!!!'))
                 result_lst.append(result)
         
-        print(result_lst[0])
+        print(result_lst)
         return 0, result_lst
 
     except subprocess.CalledProcessError as e:
@@ -44,5 +41,5 @@ def git_history_detail(checksum):
         return e.returncode, [error]
 
 
-git_history_list()    
+#git_history_list()    
 # git_history_detail()
