@@ -893,8 +893,7 @@ def tab_changed(event):
     selected_tab = event.widget.select()
     tab_text = event.widget.tab(selected_tab, "text")
     if tab_text == "Commit History":
-       
-
+        canvas.delete("all") # canvas 비우기
         return_code, history_list = git_history_list()
         
         if(return_code == 128):
@@ -921,6 +920,7 @@ def tab_changed(event):
                     text = canvas.create_text(pos_x, pos_y, text= commit_objects, fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
                     canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= history_list[i][1]: history_clicked(sum))
                 pos_y += 30
+       
 
            
 tab.bind("<<NotebookTabChanged>>", tab_changed)
