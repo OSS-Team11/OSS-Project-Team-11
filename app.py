@@ -609,46 +609,6 @@ window.resizable(True, True)
 window.iconphoto(True, tk.PhotoImage(file="data/icon.png"))
 window.minsize(width=800, height=500)
 
-
-
-# def show_commit_history():
-#     x_circle = 10
-#     y_circle = 10
-#     x_txt = 20
-#     y_txt = 14
-#     prev_index = 0;
-#     index = 0
-
-#     return_code, history_list = git_history_list()
-
-#     if(return_code == 128):
-#         print("Error")
-#         print(history_list)
-#     else:
-#         print(history_list)
-#         for i in history_list:
-#             index = history_list[i].find('*')
-#             if index != -1:
-#                 if index > prev_index:
-#                     x_circle += 15*index
-#                     y_circle += 20
-#                     circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
-#                     x_txt += 15*index
-#                 if index < prev_index:
-#                     x_circle -= 15*index
-#                     y_circle -= 20
-#                     circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
-#                     x_txt -= 15*index
-#                 prev_index = index
-
-#             canvas.create_line(x_circle+4, y_circle+4, x_circle+4, y_circle-16)
-            
-#             text = canvas.create_text(x_txt, y_txt, text= "test message",fill="black",anchor="w", font=("Arial", 12))
-#             y_txt += 20
-#             pos_x_circle += 15
-
-
-
 #tab 추가
 tab = ttk.Notebook(window)
 tab.pack(expand=1, fill="both")
@@ -659,6 +619,8 @@ tab.add(frame_vc, text="Version Control")
 tab.add(frame_branch, text="Branch")
 tab.add(frame_history, text="Commit History")
 
+
+##############version control 영역#############
 frame_up = tk.Frame(frame_vc, border=1, bg="white")
 frame_up.pack(fill="x", side="top")
 frame_vc_command = tk.Frame(frame_up, border=2, relief="groove", bg="white")
@@ -666,8 +628,6 @@ frame_vc_command.pack(fill = "x", side="top")
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
-
-##############version control 영역#############
 # Top of window
 folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 file_icon = tk.PhotoImage(file="data/untracked_file.png")
@@ -861,7 +821,7 @@ style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
 style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
 scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
 tree.configure(yscroll=scrollbar.set)
-scrollbar.pack(side="right",fill="y")
+scrollbar.pack(side="right",fill="y") 
 
 # On/off hidden files checkbutton on start
 hidden_menu = tk.IntVar()
@@ -871,11 +831,24 @@ if hidden == True:
     hidden_menu.set(1)
 #############################
 
+##########branch 영역##########
+branch_frame_up = tk.Frame(frame_branch, border=1, bg="white")
+branch_frame_up.pack(fill="x", side="top")
+frame_branch_command = tk.Frame(branch_frame_up, border=2, relief="groove", bg="white")
+frame_branch_command.pack(fill = "x", side="top")
+
+create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=init_bttn_clicked)
+delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
+rename_bttn = tk.Button(frame_branch_command, text="rename", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
+checkout_bttn = tk.Button(frame_branch_command, text="checkout", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
+create_bttn.pack(side="left", expand=1)
+delete_bttn.pack(side="left", expand=1)
+rename_bttn.pack(side="left", expand=1)
+checkout_bttn.pack(side="left", expand=1)
+
 ##########commit history 영역##########
 canvas = Canvas(frame_history, bg="white")
 canvas.pack(expand=1, fill="both")
-
-
     
 
 def history_clicked(sum):
