@@ -46,14 +46,26 @@ if branches is not None:
     for index, branch in enumerate(branches, start=1):
         print(f"{index}. {branch}")
     
-    # Input: the selected branch number
-    branch_number = int(input("Enter the branch number to check out: "))
     
-    if 1 <= branch_number <= len(branches):
+    # Input: the selected branch number
+   
+    branch_info = (input("Enter the branch number to check out: "))
+    try:
+        branch_number=int(branch_info)
+        if 1 <= branch_number <= len(branches):
         # Checkout to the selected branch
-        selected_branch = branches[branch_number - 1]
-        git_b_checkout(selected_branch)
-    else:
-        print("Please enter a valid branch number.")
+            selected_branch = branches[branch_number - 1]
+            git_b_checkout(selected_branch)
+        else:
+            print("Please enter a valid branch number.")
+        
+       
+    except:
+        git_b_checkout(branch_info)
+
+
+    
+    
 else:
     print("Failed to get branch list.")
+
