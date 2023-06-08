@@ -880,6 +880,12 @@ canvas.pack(expand=1, fill="both")
 
 def history_clicked(sum):
     print(sum)
+    global mv_new_win
+    mv_new_win = Toplevel()
+    mv_new_win.title("Commit History Detail")
+    label=tk.Label(mv_new_win, text="Detailed Commit History", bg="white")
+    label.pack()
+   
     
 
 def tab_changed(event):
