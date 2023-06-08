@@ -837,10 +837,31 @@ branch_frame_up.pack(fill="x", side="top")
 frame_branch_command = tk.Frame(branch_frame_up, border=2, relief="groove", bg="white")
 frame_branch_command.pack(fill = "x", side="top")
 
-create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=init_bttn_clicked)
-delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
-rename_bttn = tk.Button(frame_branch_command, text="rename", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
-checkout_bttn = tk.Button(frame_branch_command, text="checkout", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
+def create_bttn_clicked():
+    global cr_new_win
+    cr_new_win = Toplevel()
+    cr_new_win.title("Create")
+    label=tk.Label(cr_new_win, text="Enter new branch name.", bg="white")
+    label.pack()
+    input = Entry(cr_new_win, width=30)
+    input.pack()
+    cnfrm_button = Button(cr_new_win, text="enter", relief="flat", bg="white", command=partial(mv_bttn_clicked, input))
+    cnfrm_button.pack()
+
+
+def delete_bttn_clicked():
+    a=0
+
+def rename_bttn_clicked():
+    a=0
+
+def checkout_bttn_clicked():
+    a=0
+
+create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=create_bttn_clicked)
+delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = delete_bttn_clicked)
+rename_bttn = tk.Button(frame_branch_command, text="rename", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=rename_bttn_clicked)
+checkout_bttn = tk.Button(frame_branch_command, text="checkout", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=checkout_bttn_clicked)
 create_bttn.pack(side="left", expand=1)
 delete_bttn.pack(side="left", expand=1)
 rename_bttn.pack(side="left", expand=1)
