@@ -29,12 +29,8 @@ def git_b_checkout(branch_name):
             print(f"Error: Invalid branch name '{branch_name}'.")
         elif "did not match any file(s) known to git" in error_message:
             print(f"Error: The branch '{branch_name}' does not exist.")
-        elif "Switched to a new branch" in error_message:
-            print(f"Error: Failed to switch to the branch '{branch_name}'.")
         elif "error: Your local changes to the following files would be overwritten by checkout" in error_message:
             print("Error: You have local changes that would be overwritten by checkout. Please commit or stash your changes before switching branches.")
-        elif "error: The following untracked working tree files would be overwritten by checkout" in error_message:
-            print("Error: The following untracked working tree files would be overwritten by checkout. Please execute 'checkout' after committing or backing up the changed files.")
         else:
             print(f"Error occurred: {error_message}")
     return 0
