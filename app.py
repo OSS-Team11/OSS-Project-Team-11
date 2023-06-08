@@ -876,6 +876,12 @@ canvas = Canvas(frame_history, bg="white")
 canvas.pack(expand=1, fill="both")
 
 
+    
+
+def history_clicked(sum):
+    print(sum)
+    
+
 def tab_changed(event):
     selected_tab = event.widget.select()
     tab_text = event.widget.tab(selected_tab, "text")
@@ -904,7 +910,8 @@ def tab_changed(event):
                     #     canvas.create_line(pos_x, pos_y, pos_x, pos_y+25)
                     #     pos_x += 15
                 splited_history_list = history_list[i].split('[', maxsplit = 1)
-                canvas.create_text(pos_x, pos_y, text= splited_history_list[1], fill="black",anchor="w", font=("Arial", 12))
+                text = canvas.create_text(pos_x, pos_y, text= splited_history_list[1], fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
+                canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= splited_history_list[1]: history_clicked(sum))
                 pos_y += 30
 
             # for i in range(len(history_list)):
