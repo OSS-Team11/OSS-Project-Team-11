@@ -25,9 +25,9 @@ from back.git_commit import *
 
 from back.git_history import *
 from back.git_b_create import *
-from back.git_b_delete import *
-from back.git_b_rename import *
-from back.git_b_checkout import *
+#from back.git_b_delete import *
+#from back.git_b_rename import *
+#from back.git_b_checkout import *
 
 # Interface
 
@@ -619,21 +619,33 @@ window.minsize(width=800, height=500)
 tab = ttk.Notebook(window)
 tab.pack(expand=1, fill="both")
 frame_vc = tk.Frame(tab)
-frame_branch = tk.Frame(tab)
 frame_history = tk.Frame(tab)
 tab.add(frame_vc, text="Version Control")
-tab.add(frame_branch, text="Branch")
 tab.add(frame_history, text="Commit History")
 
 
-##############version control 영역#############
 frame_up = tk.Frame(frame_vc, border=1, bg="white")
 frame_up.pack(fill="x", side="top")
+
 frame_vc_command = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_vc_command.pack(fill = "x", side="top")
+
+frame_branch = tk.Frame(frame_up, border=1, bg="white")
+frame_branch.pack(fill="x", side="top")
+
+frame_branch_command = tk.Frame(frame_branch, border=2, relief="groove", bg="white")
+frame_branch_command.pack(fill = "x", side="left")
+
+# frame_curr_branch = tk.Frame(frame_branch, border=2, height=2, relief="groove", bg="white")
+# frame_curr_branch.pack(fill = "both")
+label_curr_branch=tk.Label(frame_branch, border=2, padx = 5, text="front", font=("Arial", 12), bg="white")
+label_curr_branch.pack()
+
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
 
+
+##############version control 영역#############
 # Top of window
 folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 file_icon = tk.PhotoImage(file="data/untracked_file.png")
@@ -838,13 +850,13 @@ if hidden == True:
 #############################
 
 ##########branch 영역##########
-branch_frame_up = tk.Frame(frame_branch, border=1, bg="white")
-branch_frame_up.pack(fill="x", side="top")
-frame_branch_command = tk.Frame(branch_frame_up, border=2, relief="groove", bg="white")
-frame_branch_command.pack(fill = "x", side="top")
+
 
 # create
-def create_bttn_clicked():
+ # def draw_tree():
+
+
+def create_bttn_clicked(input):
     branch_name=input.get() # 입력받은 commit message commit_message에 저장
     git_b_create(branch_name)
     #success, message = git_b_create(branch_name)
@@ -854,19 +866,19 @@ def create_bttn_clicked():
 
 
 def create_new_window():
-    global cr_new_win
-    cr_new_win = Toplevel()
-    cr_new_win.title("Create")
-    label=tk.Label(cr_new_win, text="Enter new branch name.", bg="white")
+    global crt_new_win
+    crt_new_win = Toplevel()
+    crt_new_win.title("Create")
+    label=tk.Label(crt_new_win, text="Enter new branch name.", bg="white")
     label.pack()
-    input = Entry(cr_new_win, width=30)
+    input = Entry(crt_new_win, width=30)
     input.pack()
-    cnfrm_button = Button(cr_new_win, text="enter", relief="flat", bg="white", command=partial(create_bttn_clicked, input))
+    cnfrm_button = Button(crt_new_win, text="enter", relief="flat", bg="white", command=partial(create_bttn_clicked, input))
     cnfrm_button.pack()
 
 # delete
-def delete_bttn_clicked():
-    a=0
+# def delete_bttn_clicked():
+    #git_b_delete(input)
 
 def delete_new_window():
     global dlt_new_win
@@ -878,24 +890,11 @@ def delete_new_window():
     treeview = ttk.Treeview(frame_branch_list, selectmode="extended")
     treeview.pack(side="left", expand=1, fill="both")
     treeview.heading("#0", text="branch list")
-    scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=treeview.yview)
+    scrollbar = ttk.Scrollbar(frame_branch_list, orient="vertical", command=treeview.yview)
     treeview.configure(yscroll=scrollbar.set)
     scrollbar.pack(side="right",fill="y")
-
-    # frame_added_files = Frame(cmmt_new_win, border=2, relief="groove", bg="white")
-    # frame_added_files.pack(side="top", fill="both", expand=True)
-    # tree_frame = tk.Frame(frame_added_files, border=1, relief="flat", bg="white")
-    # tree_frame.pack(expand=1, fill="both")
-    # treeview = ttk.Treeview(tree_frame, selectmode="extended", show="tree headings", style="mystyle.Treeview")
-    # treeview.pack(side="left", expand=1, fill="both")
-    # treeview.heading("#0", text="added files")
-    # style = ttk.Style()
-    # style.configure("Treeview", rowheight=30, font=("Arial", 12))
-    # style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
-    # style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
-    # scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=treeview.yview)
-    # treeview.configure(yscroll=scrollbar.set)
-    # scrollbar.pack(side="right",fill="y")
+    cnfrm_button = Button(dlt_new_win, text="enter", relief="flat", bg="white", command=partial(delete_bttn_clicked, input))
+    cnfrm_button.pack()
 
     # branch_list = get_branches()
     # print(branch_list)
@@ -905,17 +904,27 @@ def delete_new_window():
 
 # rename
 def rename_bttn_clicked():
-    a=0
+   
 
+def rename_new_window():
+    global rn_new_win
+    rn_new_win = Toplevel()
+    rn_new_win.title("Rename")
 
 # checkout
 def checkout_bttn_clicked():
-    a=0
+   
 
-create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=create_new_window)
-delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = delete_new_window)
-rename_bttn = tk.Button(frame_branch_command, text="rename", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=rename_bttn_clicked)
-checkout_bttn = tk.Button(frame_branch_command, text="checkout", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=checkout_bttn_clicked)
+def checkout_new_window():
+    global co_new_win
+    co_new_win = Toplevel()
+    co_new_win.title("Rename")
+
+
+create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
+delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command = create_new_window)
+rename_bttn = tk.Button(frame_branch_command, text="rename", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
+checkout_bttn = tk.Button(frame_branch_command, text="checkout", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
 create_bttn.pack(side="left", expand=1)
 delete_bttn.pack(side="left", expand=1)
 rename_bttn.pack(side="left", expand=1)
