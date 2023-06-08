@@ -22,6 +22,7 @@ from back.git_restore import *
 from back.git_restore_staged import *
 from back.git_mv import *
 from back.git_commit import *
+from back.git_history import *
 # Interface
 
 def sort_name_reverse():
@@ -433,13 +434,13 @@ def update_files(orig_dirname: str):
             tree.delete(item)
         entry.delete(0, "end")
         # Add new data
-        ################status icon 추가부분################
+        ################state icon 추가부분################
         count = 0
 
         result = git_status()
-        print(result)
+        #print(result)
 
-        if result == None:
+        if result == None: # .git 파일이 없는 디렉토리인 경우
             print("no exist .git")
             for i in dirs_list:
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])
@@ -447,15 +448,18 @@ def update_files(orig_dirname: str):
             for i in files_list:
                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])       
                 count += 1
-        else:
+        else: # .git 파일이 있는 디렉토리인 경우
+             # directory insert
             inserted_folder_list = []
             for i in dirs_list:
                folder_inserted = False
                for j in range(len(result)):
                     for k in range(len(result[str(j)])):
-                        folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0] # 폴더명만 추출
-                        folder_name2 = result[str(j)][k].split('/', maxsplit=1)[0]
+                        folder_name = result[str(j)][k].rsplit('/', maxsplit=1)[0] # 파일명 제외한 폴더 경로 추출
+                        folder_name2 = result[str(j)][k].split('/', maxsplit=1)[0] # 최상위 폴더명만 추출
                         git_path = os.popen('git rev-parse --show-toplevel').read().strip() + '/'  
+                        #print("1 " + i[2].replace('\\', '/').replace(git_path, ''))
+                        #print("2 " + folder_name)
                         if ((i[2].replace('\\', '/').replace(git_path, '') == folder_name and ((folder_name in inserted_folder_list) == False))) or ((i[2].replace('\\', '/').replace(git_path, '') == folder_name2) and ((folder_name2 in inserted_folder_list) == False)):
                             if j == 0:
                                 tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=untracked_folder_icon)
@@ -488,10 +492,11 @@ def update_files(orig_dirname: str):
                                 else:
                                     inserted_folder_list.append(folder_name2) 
                                 folder_inserted = True
-               if folder_inserted == False:
+               if folder_inserted == False: # 숨김 처리된 디렉토리 표시하기 위해(윈도우만 가능)
                    tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])                                       
                count += 1
 
+            # file insert
             inserted_file_list = []
             for i in files_list:
                 file_inserted = False                    
@@ -519,9 +524,11 @@ def update_files(orig_dirname: str):
                                 inserted_file_list.append(i[0])
                                 file_inserted = True
                                 break
-                if file_inserted == False:
+                if file_inserted == False: # 숨김 처리된 파일 표시하기 위해(윈도우만 가능)
                     tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
                 count += 1
+
+                
             
     #################################################################
         if ftp == None:
@@ -601,9 +608,66 @@ window = tk.Tk()
 window.resizable(True, True)
 window.iconphoto(True, tk.PhotoImage(file="data/icon.png"))
 window.minsize(width=800, height=500)
-frame_up = tk.Frame(window, border=1, bg="white")
-frame_up.pack(fill="x", side="top")
 
+
+
+# def show_commit_history():
+#     x_circle = 10
+#     y_circle = 10
+#     x_txt = 20
+#     y_txt = 14
+#     prev_index = 0;
+#     index = 0
+
+#     return_code, history_list = git_history_list()
+
+#     if(return_code == 128):
+#         print("Error")
+#         print(history_list)
+#     else:
+#         print(history_list)
+#         for i in history_list:
+#             index = history_list[i].find('*')
+#             if index != -1:
+#                 if index > prev_index:
+#                     x_circle += 15*index
+#                     y_circle += 20
+#                     circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
+#                     x_txt += 15*index
+#                 if index < prev_index:
+#                     x_circle -= 15*index
+#                     y_circle -= 20
+#                     circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
+#                     x_txt -= 15*index
+#                 prev_index = index
+
+#             canvas.create_line(x_circle+4, y_circle+4, x_circle+4, y_circle-16)
+            
+#             text = canvas.create_text(x_txt, y_txt, text= "test message",fill="black",anchor="w", font=("Arial", 12))
+#             y_txt += 20
+#             pos_x_circle += 15
+
+
+
+#tab 추가
+tab = ttk.Notebook(window)
+tab.pack(expand=1, fill="both")
+frame_vc = tk.Frame(tab)
+frame_branch = tk.Frame(tab)
+frame_history = tk.Frame(tab)
+tab.add(frame_vc, text="Version Control")
+tab.add(frame_branch, text="Branch")
+tab.add(frame_history, text="Commit History")
+
+frame_up = tk.Frame(frame_vc, border=1, bg="white")
+frame_up.pack(fill="x", side="top")
+frame_vc_command = tk.Frame(frame_up, border=2, relief="groove", bg="white")
+frame_vc_command.pack(fill = "x", side="top")
+frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
+frame_b.pack(side="left")
+
+
+##############version control 영역#############
 # Top of window
 folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 file_icon = tk.PhotoImage(file="data/untracked_file.png")
@@ -612,23 +676,17 @@ file_hidden_icon = tk.PhotoImage(file="data/icon_file_hidden.png")
 home_icon = tk.PhotoImage(file="data/icon_home.png")
 up_icon = tk.PhotoImage(file="data/icon_up.png")
 
-# file status icon
+# file state icon
 modified_file_icon = tk.PhotoImage(file="data/modified_file.png")
 untracked_file_icon = tk.PhotoImage(file="data/untracked_file.png")
 staged_file_icon = tk.PhotoImage(file="data/staged_file.png")
 commited_file_icon = tk.PhotoImage(file="data/commited_file.png")
 
-# directory status icon
+# directory state icon
 modified_folder_icon = tk.PhotoImage(file="data/modified_folder.png")
 untracked_folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 staged_folder_icon = tk.PhotoImage(file="data/staged_folder.png")
 commited_folder_icon = tk.PhotoImage(file="data/commited_folder.png")
-
-frame_git = tk.Frame(frame_up, border=2, relief="groove", bg="white")
-frame_git.pack(fill = "x", side="top")
-
-frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
-frame_b.pack(side="left")
 
 #init
 def init_bttn_clicked():
@@ -763,15 +821,15 @@ def commit_new_window():
     cnfrm_button.pack()
 
 
-# git 관련 버튼
-init_bttn = tk.Button(frame_git, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=init_bttn_clicked)
-add_bttn = tk.Button(frame_git, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
-restore_bttn = tk.Button(frame_git, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
-unstage_bttn = tk.Button(frame_git, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
-rm_bttn = tk.Button(frame_git, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=rm_bttn_clicked)
-rm_cached_bttn = tk.Button(frame_git, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13, command=rm_cached_bttn_clicked)
-mv_bttn = tk.Button(frame_git, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
-commit_bttn = tk.Button(frame_git, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
+# version control 관련 버튼
+init_bttn = tk.Button(frame_vc_command, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=init_bttn_clicked)
+add_bttn = tk.Button(frame_vc_command, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
+restore_bttn = tk.Button(frame_vc_command, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
+unstage_bttn = tk.Button(frame_vc_command, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
+rm_bttn = tk.Button(frame_vc_command, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=rm_bttn_clicked)
+rm_cached_bttn = tk.Button(frame_vc_command, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13, command=rm_cached_bttn_clicked)
+mv_bttn = tk.Button(frame_vc_command, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
+commit_bttn = tk.Button(frame_vc_command, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
 init_bttn.pack(side="left", expand=1)
 add_bttn.pack(side="left", expand=1)
 restore_bttn.pack(side="left", expand=1)
@@ -785,11 +843,11 @@ tk.Button(frame_b, image=up_icon, width=25, height=32, relief="flat", bg="white"
 tk.Button(frame_b, image=home_icon, width=25, height=32, relief="flat", bg="white", fg="black", command=lambda:update_files(home_path)).grid(column=1, row=1)
 entry = tk.Entry(frame_up, font=("Arial", 12), justify="left", highlightcolor="white", highlightthickness=0, relief="groove", border=2)
 entry.pack(side="right",fill="both", expand=1)
-label = tk.Label(window, font=("Arial", 12), anchor="w", bg="white", foreground="grey", border=2)
+label = tk.Label(frame_vc, font=("Arial", 12), anchor="w", bg="white", foreground="grey", border=2)
 label.pack(side="bottom",fill="both")
 
 # Tree view
-tree_frame = tk.Frame(window, border=1, relief="flat", bg="white")
+tree_frame = tk.Frame(frame_vc, border=1, relief="flat", bg="white")
 tree_frame.pack(expand=1, fill="both")
 tree = ttk.Treeview(tree_frame, columns=(["#1"]), selectmode="extended", show="tree headings", style="mystyle.Treeview")
 tree.heading("#0", text="   Name ↑", anchor="w", command=sort_name_reverse) 
@@ -811,6 +869,63 @@ if hidden == False:
     hidden_menu.set(0)
 if hidden == True:
     hidden_menu.set(1)
+#############################
+
+##########commit history 영역##########
+canvas = Canvas(frame_history, bg="white")
+canvas.pack(expand=1, fill="both")
+
+
+    
+
+def history_clicked(sum):
+    print(sum)
+    error, result_lst = git_history_detail(sum)
+    global mv_new_win
+    mv_new_win = Toplevel()
+    mv_new_win.title("Commit History Detail")
+    label=tk.Label(mv_new_win, text=result_lst, bg="white")
+    label.pack()
+   
+    
+
+def tab_changed(event):
+    selected_tab = event.widget.select()
+    tab_text = event.widget.tab(selected_tab, "text")
+    if tab_text == "Commit History":
+        canvas.delete("all") # canvas 비우기
+        return_code, history_list = git_history_list()
+        
+        if(return_code == 128):
+            print("Error")           
+        else:
+            pos_y = 15
+            for i in range(len(history_list)):
+                pos_x = 15
+                for j in history_list[i][0]:
+                    if(j == '*'):
+                        canvas.create_oval(pos_x-5, pos_y-5, pos_x+5, pos_y+5, fill="black")
+                        pos_x += 15
+                    elif(j == '|'):
+                        canvas.create_line(pos_x, pos_y-10, pos_x, pos_y+10)
+                        pos_x += 15
+                    elif(j == '/'):
+                        canvas.create_line(pos_x, pos_y-10, pos_x-5, pos_y+10)
+                        pos_x += 15
+                    elif(j == '\\'):
+                        canvas.create_line(pos_x-5, pos_y-10, pos_x, pos_y+10)
+                        pos_x += 15
+                if '[' in history_list[i][0]: #그래프만 존재하는 경우 pass
+                    commit_objects = history_list[i][0].split('[', maxsplit = 1)[1]
+                    text = canvas.create_text(pos_x, pos_y, text= commit_objects, fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
+                    canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= history_list[i][1]: history_clicked(sum))
+                pos_y += 30
+       
+
+           
+tab.bind("<<NotebookTabChanged>>", tab_changed)
+
+#########################
 
 # Right click menu
 right_menu = tk.Menu(tree_frame, tearoff=0, font=("Arial", 12))
