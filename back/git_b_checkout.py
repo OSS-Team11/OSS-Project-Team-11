@@ -27,7 +27,7 @@ def git_b_checkout(branch_name):
         elif "did not match any file(s) known to git" in error_message:
             print(f"Error: The branch '{branch_name}' does not exist.")
         elif "You are in 'detached HEAD' state" in error_message:
-            print("Error: If you manually select a commit instead of a branch with 'checkout', the branch will be in a detached HEAD state. It's better to create a new commit or move to an existing branch.")
+            print("The detached HEAD site has been changed.")
         elif "Switched to a new branch" in error_message:
             print(f"Error: Failed to switch to the branch '{branch_name}'.")
         elif "error: Your local changes to the following files would be overwritten by checkout" in error_message:
