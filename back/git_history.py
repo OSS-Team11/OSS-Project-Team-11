@@ -3,7 +3,7 @@ import subprocess
 def git_history_list():
     try:
         result_lst = []
-        command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[[%d][%s][%an]!!!%h7']
+        command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[[%d][%s][%an]!!!%h']
         result = subprocess.run(command, capture_output=True, text=True, check=True)
 
         if result.stdout is not None:
@@ -24,7 +24,7 @@ def git_history_list():
 def git_history_detail(checksum):
     try:
         result_lst = []
-        command = ['git', 'show', '--stat', checksum]
+        command = ['git', 'show', '--stat', f'{checksum}']
         result = subprocess.run(command, capture_output=True, text=True, check=True)
 
         if result.stdout is not None:
@@ -42,4 +42,4 @@ def git_history_detail(checksum):
 
 
 #git_history_list()    
-# git_history_detail()
+git_history_detail('e9a04c57')
