@@ -46,7 +46,6 @@ if branches is not None:
     
     
     # Input: the selected branch number
-   
     branch_info = (input("Enter the branch number to check out: "))
     try:
         branch_number=int(branch_info)
@@ -56,14 +55,10 @@ if branches is not None:
             git_b_checkout(selected_branch)
         else:
             print("Please enter a valid branch number.")
-        
        
     except:
         git_b_checkout(branch_info)
 
-
-    
-    
 else:
     print("Failed to get branch list.")
 
