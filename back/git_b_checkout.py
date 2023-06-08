@@ -17,7 +17,10 @@ def git_b_checkout(branch_name):
     result = subprocess.run(['git', 'checkout', branch_name], capture_output=True, text=True)
     
     if result.returncode == 0:
-        print(f"Branch '{branch_name}'Checked out.")
+        if "You are in 'detached HEAD' state" in error_message:
+            print("The detached HEAD site has been changed.")
+        else:
+            print(f"Branch '{branch_name}'Checked out.")
     else:
          # Handle different error scenarios
         error_message = result.stderr.strip()
@@ -26,8 +29,6 @@ def git_b_checkout(branch_name):
             print(f"Error: Invalid branch name '{branch_name}'.")
         elif "did not match any file(s) known to git" in error_message:
             print(f"Error: The branch '{branch_name}' does not exist.")
-        elif "You are in 'detached HEAD' state" in error_message:
-            print("The detached HEAD site has been changed.")
         elif "Switched to a new branch" in error_message:
             print(f"Error: Failed to switch to the branch '{branch_name}'.")
         elif "error: Your local changes to the following files would be overwritten by checkout" in error_message:
