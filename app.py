@@ -611,41 +611,41 @@ window.minsize(width=800, height=500)
 
 
 
-def show_commit_history():
-    x_circle = 10
-    y_circle = 10
-    x_txt = 20
-    y_txt = 14
-    prev_index = 0;
-    index = 0
+# def show_commit_history():
+#     x_circle = 10
+#     y_circle = 10
+#     x_txt = 20
+#     y_txt = 14
+#     prev_index = 0;
+#     index = 0
 
-    return_code, history_list = git_history_list()
+#     return_code, history_list = git_history_list()
 
-    if(return_code == 128):
-        print("Error")
-        print(history_list)
-    else:
-        print(history_list)
-        for i in history_list:
-            index = history_list[i].find('*')
-            if index != -1:
-                if index > prev_index:
-                    x_circle += 15*index
-                    y_circle += 20
-                    circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
-                    x_txt += 15*index
-                if index < prev_index:
-                    x_circle -= 15*index
-                    y_circle -= 20
-                    circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
-                    x_txt -= 15*index
-                prev_index = index
+#     if(return_code == 128):
+#         print("Error")
+#         print(history_list)
+#     else:
+#         print(history_list)
+#         for i in history_list:
+#             index = history_list[i].find('*')
+#             if index != -1:
+#                 if index > prev_index:
+#                     x_circle += 15*index
+#                     y_circle += 20
+#                     circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
+#                     x_txt += 15*index
+#                 if index < prev_index:
+#                     x_circle -= 15*index
+#                     y_circle -= 20
+#                     circle = canvas.create_oval(x_circle, y_circle, x_circle+8, y_circle+8, fill="blue")
+#                     x_txt -= 15*index
+#                 prev_index = index
 
-            canvas.create_line(x_circle+4, y_circle+4, x_circle+4, y_circle-16)
+#             canvas.create_line(x_circle+4, y_circle+4, x_circle+4, y_circle-16)
             
-            text = canvas.create_text(x_txt, y_txt, text= "test message",fill="black",anchor="w", font=("Arial", 12))
-            y_txt += 20
-            #pos_x_circle += 15S
+#             text = canvas.create_text(x_txt, y_txt, text= "test message",fill="black",anchor="w", font=("Arial", 12))
+#             y_txt += 20
+#             pos_x_circle += 15
 
 
 
@@ -892,9 +892,9 @@ def tab_changed(event):
     selected_tab = event.widget.select()
     tab_text = event.widget.tab(selected_tab, "text")
     if tab_text == "Commit History":
+       
 
         return_code, history_list = git_history_list()
-
         
         if(return_code == 128):
             print("Error")           
@@ -902,22 +902,23 @@ def tab_changed(event):
             pos_y = 15
             for i in range(len(history_list)):
                 pos_x = 15
-                for j in history_list[i]:
+                for j in history_list[i][0]:
                     if(j == '*'):
                         canvas.create_oval(pos_x-5, pos_y-5, pos_x+5, pos_y+5, fill="black")
                         pos_x += 15
                     elif(j == '|'):
-                        canvas.create_line(pos_x, pos_y-5, pos_x, pos_y+5)
+                        canvas.create_line(pos_x, pos_y-10, pos_x, pos_y+10)
                         pos_x += 15
                     elif(j == '/'):
-                        canvas.create_line(pos_x+5, pos_y-5, pos_x-5, pos_y+5)
+                        canvas.create_line(pos_x+5, pos_y-10, pos_x-5, pos_y+10)
                         pos_x += 15
                     # elif(j == '\\'):
-                    #     canvas.create_line(pos_x, pos_y, pos_x, pos_y+25)
+                    #     canvas.create_line(pos_x-5, pos_y+10, pos_x+5, pos_y-10)
                     #     pos_x += 15
-                splited_history_list = history_list[i].split('[', maxsplit = 1)
-                text = canvas.create_text(pos_x, pos_y, text= splited_history_list[1], fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
-                canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= splited_history_list[1]: history_clicked(sum))
+                if '[' in history_list[i][0]: #그래프만 존재하는 경우 pass
+                    commit_objects = history_list[i][0].split('[', maxsplit = 1)[1]
+                    text = canvas.create_text(pos_x, pos_y, text= commit_objects, fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
+                    canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= history_list[i][1]: history_clicked(sum))
                 pos_y += 30
 
             # for i in range(len(history_list)):
