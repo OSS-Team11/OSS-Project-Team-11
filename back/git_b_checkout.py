@@ -15,6 +15,7 @@ def get_branches():
 def git_b_checkout(branch_name):
     # Run the git checkout command
     result = subprocess.run(['git', 'checkout', branch_name], capture_output=True, text=True)
+    error_message = result.stderr.strip()
     
     if result.returncode == 0:
         if "You are in 'detached HEAD' state" in error_message:
@@ -23,7 +24,6 @@ def git_b_checkout(branch_name):
             print(f"Branch '{branch_name}'Checked out.")
     else:
          # Handle different error scenarios
-        error_message = result.stderr.strip()
 
         if "pathspec" in error_message:
             print(f"Error: Invalid branch name '{branch_name}'.")
