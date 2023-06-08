@@ -22,10 +22,10 @@ def git_b_checkout(branch_name):
          # Handle different error scenarios
         error_message = result.stderr.strip()
 
-        if "did not match any file(s) known to git" in error_message:
-            print(f"Error: The branch '{branch_name}' does not exist.")
-        elif "pathspec" in error_message:
+        if "pathspec" in error_message:
             print(f"Error: Invalid branch name '{branch_name}'.")
+        elif "did not match any file(s) known to git" in error_message:
+            print(f"Error: The branch '{branch_name}' does not exist.")
         elif "You are in 'detached HEAD' state" in error_message:
             print("Error: If you manually select a commit instead of a branch with 'checkout', the branch will be in a detached HEAD state. It's better to create a new commit or move to an existing branch.")
         elif "Switched to a new branch" in error_message:
@@ -36,6 +36,7 @@ def git_b_checkout(branch_name):
             print("Error: The following untracked working tree files would be overwritten by checkout. Please execute 'checkout' after committing or backing up the changed files.")
         else:
             print(f"Error occurred: {error_message}")
+    return 0
 
 # Get branch list
 branches = get_branches()
