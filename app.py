@@ -22,7 +22,13 @@ from back.git_restore import *
 from back.git_restore_staged import *
 from back.git_mv import *
 from back.git_commit import *
+
 from back.git_history import *
+from back.git_b_create import *
+from back.git_b_delete import *
+from back.git_b_rename import *
+from back.git_b_checkout import *
+
 # Interface
 
 def sort_name_reverse():
@@ -838,6 +844,14 @@ frame_branch_command = tk.Frame(branch_frame_up, border=2, relief="groove", bg="
 frame_branch_command.pack(fill = "x", side="top")
 
 def create_bttn_clicked():
+    branch_name=input.get() # 입력받은 commit message commit_message에 저장
+    git_b_create(branch_name)
+    #success, message = git_b_create(branch_name)
+    # if success:
+    #     update_files(entry.get())
+    # show_message(message)
+
+def create_new_window():
     global cr_new_win
     cr_new_win = Toplevel()
     cr_new_win.title("Create")
@@ -845,7 +859,7 @@ def create_bttn_clicked():
     label.pack()
     input = Entry(cr_new_win, width=30)
     input.pack()
-    cnfrm_button = Button(cr_new_win, text="enter", relief="flat", bg="white", command=partial(mv_bttn_clicked, input))
+    cnfrm_button = Button(cr_new_win, text="enter", relief="flat", bg="white", command=partial(create_bttn_clicked, input))
     cnfrm_button.pack()
 
 
@@ -858,7 +872,7 @@ def rename_bttn_clicked():
 def checkout_bttn_clicked():
     a=0
 
-create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=create_bttn_clicked)
+create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=create_new_window)
 delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = delete_bttn_clicked)
 rename_bttn = tk.Button(frame_branch_command, text="rename", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=rename_bttn_clicked)
 checkout_bttn = tk.Button(frame_branch_command, text="checkout", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=checkout_bttn_clicked)
