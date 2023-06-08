@@ -10,7 +10,7 @@ def git_b_create(branch_name):
             error_message = e.stderr.strip().decode('utf-8')
             return False, error_message
         else:
-            return False, 'Error: failed to commit'
+            return False, 'Error: failed to create branch'
 
 # branch creation function call
 # git_b_create('neww')
