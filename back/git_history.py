@@ -3,7 +3,7 @@ import subprocess
 def git_history_list():
     try:
         result_lst = []
-        command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[%d][%s][%an][%h7]']
+        command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[[%d][%s][%an][%h7]']
         result = subprocess.run(command, capture_output=True, text=True, check=True)
 
         if result.stdout is not None:
