@@ -903,28 +903,34 @@ def delete_new_window():
 
 
 # rename
-def rename_bttn_clicked():
-   
+def rename_bttn_clicked(input):
+    branch_name=input.get()
 
 def rename_new_window():
     global rn_new_win
     rn_new_win = Toplevel()
     rn_new_win.title("Rename")
+    label=tk.Label(rn_new_win, text="Enter new name.", bg="white")
+    label.pack()
+    input = Entry(rn_new_win, width=30)
+    input.pack()
+    cnfrm_button = Button(rn_new_win, text="enter", relief="flat", bg="white", command=partial(rename_bttn_clicked, input))
+    cnfrm_button.pack()
 
 # checkout
-def checkout_bttn_clicked():
+#def checkout_bttn_clicked():
    
 
 def checkout_new_window():
     global co_new_win
     co_new_win = Toplevel()
-    co_new_win.title("Rename")
+    co_new_win.title("Checkout")
 
 
 create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
-delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command = create_new_window)
-rename_bttn = tk.Button(frame_branch_command, text="rename", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
-checkout_bttn = tk.Button(frame_branch_command, text="checkout", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
+delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command = delete_new_window)
+rename_bttn = tk.Button(frame_branch_command, text="rename", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=rename_new_window)
+checkout_bttn = tk.Button(frame_branch_command, text="checkout", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=checkout_new_window)
 create_bttn.pack(side="left", expand=1)
 delete_bttn.pack(side="left", expand=1)
 rename_bttn.pack(side="left", expand=1)
