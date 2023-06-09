@@ -1026,9 +1026,17 @@ rename_bttn.pack(side="left", expand=1)
 checkout_bttn.pack(side="left", expand=1)
 
 ##########commit history 영역##########
+def _on_mousewheel(event):
+    canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
 canvas = Canvas(frame_history, bg="white")
-canvas.pack(expand=1, fill="both")
-    
+canvas.pack(side=LEFT, expand=1, fill="both")
+canvas.bind("<MouseWheel>", _on_mousewheel)
+
+vbar = ttk.Scrollbar(frame_history, orient="vertical")
+vbar.pack(side=RIGHT,fill=Y)
+vbar.config(command=canvas.yview)
+canvas.config(yscrollcommand=vbar.set)
 
 def history_clicked(sum):
     error, result_lst = git_history_detail(sum)
@@ -1088,7 +1096,9 @@ def tab_changed(event):
                     commit_objects = history_list[i][0].split('[', maxsplit = 1)[1]
                     text = canvas.create_text(pos_x, pos_y, text= commit_objects, fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
                     canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= history_list[i][1]: history_clicked(sum))
-                pos_y += 30
+                pos_y += 100
+        canvas.update_idletasks()
+        canvas.configure(scrollregion=canvas.bbox("all"))
        
 
            
