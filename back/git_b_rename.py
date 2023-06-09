@@ -20,4 +20,4 @@ old_name = input("Enter the branch name to change : ")
 new_name = input("Enter a new branch name : ")
 
 # branch renaming function call
-git_b_rename(old_name, new_name)
+#git_b_rename(old_name, new_name)
