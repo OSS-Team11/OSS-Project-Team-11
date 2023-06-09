@@ -869,19 +869,19 @@ def select(event):
 def print_curr_branch():
     for widgets in frame_curr_branch.winfo_children():
       widgets.destroy()
-    label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
-    label_curr_branch.config(text="Current branch")
-    label_curr_branch.pack()
+    
+
+
 
 # curr_branch_bttn = tk.Button(frame_curr_branch, text="Current branch", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15)
 # curr_branch_bttn.pack(side="right", expand=1)
 
-# def draw_tree():
-#     treeview.delete(*treeview.get_children())
-#     branch_list = get_branches()
-#     print(branch_list[1])
-#     for i in range(len(branch_list[1])):
-#         treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
+def draw_tree():
+    treeview.delete(*treeview.get_children())
+    branch_list = get_branches()
+    print(branch_list[1])
+    for i in range(len(branch_list[1])):
+        treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
  
 # create
 def create_bttn_clicked(input):
@@ -906,6 +906,8 @@ def delete_bttn_clicked():
     input = select()
     print(input)
     success, message = git_b_delete(input)
+    if success:
+        draw_tree()
     show_message(message)
     
 def delete_new_window():
@@ -927,38 +929,60 @@ def delete_new_window():
     treeview.configure(yscroll=scrollbar.set)
     scrollbar.pack(side="right",fill="y")
 
-    cnfrm_button = Button(dlt_new_win, text="delete", relief="flat", bg="white", command=partial(delete_bttn_clicked, input))
+    cnfrm_button = Button(dlt_new_win, text="delete", relief="flat", bg="white", command=delete_bttn_clicked)
     cnfrm_button.pack(side="bottom")
 
-    # print tree
-    treeview.delete(*treeview.get_children())
-    branch_list = get_branches()
-
-    for i in range(len(branch_list[1])):
-        treeview.insert("", tk.END, text=branch_list[1][i], values= branch_list[1][i], open=False, image=branch_icon)
-
+    draw_tree()
     treeview.bind('<ButtonRelease-1>', select)
 
 
 # rename
 def rename_bttn_clicked(input):
-    branch_name=input.get()
-#     success, message = git_b_rename(branch_name)
+    input = select()
+    print(input)
+    # success, message = git_b_rename(input)
+    # if success:
+    #     draw_tree()
+    # show_message(message)
 
 def rename_new_window():
     global rn_new_win
     rn_new_win = Toplevel()
     rn_new_win.title("Rename")
+
+    frame_branch_list = Frame(dlt_new_win, border=2, relief="groove", bg="white")
+    frame_branch_list.pack(side="top", fill="both", expand=True)
+    global treeview
+    treeview = ttk.Treeview(frame_branch_list, selectmode="extended", show="tree headings", style="mystyle.Treeview")
+    treeview.pack(side="left", expand=1, fill="both")
+    treeview.heading("#0", text="branch list")
+    style = ttk.Style()
+    style.configure("Treeview", rowheight=30, font=("Arial", 12))
+    style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
+    style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
+    scrollbar = ttk.Scrollbar(frame_branch_list, orient="vertical", command=treeview.yview)
+    treeview.configure(yscroll=scrollbar.set)
+    scrollbar.pack(side="right",fill="y")
+
     label=tk.Label(rn_new_win, text="Enter new name.", bg="white")
     label.pack()
     input = Entry(rn_new_win, width=30)
     input.pack()
-    cnfrm_button = Button(rn_new_win, text="rename", relief="flat", bg="white", command=partial(rename_bttn_clicked, input))
-    cnfrm_button.pack()
+
+    cnfrm_button = Button(dlt_new_win, text="rename", relief="flat", bg="white", command=rename_bttn_clicked)
+    cnfrm_button.pack(side="bottom")
+
+    draw_tree()
+    treeview.bind('<ButtonRelease-1>', select)
 
 # checkout
 def checkout_bttn_clicked():
-    success, message = git_b_checkout(branch_name)
+    input = select()
+    print(input)
+    success, message = git_b_checkout(input)
+    if success:
+        draw_tree()
+    show_message(message)
 
 
 def checkout_new_window():
@@ -966,8 +990,25 @@ def checkout_new_window():
     co_new_win = Toplevel()
     co_new_win.title("Checkout")
 
+    frame_branch_list = Frame(co_new_win, border=2, relief="groove", bg="white")
+    frame_branch_list.pack(side="top", fill="both", expand=True)
+    global treeview
+    treeview = ttk.Treeview(frame_branch_list, selectmode="extended", show="tree headings", style="mystyle.Treeview")
+    treeview.pack(side="left", expand=1, fill="both")
+    treeview.heading("#0", text="branch list")
+    style = ttk.Style()
+    style.configure("Treeview", rowheight=30, font=("Arial", 12))
+    style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
+    style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
+    scrollbar = ttk.Scrollbar(frame_branch_list, orient="vertical", command=treeview.yview)
+    treeview.configure(yscroll=scrollbar.set)
+    scrollbar.pack(side="right",fill="y")
+    
+    cnfrm_button = Button(co_new_win, text="checkout", relief="flat", bg="white", command=checkout_bttn_clicked)
+    cnfrm_button.pack(side="bottom")
 
-
+    draw_tree()
+    treeview.bind('<ButtonRelease-1>', select)
     
 
 create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
