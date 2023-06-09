@@ -27,7 +27,7 @@ from back.git_history import *
 from back.git_b_create import *
 from back.git_b_delete import *
 #from back.git_b_rename import *
-#from back.git_b_checkout import *
+from back.git_b_checkout import *
 
 # Interface
 
@@ -534,6 +534,7 @@ def update_files(orig_dirname: str):
                     tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
                 count += 1
 
+
         print_curr_branch()
                 
             
@@ -858,7 +859,10 @@ if hidden == True:
 
 ##########branch 영역##########
 def print_curr_branch():
-    label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, text="Current branch", font=("Arial", 12), fg = "blue", bg="white")
+    for widgets in frame_curr_branch.winfo_children():
+      widgets.destroy()
+    label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
+    label_curr_branch.config(text="Current branch")
     label_curr_branch.pack()
 
 # curr_branch_bttn = tk.Button(frame_curr_branch, text="Current branch", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15)
@@ -911,8 +915,8 @@ def delete_new_window():
     cnfrm_button = Button(dlt_new_win, text="delete", relief="flat", bg="white", command=partial(delete_bttn_clicked, input))
     cnfrm_button.pack(side="bottom")
 
-    # branch_list = get_branches()
-    # print(branch_list)
+    branch_list = get_branches()
+    print(branch_list)
     # for i in range(len(branch_list)):
     #     treeview.insert("", tk.END, text=branch_list[i], values="", open=False)
 
@@ -933,7 +937,7 @@ def rename_new_window():
     cnfrm_button = Button(rn_new_win, text="rename", relief="flat", bg="white", command=partial(rename_bttn_clicked, input))
     cnfrm_button.pack()
 
-#checkout
+# checkout
 # def checkout_bttn_clicked():
 #     success, message = git_b_checkout(branch_name)
 
@@ -958,7 +962,6 @@ canvas.pack(expand=1, fill="both")
     
 
 def history_clicked(sum):
-    print(sum)
     error, result_lst = git_history_detail(sum)
     global mv_new_win
     mv_new_win = Toplevel()
