@@ -1066,6 +1066,9 @@ def tab_changed(event):
                     elif(j == '\\'):
                         canvas.create_line(pos_x-5, pos_y-10, pos_x, pos_y+10)
                         pos_x += 15
+                    elif(j == '_'):
+                        canvas.create_line(pos_x-4, pos_y-10, pos_x+4, pos_y-10)
+                        pos_x += 15
                 if '[' in history_list[i][0]: #그래프만 존재하는 경우 pass
                     commit_objects = history_list[i][0].split('[', maxsplit = 1)[1]
                     text = canvas.create_text(pos_x, pos_y, text= commit_objects, fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
