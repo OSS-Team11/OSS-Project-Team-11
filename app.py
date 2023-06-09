@@ -860,7 +860,7 @@ if hidden == True:
 #############################
 
 ##########branch 영역##########
-def select(event):
+def select_branch(event):
     selected_item = treeview.focus()
     get_text = treeview.item(selected_item).get('text')
     print(get_text)
@@ -888,7 +888,6 @@ def print_curr_branch():
 def draw_tree():
     treeview.delete(*treeview.get_children())
     branch_list = get_branches()
-    print(branch_list[1])
     for i in range(len(branch_list[1])):
         treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
  
@@ -912,8 +911,7 @@ def create_new_window():
     
 # delete
 def delete_bttn_clicked():
-    input = select()
-    print(input)
+    input = select_branch("<ButtonRelease-1>")
     success, message = git_b_delete(input)
     if success:
         draw_tree()
@@ -942,13 +940,12 @@ def delete_new_window():
     cnfrm_button.pack(side="bottom")
 
     draw_tree()
-    treeview.bind('<ButtonRelease-1>', select)
+    treeview.bind('<ButtonRelease-1>', select_branch)
 
 
 # rename
 def rename_bttn_clicked(input):
-    input = select()
-    print(input)
+    input = select_branch()
     # success, message = git_b_rename(input)
     # if success:
     #     draw_tree()
@@ -982,15 +979,14 @@ def rename_new_window():
     cnfrm_button.pack(side="bottom")
 
     draw_tree()
-    treeview.bind('<ButtonRelease-1>', select)
+    treeview.bind('<ButtonRelease-1>', select_branch)
 
 # checkout
 def checkout_bttn_clicked():
-    input = select()
-    print(input)
+    input = select_branch("<ButtonRelease-1>")
     success, message = git_b_checkout(input)
     if success:
-        draw_tree()
+        print_curr_branch()
     show_message(message)
 
 
@@ -1017,7 +1013,7 @@ def checkout_new_window():
     cnfrm_button.pack(side="bottom")
 
     draw_tree()
-    treeview.bind('<ButtonRelease-1>', select)
+    treeview.bind('<ButtonRelease-1>', select_branch)
     
 
 create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
