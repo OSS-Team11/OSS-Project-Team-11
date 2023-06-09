@@ -5,6 +5,7 @@ def get_branches():
     try:
         result = subprocess.run(['git', 'branch', '--format', '%(refname:short)'], capture_output=True, text=True)
         branch_lst = result.stdout.strip().split('\n')
+        print(branch_lst)
         return True, branch_lst
     except subprocess.CalledProcessError as e:
         if e.stderr:
@@ -16,27 +17,17 @@ def get_branches():
 
 def git_b_checkout(branch_name):
     # Run the git checkout command
-    result = subprocess.run(['git', 'checkout', branch_name], capture_output=True, text=True)
-    error_message = result.stderr.strip()
-    
-    if result.returncode == 0:
-        if "You are in 'detached HEAD' state" in error_message:
-            print("The detached HEAD site has been changed.")
+    try:
+        result = subprocess.run(['git', 'checkout', branch_name], check=True, capture_output=True, text=True)
+        print(result.returncode)
+        return True, result.stdout.strip()
+    except subprocess.CalledProcessError as e:    
+        if e.stderr:
+            error_message = e.stderr.strip()
+            return False, error_message
         else:
-            print(f"Branch '{branch_name}'Checked out.")
-    else:
-         # Handle different error scenarios
-
-        if "pathspec" in error_message:
-            print(f"Error: Invalid branch name '{branch_name}'.")
-        elif "did not match any file(s) known to git" in error_message:
-            print(f"Error: The branch '{branch_name}' does not exist.")
-        elif "error: Your local changes to the following files would be overwritten by checkout" in error_message:
-            print("Error: You have local changes that would be overwritten by checkout. Please commit or stash your changes before switching branches.")
-        else:
-            print(f"Error occurred: {error_message}")
-    return 0
+            return False, f'Error: failed to checkout {branch_name}'
 
 # Get branch list
-#get_branches()
-
+# get_branches()
+# git_b_checkout('main')
