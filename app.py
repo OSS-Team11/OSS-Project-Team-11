@@ -1026,17 +1026,25 @@ rename_bttn.pack(side="left", expand=1)
 checkout_bttn.pack(side="left", expand=1)
 
 ##########commit history 영역##########
+def _on_mousewheel(event):
+    canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
 canvas = Canvas(frame_history, bg="white")
-canvas.pack(expand=1, fill="both")
-    
+canvas.pack(side=LEFT, expand=1, fill="both")
+canvas.bind("<MouseWheel>", _on_mousewheel)
+
+vbar = ttk.Scrollbar(frame_history, orient="vertical")
+vbar.pack(side=RIGHT,fill=Y)
+vbar.config(command=canvas.yview)
+canvas.config(yscrollcommand=vbar.set)
 
 def history_clicked(sum):
     error, result_lst = git_history_detail(sum)
     global mv_new_win
     mv_new_win = Toplevel()
     mv_new_win.title("Commit History Detail")
-    label=tk.Label(mv_new_win, text=result_lst, bg="white")
-    label.pack()
+    label=tk.Label(mv_new_win, text=result_lst, bg="white", wraplength = 700, font=("Arial", 12))
+    label.pack(expand=1)
    
     
 
@@ -1055,22 +1063,42 @@ def tab_changed(event):
                 pos_x = 15
                 for j in history_list[i][0]:
                     if(j == '*'):
-                        canvas.create_oval(pos_x-5, pos_y-5, pos_x+5, pos_y+5, fill="black")
+                        if(pos_x==15):
+                            canvas.create_oval(pos_x-5, pos_y-5, pos_x+5, pos_y+5, fill="blue")
+                        else:
+                            canvas.create_oval(pos_x-5, pos_y-5, pos_x+5, pos_y+5, fill="black")
                         pos_x += 15
                     elif(j == '|'):
-                        canvas.create_line(pos_x, pos_y-10, pos_x, pos_y+10)
+                        if(pos_x==15):
+                            canvas.create_line(pos_x, pos_y-10, pos_x, pos_y+10, fill="blue")
+                        else:
+                            canvas.create_line(pos_x, pos_y-10, pos_x, pos_y+10)
                         pos_x += 15
                     elif(j == '/'):
-                        canvas.create_line(pos_x, pos_y-10, pos_x-5, pos_y+10)
+                        if(pos_x==15):
+                            canvas.create_line(pos_x, pos_y-10, pos_x-5, pos_y+10, fill="blue")
+                        else:
+                            canvas.create_line(pos_x, pos_y-10, pos_x-5, pos_y+10)
                         pos_x += 15
                     elif(j == '\\'):
-                        canvas.create_line(pos_x-5, pos_y-10, pos_x, pos_y+10)
+                        if(pos_x==15):
+                            canvas.create_line(pos_x-5, pos_y-10, pos_x, pos_y+10, fill="blue")
+                        else:
+                            canvas.create_line(pos_x-5, pos_y-10, pos_x, pos_y+10)
                         pos_x += 15
-                if '[' in history_list[i][0]: #그래프만 존재하는 경우 pass
+                    elif(j == '_'):
+                        if(pos_x==15):
+                            canvas.create_line(pos_x-4, pos_y-10, pos_x+4, pos_y-10, fill="blue")
+                        else:
+                            canvas.create_line(pos_x-4, pos_y-10, pos_x+4, pos_y-10)
+                        pos_x += 15
+                if '[' in history_list[i][0]: # 그래프만 존재하는 경우 pass
                     commit_objects = history_list[i][0].split('[', maxsplit = 1)[1]
                     text = canvas.create_text(pos_x, pos_y, text= commit_objects, fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
                     canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= history_list[i][1]: history_clicked(sum))
                 pos_y += 30
+        canvas.update_idletasks()
+        canvas.configure(scrollregion=canvas.bbox("all"))
        
 
            
