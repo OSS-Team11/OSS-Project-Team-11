@@ -860,13 +860,13 @@ if hidden == True:
 #############################
 
 ##########branch 영역##########
-def select_branch(event):
+def select_branch(event): 
     selected_item = treeview.focus()
     get_text = treeview.item(selected_item).get('text')
     print(get_text)
     return get_text
     
-def print_curr_branch():
+def print_curr_branch(): # 현재 브랜치 출력 함수
     for widgets in frame_curr_branch.winfo_children():
       widgets.destroy()
     success, curr_branch = get_current_branch()
@@ -879,8 +879,6 @@ def print_curr_branch():
         label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
         label_curr_branch.config(text="no exist .git")
         label_curr_branch.pack()
-
-
 
 # curr_branch_bttn = tk.Button(frame_curr_branch, text="Current branch", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15)
 # curr_branch_bttn.pack(side="right", expand=1)
