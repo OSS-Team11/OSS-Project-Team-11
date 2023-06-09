@@ -674,6 +674,8 @@ untracked_folder_icon = tk.PhotoImage(file="data/untracked_folder.png")
 staged_folder_icon = tk.PhotoImage(file="data/staged_folder.png")
 commited_folder_icon = tk.PhotoImage(file="data/commited_folder.png")
 
+branch_icon = tk.PhotoImage(file="data/branch_icon.png")
+
 #init
 def init_bttn_clicked():
     success, message = git_init()
@@ -858,6 +860,12 @@ if hidden == True:
 #############################
 
 ##########branch 영역##########
+def select(event):
+    selected_item = treeview.focus()
+    get_text = treeview.item(selected_item).get('text')
+    print(get_text)
+    return get_text
+    
 def print_curr_branch():
     for widgets in frame_curr_branch.winfo_children():
       widgets.destroy()
@@ -868,8 +876,12 @@ def print_curr_branch():
 # curr_branch_bttn = tk.Button(frame_curr_branch, text="Current branch", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15)
 # curr_branch_bttn.pack(side="right", expand=1)
 
-def draw_tree():
-    treeview.delete(*treeview.get_children())
+# def draw_tree():
+#     treeview.delete(*treeview.get_children())
+#     branch_list = get_branches()
+#     print(branch_list[1])
+#     for i in range(len(branch_list[1])):
+#         treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
  
 # create
 def create_bttn_clicked(input):
@@ -877,8 +889,6 @@ def create_bttn_clicked(input):
     success, message = git_b_create(branch_name)
     show_message(message)
     crt_new_win.destroy()
-
-
 
 def create_new_window():
     global crt_new_win
@@ -893,7 +903,8 @@ def create_new_window():
     
 # delete
 def delete_bttn_clicked():
-    input = treeview.focus()
+    input = select()
+    print(input)
     success, message = git_b_delete(input)
     show_message(message)
     
@@ -905,9 +916,13 @@ def delete_new_window():
     frame_branch_list = Frame(dlt_new_win, border=2, relief="groove", bg="white")
     frame_branch_list.pack(side="top", fill="both", expand=True)
     global treeview
-    treeview = ttk.Treeview(frame_branch_list, selectmode="extended")
+    treeview = ttk.Treeview(frame_branch_list, selectmode="extended", show="tree headings", style="mystyle.Treeview")
     treeview.pack(side="left", expand=1, fill="both")
     treeview.heading("#0", text="branch list")
+    style = ttk.Style()
+    style.configure("Treeview", rowheight=30, font=("Arial", 12))
+    style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
+    style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
     scrollbar = ttk.Scrollbar(frame_branch_list, orient="vertical", command=treeview.yview)
     treeview.configure(yscroll=scrollbar.set)
     scrollbar.pack(side="right",fill="y")
@@ -915,10 +930,14 @@ def delete_new_window():
     cnfrm_button = Button(dlt_new_win, text="delete", relief="flat", bg="white", command=partial(delete_bttn_clicked, input))
     cnfrm_button.pack(side="bottom")
 
+    # print tree
+    treeview.delete(*treeview.get_children())
     branch_list = get_branches()
-    print(branch_list)
-    # for i in range(len(branch_list)):
-    #     treeview.insert("", tk.END, text=branch_list[i], values="", open=False)
+
+    for i in range(len(branch_list[1])):
+        treeview.insert("", tk.END, text=branch_list[1][i], values= branch_list[1][i], open=False, image=branch_icon)
+
+    treeview.bind('<ButtonRelease-1>', select)
 
 
 # rename
@@ -938,14 +957,18 @@ def rename_new_window():
     cnfrm_button.pack()
 
 # checkout
-# def checkout_bttn_clicked():
-#     success, message = git_b_checkout(branch_name)
+def checkout_bttn_clicked():
+    success, message = git_b_checkout(branch_name)
 
 
 def checkout_new_window():
     global co_new_win
     co_new_win = Toplevel()
     co_new_win.title("Checkout")
+
+
+
+    
 
 create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
 delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command = delete_new_window)
