@@ -42,4 +42,4 @@ def git_history_detail(checksum):
 
 
 #git_history_list()    
-git_history_detail('e9a04c57')
+# git_history_detail('e9a04c57')
