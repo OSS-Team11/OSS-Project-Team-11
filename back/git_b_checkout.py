@@ -2,15 +2,17 @@ import subprocess
 
 def get_branches():
     # Run the git branch command to get a list of branches
-    result = subprocess.run(['git', 'branch', '--format', '%(refname:short)'], capture_output=True, text=True)
-    
-    if result.returncode == 0:
-        # return branch list
-        branches = result.stdout.strip().split('\n')
-        return branches
-    else:
-        # Return None on error
-        return None
+    try:
+        result = subprocess.run(['git', 'branch', '--format', '%(refname:short)'], capture_output=True, text=True)
+        branch_lst = result.stdout.strip().split('\n')
+        return True, branch_lst
+    except subprocess.CalledProcessError as e:
+        if e.stderr:
+            error_message = e.stderr.strip().decode('utf-8')
+            print(error_message)
+            return False, error_message
+        else:
+            return False, 'Error: failed to get branch list'
 
 def git_b_checkout(branch_name):
     # Run the git checkout command
@@ -36,29 +38,5 @@ def git_b_checkout(branch_name):
     return 0
 
 # Get branch list
-branches = get_branches()
-
-if branches is not None:
-    # Print a list of exposed branches
-    print("Branch list :")
-    for index, branch in enumerate(branches, start=1):
-        print(f"{index}. {branch}")
-    
-    
-    # Input: the selected branch number
-    branch_info = (input("Enter the branch number to check out: "))
-    try:
-        branch_number=int(branch_info)
-        if 1 <= branch_number <= len(branches):
-        # Checkout to the selected branch
-            selected_branch = branches[branch_number - 1]
-            git_b_checkout(selected_branch)
-        else:
-            print("Please enter a valid branch number.")
-       
-    except:
-        git_b_checkout(branch_info)
-
-else:
-    print("Failed to get branch list.")
+#get_branches()
 
