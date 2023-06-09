@@ -1035,8 +1035,8 @@ def history_clicked(sum):
     global mv_new_win
     mv_new_win = Toplevel()
     mv_new_win.title("Commit History Detail")
-    label=tk.Label(mv_new_win, text=result_lst, bg="white")
-    label.pack()
+    label=tk.Label(mv_new_win, text=result_lst, bg="white", wraplength = 700, font=("Arial", 12))
+    label.pack(expand=1)
    
     
 
