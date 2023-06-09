@@ -869,7 +869,16 @@ def select(event):
 def print_curr_branch():
     for widgets in frame_curr_branch.winfo_children():
       widgets.destroy()
-    
+    success, curr_branch = get_current_branch()
+    if success == True:
+        label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
+        label_curr_branch.config(text="Current branch: " + curr_branch)
+        label_curr_branch.pack()
+        
+    elif success == False:
+        label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
+        label_curr_branch.config(text="no exist .git")
+        label_curr_branch.pack()
 
 
 
