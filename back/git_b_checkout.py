@@ -29,5 +29,5 @@ def git_b_checkout(branch_name):
             return False, f'Error: failed to checkout {branch_name}'
 
 # Get branch list
-# get_branches()
-# git_b_checkout('main')
+
+
