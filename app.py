@@ -534,6 +534,7 @@ def update_files(orig_dirname: str):
                     tree.insert("", tk.END, text=i[0], values=[f"{i[1]}", i[2]], open=False, image=i[3])             
                 count += 1
 
+        print_curr_branch()
                 
             
     #################################################################
@@ -645,11 +646,7 @@ frame_branch_command.pack(fill = "x", side="left", expand=1)
 # current branch
 frame_curr_branch = tk.Frame(frame_branch_up, border=2, relief="groove", bg="white")
 frame_curr_branch.pack(fill = "both", side="right")
-label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, text="Current branch", font=("Arial", 12), fg = "blue", bg="white")
-label_curr_branch.pack()
 
-# curr_branch_bttn = tk.Button(frame_curr_branch, text="Current branch", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15)
-# curr_branch_bttn.pack(side="right", expand=1)
 
 frame_b = tk.Frame(frame_up, border=2, relief="groove", bg="white")
 frame_b.pack(side="left")
@@ -860,6 +857,12 @@ if hidden == True:
 #############################
 
 ##########branch 영역##########
+def print_curr_branch():
+    label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, text="Current branch", font=("Arial", 12), fg = "blue", bg="white")
+    label_curr_branch.pack()
+
+# curr_branch_bttn = tk.Button(frame_curr_branch, text="Current branch", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15)
+# curr_branch_bttn.pack(side="right", expand=1)
 
 def draw_tree():
     treeview.delete(*treeview.get_children())
