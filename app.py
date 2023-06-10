@@ -26,7 +26,7 @@ from back.git_commit import *
 from back.git_history import *
 from back.git_b_create import *
 from back.git_b_delete import *
-#from back.git_b_rename import *
+from back.git_b_rename import *
 from back.git_b_checkout import *
 
 # Interface
@@ -882,7 +882,7 @@ def print_curr_branch(): # 현재 브랜치 출력 함수
 # curr_branch_bttn = tk.Button(frame_curr_branch, text="Current branch", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15)
 # curr_branch_bttn.pack(side="right", expand=1)
 
-def draw_tree():
+def draw_tree(): # branch list 출력
     treeview.delete(*treeview.get_children())
     branch_list = get_branches()
     for i in range(len(branch_list[1])):
@@ -959,9 +959,11 @@ def delete_new_window():
 def rename_bttn_clicked(input):
     new_name=input.get()
     selcted_brnch = select_branch("<ButtonRelease-1>")
-    success, message = git_b_delete(selcted_brnch, new_name)
+    print(selcted_brnch)
+    success, message = git_b_rename(selcted_brnch, new_name)
     if success:
-        draw_tree()
+        draw_tree() # update tree
+    input.delete(0, END) # clear entry
     show_message(message)
 
 def rename_new_window():
@@ -991,7 +993,7 @@ def rename_new_window():
         input = Entry(rn_new_win, width=30)
         input.pack()
 
-        cnfrm_button = Button(rn_new_win, text="rename", relief="flat", bg="white", command=(rename_bttn_clicked, input))
+        cnfrm_button = Button(rn_new_win, text="rename", relief="flat", bg="white", command=partial(rename_bttn_clicked, input))
         cnfrm_button.pack(side="bottom")
 
         draw_tree()
