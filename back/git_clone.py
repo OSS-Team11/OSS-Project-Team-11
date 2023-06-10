@@ -77,7 +77,7 @@ def git_clone(is_private, clone_url, id, token):
                 return False, 'Error: failed to clone repository'
             
 #git_clone(False, 'https://github.com/OSS-Team11/OSS-Project-Team-11.git','','')
-git_clone(True, 'https://github.com/hayeongKo/private.git', '', '')
+# git_clone(True, 'https://github.com/hayeongKo/private.git', '', '')
 
         
         
