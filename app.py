@@ -863,7 +863,6 @@ if hidden == True:
 def select_branch(event): 
     selected_item = treeview.focus()
     get_text = treeview.item(selected_item).get('text')
-    print(get_text)
     return get_text
     
 def print_curr_branch(): # 현재 브랜치 출력 함수
@@ -943,41 +942,48 @@ def delete_new_window():
 
 # rename
 def rename_bttn_clicked(input):
-    input = select_branch()
-    # success, message = git_b_rename(input)
-    # if success:
-    #     draw_tree()
-    # show_message(message)
+    new_name=input.get()
+    selcted_brnch = select_branch("<ButtonRelease-1>")
+    success, message = git_b_delete(selcted_brnch, new_name)
+    if success:
+        draw_tree()
+    show_message(message)
 
 def rename_new_window():
-    global rn_new_win
-    rn_new_win = Toplevel()
-    rn_new_win.title("Rename")
+    success, message = get_current_branch()
+    if success == True:
+        global rn_new_win
+        rn_new_win = Toplevel()
+        rn_new_win.title("Rename")
 
-    frame_branch_list = Frame(dlt_new_win, border=2, relief="groove", bg="white")
-    frame_branch_list.pack(side="top", fill="both", expand=True)
-    global treeview
-    treeview = ttk.Treeview(frame_branch_list, selectmode="extended", show="tree headings", style="mystyle.Treeview")
-    treeview.pack(side="left", expand=1, fill="both")
-    treeview.heading("#0", text="branch list")
-    style = ttk.Style()
-    style.configure("Treeview", rowheight=30, font=("Arial", 12))
-    style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
-    style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
-    scrollbar = ttk.Scrollbar(frame_branch_list, orient="vertical", command=treeview.yview)
-    treeview.configure(yscroll=scrollbar.set)
-    scrollbar.pack(side="right",fill="y")
+        frame_branch_list = Frame(rn_new_win, border=2, relief="groove", bg="white")
+        frame_branch_list.pack(side="top", fill="both", expand=True)
+        global treeview
+        treeview = ttk.Treeview(frame_branch_list, selectmode="extended", show="tree headings", style="mystyle.Treeview")
+        treeview.pack(side="left", expand=1, fill="both")
+        treeview.heading("#0", text="branch list")
+        style = ttk.Style()
+        style.configure("Treeview", rowheight=30, font=("Arial", 12))
+        style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
+        style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
+        scrollbar = ttk.Scrollbar(frame_branch_list, orient="vertical", command=treeview.yview)
+        treeview.configure(yscroll=scrollbar.set)
+        scrollbar.pack(side="right",fill="y")
 
-    label=tk.Label(rn_new_win, text="Enter new name.", bg="white")
-    label.pack()
-    input = Entry(rn_new_win, width=30)
-    input.pack()
+        label=tk.Label(rn_new_win, text="Select a branch and enter a new name.", bg="white")
+        label.pack()
+        input = Entry(rn_new_win, width=30)
+        input.pack()
 
-    cnfrm_button = Button(dlt_new_win, text="rename", relief="flat", bg="white", command=rename_bttn_clicked)
-    cnfrm_button.pack(side="bottom")
+        cnfrm_button = Button(rn_new_win, text="rename", relief="flat", bg="white", command=(rename_bttn_clicked, input))
+        cnfrm_button.pack(side="bottom")
 
-    draw_tree()
-    treeview.bind('<ButtonRelease-1>', select_branch)
+        draw_tree()
+        treeview.bind('<ButtonRelease-1>', select_branch)
+
+    elif success == False:
+        show_message(message)
+        rn_new_win.destroy()
 
 # checkout
 def checkout_bttn_clicked():
