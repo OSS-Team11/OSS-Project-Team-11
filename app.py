@@ -910,7 +910,7 @@ def create_new_window():
 
     elif success == False:
         show_message(message)
-        create_new_window.destroy()
+        
     
 # delete
 def delete_bttn_clicked():
@@ -949,7 +949,7 @@ def delete_new_window():
 
     elif success == False:
         show_message(message)
-        delete_new_window.destroy()
+        
 
 
 # rename
@@ -995,7 +995,7 @@ def rename_new_window():
 
     elif success == False:
         show_message(message)
-        rn_new_win.destroy()
+      
 
 # checkout
 def checkout_bttn_clicked():
@@ -1035,7 +1035,7 @@ def checkout_new_window():
 
     elif success == False:
         show_message(message)
-        rn_new_win.destroy()
+        
     
 
 create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
