@@ -41,6 +41,6 @@ def git_b_checkout(branch_name):
             return False, f'Error: failed to checkout {branch_name}'
 
 
-git_b_checkout('git_branch')
+#git_b_checkout('git_branch')
 # get_branches()
 # get_current_branch()
