@@ -871,12 +871,12 @@ def print_curr_branch(): # 현재 브랜치 출력 함수
     success, curr_branch = get_current_branch()
     if success == True:
         label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
-        label_curr_branch.config(text="Current branch: " + curr_branch)
+        label_curr_branch.config(text="Your currently on branch " + curr_branch)
         label_curr_branch.pack()
         
     elif success == False:
         label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
-        label_curr_branch.config(text="no exist .git")
+        label_curr_branch.config(text="not a git repo")
         label_curr_branch.pack()
 
 # curr_branch_bttn = tk.Button(frame_curr_branch, text="Current branch", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15)
@@ -892,9 +892,8 @@ def draw_tree():
 def create_bttn_clicked(input):
     branch_name=input.get() # 입력받은 commit message commit_message에 저장
     success, message = git_b_create(branch_name)
-    if success:
-        draw_tree()
-    show_message("success")
+    crt_new_win.destroy()
+    show_message(message)
 
 def create_new_window():
     success, message = get_current_branch()
