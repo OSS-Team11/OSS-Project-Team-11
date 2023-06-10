@@ -859,7 +859,7 @@ if hidden == True:
     hidden_menu.set(1)
 
 
-##########branch 영역##########
+############# branch 영역 #############
 def select_branch(event): 
     selected_item = treeview.focus()
     get_text = treeview.item(selected_item).get('text')
@@ -1052,7 +1052,7 @@ delete_bttn.pack(side="left", expand=1)
 rename_bttn.pack(side="left", expand=1)
 checkout_bttn.pack(side="left", expand=1)
 
-##########commit history 영역##########
+############# commit history 영역 ############
 def _on_mousewheel(event):
     canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
@@ -1136,37 +1136,86 @@ def tab_changed(event):
            
 tab.bind("<<NotebookTabChanged>>", tab_changed)
 
-############clone 영역############
-# def clone_bttn_clicked(input):
-#     branch_name=input.get() # 입력받은 commit message commit_message에 저장
-#     success, message = git_b_create(branch_name)
+############ clone 영역 ############
 
-#     for i in tree.selection():
-#         r_path = tree.item(i)["values"][1]
-#         e_path = r_path.rsplit(slash, 1)
+def clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry):
+    rad_selected = rad_var.get()
+    addr=addr_entry.get() # 입력받은 commit message commit_message에 저장
+    id=id_entry.get()
+    token=token_entry.get()
+    print(rad_selected)
+    
 
-#     success, message = git_mv(e_path[1], new_name)
+    #success, message = git_b_clone(rad_selected, addr, id, token)
 
-#     if success:
-#         update_files(entry.get())
-#     show_message(message)
-#     clone_new_window.destroy()
+    # if success:
+    #     update_files(entry.get())
+    # show_message(message)
+    # clone_new_window.destroy()
 
-# def clone_new_window():
-#     global cln_new_win
-#     cln_new_win = Toplevel()
-#     cln_new_win.title("Clone")
-#     label=tk.Label(cln_new_win, text="Enter GitHub repository address.", bg="white")
-#     label.pack()
-#     input = Entry(cln_new_win, width=30)
-#     input.pack()
-#     cnfrm_button = Button(cln_new_win, text="clone", relief="flat", bg="white", command=partial(create_bttn_clicked, input))
-#     cnfrm_button.pack()
+def clone_new_window():
+   
+    cln_new_win = tk.Toplevel()
+    cln_new_win.title("Clone")
+    rad_var = tk.IntVar(value=1)
+    clone_frame = tk.Frame(cln_new_win)
+    clone_frame.pack(expand=1, fill="both")
 
+    def print_entry():
+        if rad_var.get() == 1:
+            for widget in clone_frame.winfo_children():
+                widget.destroy()
+            button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=1, command=print_entry)
+            button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=2, command=print_entry)
+            button_public.pack(side="top", expand=1)
+            button_private.pack(side="top", expand=1)
+            adddr_label=tk.Label(clone_frame, text="GitHub repo address")
+            adddr_label.pack(side="top", fill="x", expand=1)
+            addr_entry = Entry(clone_frame, width=50)
+            addr_entry.pack(side="top", fill="x", expand=1)
+            id_entry = Entry(clone_frame, width=50)
+            token_entry = Entry(clone_frame, width=50)
+            cnfrm_button = Button(clone_frame, text="clone", bg="white", command=lambda: clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry))
+            cnfrm_button.pack(side="top", expand=1)
 
+        elif rad_var.get() == 2:
+            for widget in clone_frame.winfo_children():
+                widget.destroy()
+            button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=1, command=print_entry)
+            button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=2, command=print_entry)
+            button_public.pack(side="top", expand=1)
+            button_private.pack(side="top", expand=1)
+            adddr_label=tk.Label(clone_frame, text="GitHub repo address")
+            adddr_label.pack(side="top", fill="x", expand=1)
+            addr_entry = Entry(clone_frame, width=50)
+            addr_entry.pack(side="top", fill="x", expand=1)
+            id_label=tk.Label(clone_frame, text="ID")
+            id_label.pack(side="top", fill="x", expand=1)
+            id_entry = Entry(clone_frame, width=50)
+            id_entry.pack(side="top", fill="x", expand=1)
+            token_label=tk.Label(clone_frame, text="Access token")
+            token_label.pack(side="top", fill="x", expand=1)
+            token_entry = Entry(clone_frame, width=50)
+            token_entry.pack(side="top", fill="x", expand=1)
+            cnfrm_button = Button(clone_frame, text="clone", bg="white", command=lambda: clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry))
+            cnfrm_button.pack(side="top", expand=1)
+        
+    button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=1, command=print_entry)
+    button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=2, command=print_entry)
+    button_public.pack(side="top", expand=1)
+    button_private.pack(side="top", expand=1)
 
-# clone_bttn = tk.Button(frame_vc_command, text="clone", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=clone_new_window)
-# clone_bttn.pack(side="right", expand=1)   
+    adddr_label=tk.Label(clone_frame, text="GitHub repo address")
+    adddr_label.pack(side="top", fill="x", expand=1)
+    addr_entry = Entry(clone_frame, width=50)
+    addr_entry.pack(side="top", fill="x", expand=1)
+    id_entry = Entry(clone_frame, width=50)
+    token_entry = Entry(clone_frame, width=50)
+    cnfrm_button = Button(clone_frame, text="clone", bg="white", command=lambda: clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry))
+    cnfrm_button.pack(side="top", expand=1)
+
+clone_bttn = tk.Button(frame_vc_command, text="clone", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=clone_new_window)
+clone_bttn.pack(side="right", expand=1)   
 
 
 # Right click menu
