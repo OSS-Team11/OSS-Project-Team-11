@@ -914,6 +914,7 @@ def create_new_window():
 
     elif success == False:
         show_message(message)
+        
     
 # delete
 def delete_bttn_clicked():
@@ -953,8 +954,6 @@ def delete_new_window():
 
     elif success == False:
         show_message(message)
-        
-
 
 # rename
 def rename_bttn_clicked(input):
@@ -1041,7 +1040,7 @@ def checkout_new_window():
 
     elif success == False:
         show_message(message)
-
+          
 create_bttn = tk.Button(frame_branch_command, text="create", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=create_new_window)
 delete_bttn = tk.Button(frame_branch_command, text="delete", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command = delete_new_window)
 rename_bttn = tk.Button(frame_branch_command, text="rename", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=rename_new_window)
@@ -1055,12 +1054,12 @@ checkout_bttn.pack(side="left", expand=1)
 def merge_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_merge(selected_brnch)
-    co_new_win.destroy()
+    co_new_win.destroy() # 새 창 닫기
     show_message(message)
 
 def merge_new_window():
     success, message = get_current_branch()
-    if success == True:
+    if success == True: # .git이 없는 디렉토리에서 버튼 클릭
         global mrg_new_win
         mrg_new_win = Toplevel()
         mrg_new_win.title("Merge")
@@ -1098,7 +1097,6 @@ def merge_new_window():
 
 merge_bttn = tk.Button(frame_branch_command, text="merge", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=merge_new_window)
 merge_bttn.pack(side="left", expand=1)
-
 
 
 ############# commit history 영역 ############
@@ -1182,6 +1180,7 @@ def tab_changed(event):
         canvas.configure(scrollregion=canvas.bbox("all"))
        
 
+           
 tab.bind("<<NotebookTabChanged>>", tab_changed)
 
 ############ clone 영역 ############
@@ -1191,7 +1190,8 @@ def clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry):
     addr=addr_entry.get() # 입력받은 commit message commit_message에 저장
     id=id_entry.get()
     token=token_entry.get()
-
+    print(rad_selected)
+    
     success, message = git_clone(rad_selected, addr, id, token)
     if success:
         update_files(entry.get())
