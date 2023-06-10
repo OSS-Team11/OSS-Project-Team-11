@@ -892,15 +892,18 @@ def draw_tree():
 def create_bttn_clicked(input):
     branch_name=input.get() # 입력받은 commit message commit_message에 저장
     success, message = git_b_create(branch_name)
-    show_message(message)
-    crt_new_win.destroy()
+    if success:
+        draw_tree()
+    show_message("success")
 
 def create_new_window():
     success, message = get_current_branch()
     if success == True:
         global crt_new_win
         crt_new_win = Toplevel()
+        crt_new_win.attributes("-topmost", True)
         crt_new_win.title("Create")
+        
         label=tk.Label(crt_new_win, text="Enter new branch name.", bg="white")
         label.pack()
         input = Entry(crt_new_win, width=30)
@@ -914,8 +917,8 @@ def create_new_window():
     
 # delete
 def delete_bttn_clicked():
-    input = select_branch("<ButtonRelease-1>")
-    success, message = git_b_delete(input)
+    selected_brnch = select_branch("<ButtonRelease-1>")
+    success, message = git_b_delete(selected_brnch)
     if success:
         draw_tree()
     show_message(message)
@@ -926,6 +929,7 @@ def delete_new_window():
         global dlt_new_win
         dlt_new_win = Toplevel()
         dlt_new_win.title("Delete")
+        dlt_new_win.attributes("-topmost", True)
 
         frame_branch_list = Frame(dlt_new_win, border=2, relief="groove", bg="white")
         frame_branch_list.pack(side="top", fill="both", expand=True)
@@ -967,6 +971,7 @@ def rename_new_window():
         global rn_new_win
         rn_new_win = Toplevel()
         rn_new_win.title("Rename")
+        rn_new_win.attributes("-topmost", True)
 
         frame_branch_list = Frame(rn_new_win, border=2, relief="groove", bg="white")
         frame_branch_list.pack(side="top", fill="both", expand=True)
@@ -999,19 +1004,18 @@ def rename_new_window():
 
 # checkout
 def checkout_bttn_clicked():
-    input = select_branch("<ButtonRelease-1>")
-    success, message = git_b_checkout(input)
-    if success:
-        print_curr_branch()
+    selected_brnch = select_branch("<ButtonRelease-1>")
+    success, message = git_b_checkout(selected_brnch)
+    co_new_win.destroy()
     show_message(message)
-
-
+    
 def checkout_new_window():
     success, message = get_current_branch()
     if success == True:
         global co_new_win
         co_new_win = Toplevel()
         co_new_win.title("Checkout")
+        co_new_win.attributes("-topmost", True)
 
         frame_branch_list = Frame(co_new_win, border=2, relief="groove", bg="white")
         frame_branch_list.pack(side="top", fill="both", expand=True)
