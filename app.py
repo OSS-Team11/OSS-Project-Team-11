@@ -1008,6 +1008,7 @@ def checkout_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_b_checkout(selected_brnch)
     co_new_win.destroy()
+    print_curr_branch()
     show_message(message)
     
 def checkout_new_window():
