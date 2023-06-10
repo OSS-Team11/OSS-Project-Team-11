@@ -1055,7 +1055,7 @@ checkout_bttn.pack(side="left", expand=1)
 def merge_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_merge(selected_brnch)
-    co_new_win.destroy() # 새 창 닫기
+    mrg_new_win.destroy() # 새 창 닫기
     show_message(message)
 
 def merge_new_window():
