@@ -18,7 +18,6 @@ def get_branches():
 def get_current_branch():
     try:
         result = subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], capture_output=True, text=True, check=True)
-        #print(result.stdout.strip())
         return True, result.stdout.strip()
     except subprocess.CalledProcessError as e:
         if e.stderr:
@@ -32,8 +31,7 @@ def git_b_checkout(branch_name):
     # Run the git checkout command
     try:
         result = subprocess.run(['git', 'checkout', branch_name], check=True, capture_output=True, text=True)
-        print(result.stdout.strip())
-        return True, result.stdout.strip()
+        return True, 'Success'
     except subprocess.CalledProcessError as e:    
         if e.stderr:
             error_message = e.stderr.strip()
@@ -43,6 +41,6 @@ def git_b_checkout(branch_name):
             return False, f'Error: failed to checkout {branch_name}'
 
 
-# git_b_checkout('main')
+git_b_checkout('git_branch')
 # get_branches()
 # get_current_branch()
