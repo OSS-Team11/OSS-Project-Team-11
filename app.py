@@ -871,7 +871,7 @@ def print_curr_branch(): # 현재 브랜치 출력 함수
     success, curr_branch = get_current_branch()
     if success == True:
         label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
-        label_curr_branch.config(text="Current branch " + curr_branch)
+        label_curr_branch.config(text="Current branch: " + curr_branch)
         label_curr_branch.pack()
         
     elif success == False:
