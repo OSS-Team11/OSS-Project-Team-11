@@ -28,6 +28,7 @@ from back.git_b_create import *
 from back.git_b_delete import *
 from back.git_b_rename import *
 from back.git_b_checkout import *
+from back.git_clone import *
 
 # Interface
 
@@ -1145,28 +1146,26 @@ def clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry):
     token=token_entry.get()
     print(rad_selected)
     
-
-    #success, message = git_b_clone(rad_selected, addr, id, token)
-
-    # if success:
-    #     update_files(entry.get())
-    # show_message(message)
-    # clone_new_window.destroy()
+    success, message = git_clone(rad_selected, addr, id, token)
+    if success:
+        update_files(entry.get())
+    show_message(message)
+    clone_new_window.destroy()
 
 def clone_new_window():
    
     cln_new_win = tk.Toplevel()
     cln_new_win.title("Clone")
-    rad_var = tk.IntVar(value=1)
+    rad_var = tk.IntVar(value=0)
     clone_frame = tk.Frame(cln_new_win)
     clone_frame.pack(expand=1, fill="both")
 
     def print_entry():
-        if rad_var.get() == 1:
+        if rad_var.get() == 0:
             for widget in clone_frame.winfo_children():
                 widget.destroy()
-            button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=1, command=print_entry)
-            button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=2, command=print_entry)
+            button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=0, command=print_entry)
+            button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=1, command=print_entry)
             button_public.pack(side="top", expand=1)
             button_private.pack(side="top", expand=1)
             adddr_label=tk.Label(clone_frame, text="GitHub repo address")
@@ -1178,11 +1177,11 @@ def clone_new_window():
             cnfrm_button = Button(clone_frame, text="clone", bg="white", command=lambda: clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry))
             cnfrm_button.pack(side="top", expand=1)
 
-        elif rad_var.get() == 2:
+        elif rad_var.get() == 1:
             for widget in clone_frame.winfo_children():
                 widget.destroy()
-            button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=1, command=print_entry)
-            button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=2, command=print_entry)
+            button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=0, command=print_entry)
+            button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=1, command=print_entry)
             button_public.pack(side="top", expand=1)
             button_private.pack(side="top", expand=1)
             adddr_label=tk.Label(clone_frame, text="GitHub repo address")
@@ -1200,8 +1199,8 @@ def clone_new_window():
             cnfrm_button = Button(clone_frame, text="clone", bg="white", command=lambda: clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry))
             cnfrm_button.pack(side="top", expand=1)
         
-    button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=1, command=print_entry)
-    button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=2, command=print_entry)
+    button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=0, command=print_entry)
+    button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=1, command=print_entry)
     button_public.pack(side="top", expand=1)
     button_private.pack(side="top", expand=1)
 
