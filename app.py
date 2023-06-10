@@ -26,8 +26,9 @@ from back.git_commit import *
 from back.git_history import *
 from back.git_b_create import *
 from back.git_b_delete import *
-#from back.git_b_rename import *
+from back.git_b_rename import *
 from back.git_b_checkout import *
+from back.git_clone import *
 
 # Interface
 
@@ -625,7 +626,6 @@ frame_history = tk.Frame(tab)
 tab.add(frame_workspace, text="Workspace")
 tab.add(frame_history, text="Commit History")
 
-
 frame_up = tk.Frame(frame_workspace, border=1, bg="white")
 frame_up.pack(fill="x", side="top")
 
@@ -634,8 +634,9 @@ frame_vc_up.pack(fill="x", side="top")
 label_vc_command =tk.Label(frame_vc_up, text="Version control", width =15, font=("Arial", 10), fg = "grey",bg="white")
 label_vc_command.pack(side="left")
 frame_vc_command = tk.Frame(frame_vc_up, border=2, relief="groove", bg="white")
-frame_vc_command.pack(fill = "x", side="right", expand=1 )
-
+frame_vc_command.pack(fill = "x", side="left", expand=1)
+# frame_clone = tk.Frame(frame_vc_up, border=2, relief="groove", bg="white")
+# frame_clone.pack(side="left")
 
 frame_branch_up = tk.Frame(frame_up, border=1, bg="white")
 frame_branch_up.pack(fill="x", side="top")
@@ -810,14 +811,14 @@ def commit_new_window():
 
 
 # version control 관련 버튼
-init_bttn = tk.Button(frame_vc_command, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=init_bttn_clicked)
-add_bttn = tk.Button(frame_vc_command, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command = add_bttn_clicked)
-restore_bttn = tk.Button(frame_vc_command, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=restore_bttn_clicked)
-unstage_bttn = tk.Button(frame_vc_command, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 20, command=unstage_bttn_clicked)
-rm_bttn = tk.Button(frame_vc_command, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=rm_bttn_clicked)
-rm_cached_bttn = tk.Button(frame_vc_command, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 13, command=rm_cached_bttn_clicked)
-mv_bttn = tk.Button(frame_vc_command, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=mv_new_window)
-commit_bttn = tk.Button(frame_vc_command, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=commit_new_window)
+init_bttn = tk.Button(frame_vc_command, text="init", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 7, command=init_bttn_clicked)
+add_bttn = tk.Button(frame_vc_command, text="add", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 7, command = add_bttn_clicked)
+restore_bttn = tk.Button(frame_vc_command, text="restore", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 7, command=restore_bttn_clicked)
+unstage_bttn = tk.Button(frame_vc_command, text="restore --staged", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=unstage_bttn_clicked)
+rm_bttn = tk.Button(frame_vc_command, text="remove", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 7, command=rm_bttn_clicked)
+rm_cached_bttn = tk.Button(frame_vc_command, text="rm --cached", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 10, command=rm_cached_bttn_clicked)
+mv_bttn = tk.Button(frame_vc_command, text="move", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 7, command=mv_new_window)
+commit_bttn = tk.Button(frame_vc_command, text="commit", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 7, command=commit_new_window)
 init_bttn.pack(side="left", expand=1)
 add_bttn.pack(side="left", expand=1)
 restore_bttn.pack(side="left", expand=1)
@@ -852,14 +853,14 @@ tree.configure(yscroll=scrollbar.set)
 scrollbar.pack(side="right",fill="y") 
 
 # On/off hidden files checkbutton on start
-hidden_menu = tk.IntVar()
+hidden_menu = tk.IntVar() 
 if hidden == False:
     hidden_menu.set(0)
 if hidden == True:
     hidden_menu.set(1)
-#############################
 
-##########branch 영역##########
+
+############# branch 영역 #############
 def select_branch(event): 
     selected_item = treeview.focus()
     get_text = treeview.item(selected_item).get('text')
@@ -871,18 +872,18 @@ def print_curr_branch(): # 현재 브랜치 출력 함수
     success, curr_branch = get_current_branch()
     if success == True:
         label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
-        label_curr_branch.config(text="Your currently on branch " + curr_branch)
+        label_curr_branch.config(text="Current branch: " + curr_branch)
         label_curr_branch.pack()
         
     elif success == False:
         label_curr_branch=tk.Label(frame_curr_branch, border=2, padx = 5, font=("Arial", 12), fg = "blue", bg="white")
-        label_curr_branch.config(text="not a git repo")
+        label_curr_branch.config(text="Current branch: not a git repo")
         label_curr_branch.pack()
 
 # curr_branch_bttn = tk.Button(frame_curr_branch, text="Current branch", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15)
 # curr_branch_bttn.pack(side="right", expand=1)
 
-def draw_tree():
+def draw_tree(): # branch list 출력
     treeview.delete(*treeview.get_children())
     branch_list = get_branches()
     for i in range(len(branch_list[1])):
@@ -958,9 +959,11 @@ def delete_new_window():
 def rename_bttn_clicked(input):
     new_name=input.get()
     selcted_brnch = select_branch("<ButtonRelease-1>")
-    success, message = git_b_delete(selcted_brnch, new_name)
+    print(selcted_brnch)
+    success, message = git_b_rename(selcted_brnch, new_name)
     if success:
-        draw_tree()
+        draw_tree() # update tree
+    input.delete(0, END) # clear entry
     show_message(message)
 
 def rename_new_window():
@@ -990,7 +993,7 @@ def rename_new_window():
         input = Entry(rn_new_win, width=30)
         input.pack()
 
-        cnfrm_button = Button(rn_new_win, text="rename", relief="flat", bg="white", command=(rename_bttn_clicked, input))
+        cnfrm_button = Button(rn_new_win, text="rename", relief="flat", bg="white", command=partial(rename_bttn_clicked, input))
         cnfrm_button.pack(side="bottom")
 
         draw_tree()
@@ -1047,55 +1050,7 @@ delete_bttn.pack(side="left", expand=1)
 rename_bttn.pack(side="left", expand=1)
 checkout_bttn.pack(side="left", expand=1)
 
-########## merge 영역 ##############
-def merge_bttn_clicked():
-    selected_brnch = select_branch("<ButtonRelease-1>")
-    success, message = git_b_checkout(selected_brnch)
-    co_new_win.destroy()
-    show_message(message)
-
-def merge_new_window():
-    success, message = get_current_branch()
-    if success == True:
-        global mrg_new_win
-        mrg_new_win = Toplevel()
-        mrg_new_win.title("Checkout")
-        mrg_new_win.attributes("-topmost", True)
-
-        frame_branch_list = Frame(mrg_new_win, border=2, relief="groove", bg="white")
-        frame_branch_list.pack(side="top", fill="both", expand=True)
-        global treeview
-        treeview = ttk.Treeview(frame_branch_list, selectmode="extended", show="tree headings", style="mystyle.Treeview")
-        treeview.pack(side="left", expand=1, fill="both")
-        treeview.heading("#0", text="branch list")
-        style = ttk.Style()
-        style.configure("Treeview", rowheight=30, font=("Arial", 12))
-        style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
-        style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
-        scrollbar = ttk.Scrollbar(frame_branch_list, orient="vertical", command=treeview.yview)
-        treeview.configure(yscroll=scrollbar.set)
-        scrollbar.pack(side="right",fill="y")
-        
-        cnfrm_button = Button(mrg_new_win, text="merge", relief="flat", bg="white", command=checkout_bttn_clicked)
-        cnfrm_button.pack(side="bottom")
-
-        treeview.delete(*treeview.get_children())
-        success, curr_branch = get_current_branch()
-        branch_list = get_branches()
-        for i in range(len(branch_list[1])):
-            if branch_list[1][i] != curr_branch:
-                treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
-
-        treeview.bind('<ButtonRelease-1>', select_branch)
-
-    elif success == False:
-        show_message(message)
-
-
-merge_bttn = tk.Button(frame_branch_command, text="merge", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=merge_new_window)
-merge_bttn.pack(side="left", expand=1)
-
-########## commit history 영역 ##########
+############# commit history 영역 ############
 def _on_mousewheel(event):
     canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
@@ -1116,8 +1071,6 @@ def history_clicked(sum):
     label=tk.Label(mv_new_win, text=result_lst, bg="white", wraplength = 700, font=("Arial", 12))
     label.pack(expand=1)
    
-    
-
 def tab_changed(event):
     selected_tab = event.widget.select()
     tab_text = event.widget.tab(selected_tab, "text")
@@ -1131,37 +1084,44 @@ def tab_changed(event):
             pos_y = 15
             for i in range(len(history_list)):
                 pos_x = 15
-                for j in history_list[i][0]:
+                if '[' in history_list[i][0]: # 그래프만 존재하는 경우 pass
+                    graph = history_list[i][0].split('[', maxsplit = 1)[0]
+                else:
+                    graph = history_list[i][0]         
+                for j in graph:
                     if(j == '*'):
                         if(pos_x==15):
                             canvas.create_oval(pos_x-5, pos_y-5, pos_x+5, pos_y+5, fill="blue")
                         else:
                             canvas.create_oval(pos_x-5, pos_y-5, pos_x+5, pos_y+5, fill="black")
-                        pos_x += 15
+                        pos_x += 10
                     elif(j == '|'):
                         if(pos_x==15):
                             canvas.create_line(pos_x, pos_y-10, pos_x, pos_y+10, fill="blue")
                         else:
                             canvas.create_line(pos_x, pos_y-10, pos_x, pos_y+10)
-                        pos_x += 15
+                        pos_x += 10
                     elif(j == '/'):
                         if(pos_x==15):
-                            canvas.create_line(pos_x, pos_y-10, pos_x-5, pos_y+10, fill="blue")
+                            canvas.create_line(pos_x+5, pos_y-10, pos_x-5, pos_y+10, fill="blue")
                         else:
-                            canvas.create_line(pos_x, pos_y-10, pos_x-5, pos_y+10)
-                        pos_x += 15
+                            canvas.create_line(pos_x+5, pos_y-10, pos_x-5, pos_y+10)
+                        pos_x += 10
                     elif(j == '\\'):
                         if(pos_x==15):
-                            canvas.create_line(pos_x-5, pos_y-10, pos_x, pos_y+10, fill="blue")
+                            canvas.create_line(pos_x-5, pos_y-10, pos_x+5, pos_y+10, fill="blue")
                         else:
-                            canvas.create_line(pos_x-5, pos_y-10, pos_x, pos_y+10)
-                        pos_x += 15
+                            canvas.create_line(pos_x-5, pos_y-10, pos_x+5, pos_y+10)
+                        pos_x += 10
                     elif(j == '_'):
                         if(pos_x==15):
                             canvas.create_line(pos_x-4, pos_y-10, pos_x+4, pos_y-10, fill="blue")
                         else:
                             canvas.create_line(pos_x-4, pos_y-10, pos_x+4, pos_y-10)
-                        pos_x += 15
+                        pos_x += 10
+                    elif(j == ' '):
+                        canvas.create_line(pos_x-4, pos_y-10, pos_x+4, pos_y-10, fill="white")
+                        pos_x += 10
                 if '[' in history_list[i][0]: # 그래프만 존재하는 경우 pass
                     commit_objects = history_list[i][0].split('[', maxsplit = 1)[1]
                     text = canvas.create_text(pos_x, pos_y, text= commit_objects, fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
@@ -1173,7 +1133,85 @@ def tab_changed(event):
 
 tab.bind("<<NotebookTabChanged>>", tab_changed)
 
-#########################
+############ clone 영역 ############
+
+def clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry):
+    rad_selected = rad_var.get()
+    addr=addr_entry.get() # 입력받은 commit message commit_message에 저장
+    id=id_entry.get()
+    token=token_entry.get()
+    print(rad_selected)
+    
+    success, message = git_clone(rad_selected, addr, id, token)
+    if success:
+        update_files(entry.get())
+    show_message(message)
+    clone_new_window.destroy()
+
+def clone_new_window():
+   
+    cln_new_win = tk.Toplevel()
+    cln_new_win.title("Clone")
+    rad_var = tk.IntVar(value=0)
+    clone_frame = tk.Frame(cln_new_win)
+    clone_frame.pack(expand=1, fill="both")
+
+    def print_entry():
+        if rad_var.get() == 0:
+            for widget in clone_frame.winfo_children():
+                widget.destroy()
+            button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=0, command=print_entry)
+            button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=1, command=print_entry)
+            button_public.pack(side="top", expand=1)
+            button_private.pack(side="top", expand=1)
+            adddr_label=tk.Label(clone_frame, text="GitHub repo address")
+            adddr_label.pack(side="top", fill="x", expand=1)
+            addr_entry = Entry(clone_frame, width=50)
+            addr_entry.pack(side="top", fill="x", expand=1)
+            id_entry = Entry(clone_frame, width=50)
+            token_entry = Entry(clone_frame, width=50)
+            cnfrm_button = Button(clone_frame, text="clone", bg="white", command=lambda: clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry))
+            cnfrm_button.pack(side="top", expand=1)
+
+        elif rad_var.get() == 1:
+            for widget in clone_frame.winfo_children():
+                widget.destroy()
+            button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=0, command=print_entry)
+            button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=1, command=print_entry)
+            button_public.pack(side="top", expand=1)
+            button_private.pack(side="top", expand=1)
+            adddr_label=tk.Label(clone_frame, text="GitHub repo address")
+            adddr_label.pack(side="top", fill="x", expand=1)
+            addr_entry = Entry(clone_frame, width=50)
+            addr_entry.pack(side="top", fill="x", expand=1)
+            id_label=tk.Label(clone_frame, text="ID")
+            id_label.pack(side="top", fill="x", expand=1)
+            id_entry = Entry(clone_frame, width=50)
+            id_entry.pack(side="top", fill="x", expand=1)
+            token_label=tk.Label(clone_frame, text="Access token")
+            token_label.pack(side="top", fill="x", expand=1)
+            token_entry = Entry(clone_frame, width=50)
+            token_entry.pack(side="top", fill="x", expand=1)
+            cnfrm_button = Button(clone_frame, text="clone", bg="white", command=lambda: clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry))
+            cnfrm_button.pack(side="top", expand=1)
+        
+    button_public = tk.Radiobutton(clone_frame, variable=rad_var, text="Public", value=0, command=print_entry)
+    button_private = tk.Radiobutton(clone_frame, variable=rad_var, text="Private", value=1, command=print_entry)
+    button_public.pack(side="top", expand=1)
+    button_private.pack(side="top", expand=1)
+
+    adddr_label=tk.Label(clone_frame, text="GitHub repo address")
+    adddr_label.pack(side="top", fill="x", expand=1)
+    addr_entry = Entry(clone_frame, width=50)
+    addr_entry.pack(side="top", fill="x", expand=1)
+    id_entry = Entry(clone_frame, width=50)
+    token_entry = Entry(clone_frame, width=50)
+    cnfrm_button = Button(clone_frame, text="clone", bg="white", command=lambda: clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry))
+    cnfrm_button.pack(side="top", expand=1)
+
+clone_bttn = tk.Button(frame_vc_command, text="clone", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=clone_new_window)
+clone_bttn.pack(side="right", expand=1)   
+
 
 # Right click menu
 right_menu = tk.Menu(tree_frame, tearoff=0, font=("Arial", 12))
