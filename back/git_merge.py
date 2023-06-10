@@ -3,8 +3,7 @@ import subprocess
 def git_merge(branch):
     try:
         result = subprocess.run(['git', 'merge', f'{branch}'], capture_output=True, check=True, text=True)
-        print('success:', result.stdout.strip())
-        return True, result.stderr.strip()
+        return True, 'Success'
     except subprocess.CalledProcessError as e:
         if e.stdout:
             error_message = e.stdout.strip()
