@@ -1007,10 +1007,8 @@ def rename_new_window():
 def checkout_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_b_checkout(selected_brnch)
-    if success:
-        update_files(entry.get())
-        print_curr_branch()
     co_new_win.destroy()
+    print_curr_branch()
     show_message(message)
     
 def checkout_new_window():
@@ -1057,8 +1055,6 @@ checkout_bttn.pack(side="left", expand=1)
 def merge_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_merge(selected_brnch)
-    if success:
-        update_files(entry.get())
     co_new_win.destroy() # 새 창 닫기
     show_message(message)
 
