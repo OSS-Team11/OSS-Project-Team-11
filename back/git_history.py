@@ -26,7 +26,7 @@ def git_history_list():
                         print(buffer)
                 result_lst.append(history_detail)  
 
-        #print(result_lst)
+        print(result_lst)
         return 0, result_lst
 
     except subprocess.CalledProcessError as e:
@@ -64,5 +64,5 @@ def git_history_detail(checksum):
         return e.returncode, [error]
 
 
-git_history_list()    
+#git_history_list()    
 #git_history_detail('62d881117692eaa1c9f10003eb3aec7497e0f8c5')

@@ -946,22 +946,22 @@ def create_new_window():
 def delete_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_b_delete(selected_brnch)
+    show_message(message)
     if success:
         print_curr_branch()
         draw_tree()
-    show_message(message)
+    
        
 # rename
 def rename_bttn_clicked(input):
     new_name=input.get()
     selcted_brnch = select_branch("<ButtonRelease-1>")
-    print(selcted_brnch)
     success, message = git_b_rename(selcted_brnch, new_name)
+    show_message(message)
     if success:
         print_curr_branch()
         draw_tree() # update tree
     rn_new_win.destroy()
-    show_message(message)
 
 def rename_new_window():
     global rn_new_win
@@ -981,9 +981,9 @@ def rename_new_window():
 def checkout_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_b_checkout(selected_brnch)
+    show_message(message)
     if success:
         update_files(entry.get()) 
-    show_message(message)
     
 
 success, curr_branch = get_current_branch()
