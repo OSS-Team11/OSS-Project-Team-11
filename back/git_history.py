@@ -23,10 +23,10 @@ def git_history_list():
                     elif i == 2:
                         buffer += history[2]
                         history_detail.append(history[i])  
-                        print(buffer)
+                        # print(buffer)
                 result_lst.append(history_detail)  
 
-        print(result_lst)
+        # print(result_lst)
         return 0, result_lst
 
     except subprocess.CalledProcessError as e:
