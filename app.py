@@ -959,6 +959,7 @@ def rename_bttn_clicked(input):
     print(selcted_brnch)
     success, message = git_b_rename(selcted_brnch, new_name)
     if success:
+        print_curr_branch()
         draw_tree() # update tree
     rn_new_win.destroy()
     show_message(message)
