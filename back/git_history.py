@@ -11,7 +11,11 @@ def git_history_list():
             for line in output.split('\n'):
                 history_detail = []
                 history = line.replace('{', '^').replace('}', '^').split('^')
+                cnt = 0
                 for word in history:
+                    cnt += 1
+                    if cnt == 2 and word == '':
+                        history_detail.append(word)
                     if word != '':
                         history_detail.append(word)
                 print(history_detail)
