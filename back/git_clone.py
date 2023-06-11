@@ -46,7 +46,7 @@ def git_clone(is_private, clone_url, id, token):
     if is_private == False:
         try:
             result = subprocess.run(['git', 'clone', f'{clone_url}'], capture_output=True, text=True, check=True)
-            return True, result.stdout.strip()
+            return True, 'Success'
         except subprocess.CalledProcessError as e:
             if e.stderr:
                 error_message = e.stderr.strip()
@@ -65,7 +65,7 @@ def git_clone(is_private, clone_url, id, token):
             clone_url = clone_url[8:]
             print(clone_url)
             result = subprocess.run(['git', 'clone', f'https://{id}:{token}@{clone_url}'], capture_output=True, text=True, check=True)
-            return True, result.stdout.strip()
+            return True, 'Success'
         except subprocess.CalledProcessError as e:
             if e.stderr:
                 error_message = e.stderr.strip()

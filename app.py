@@ -1143,9 +1143,9 @@ def clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry):
     token=token_entry.get()
     
     success, message = git_clone(rad_selected, addr, id, token)
+    show_message(message)
     if success:
         update_files(entry.get())
-    show_message(message)
     clone_new_window.destroy()
 
 def clone_new_window():
