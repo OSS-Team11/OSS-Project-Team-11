@@ -5,13 +5,11 @@ def git_history_list():
         result_lst = []
         command = ['git', 'log', '--graph', '--pretty=format:{%d{%s      %an{%h']
         result = subprocess.run(command, capture_output=True, text=True, check=True)
-
         if result.stdout is not None:
             output = result.stdout.strip()
             for line in output.split('\n'):
                 history_detail = []
                 history = line.replace('{', '^').replace('}', '^').split('^')
-                # print(history)
                 buffer = ''
                 for i in range(len(history)):
                     if i == 0 or i == 3:
@@ -22,11 +20,11 @@ def git_history_list():
                             buffer += '      '
                     elif i == 2:
                         buffer += history[2]
-                        history_detail.append(history[i])  
+                        history_detail.append(buffer)  
                         # print(buffer)
                 result_lst.append(history_detail)  
 
-        # print(result_lst)
+        #print(result_lst)
         return 0, result_lst
 
     except subprocess.CalledProcessError as e:
