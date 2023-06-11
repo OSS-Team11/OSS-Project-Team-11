@@ -538,7 +538,6 @@ def update_files(orig_dirname: str):
 
 
         print_curr_branch()
-        draw_tree()
                 
             
     #################################################################
@@ -905,15 +904,12 @@ def print_curr_branch(): # 현재 브랜치 출력 함수
         label_curr_branch.pack()
 
 def draw_tree(): # branch list 출력
-    success, curr_branch = get_current_branch()
-    print(success)
-    if success == True:
-        treeview.delete(*treeview.get_children())
-        branch_list = get_branches()
-        for i in range(len(branch_list[1])):
-            treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
-    elif success == False:
-        treeview.delete(*treeview.get_children())
+   
+    treeview.delete(*treeview.get_children())
+    branch_list = get_branches()
+    for i in range(len(branch_list[1])):
+        treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
+   
  
 # create
 def create_bttn_clicked(input):
@@ -1129,6 +1125,10 @@ def tab_changed(event):
                 pos_y += 30
         canvas.update_idletasks()
         canvas.configure(scrollregion=canvas.bbox("all"))
+
+    elif tab_text == "Branch management":
+        draw_tree()
+
 
        
 tab.bind("<<NotebookTabChanged>>", tab_changed)
