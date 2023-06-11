@@ -1006,10 +1006,10 @@ treeview.bind('<ButtonRelease-1>', select_branch)
 def merge_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_merge(selected_brnch)
+    show_message(message)
     if success:
         update_files(entry.get())
     mrg_new_win.destroy() # 새 창 닫기
-    show_message(message)
 
 def merge_new_window():
     success, message = get_current_branch()
