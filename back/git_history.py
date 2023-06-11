@@ -3,15 +3,20 @@ import subprocess
 def git_history_list():
     try:
         result_lst = []
-        command = ['git', 'log', '--graph', '--pretty=format:\'%C(auto)%d%Creset[%s][%an][%h]\'']
+        command = ['git', 'log', '--graph', '--pretty=format:{%d}{%s}{%an}{%h}']
         result = subprocess.run(command, capture_output=True, text=True, check=True)
-        print(result)
-        # if result.stdout is not None:
-        #     output = result.stdout.strip()
-        #     for line in output.split('\n'):
-        #         result = list(line.split('!!!'))
-        #         result_lst.append(result)
-        
+
+        if result.stdout is not None:
+            output = result.stdout.strip()
+            for line in output.split('\n'):
+                history_detail = []
+                history = line.replace('{', '^').replace('}', '^').split('^')
+                for word in history:
+                    if word != '':
+                        history_detail.append(word)
+                print(history_detail)
+                result_lst.append(history_detail)
+        # print(result_lst)
         return 0, result_lst
 
     except subprocess.CalledProcessError as e:
