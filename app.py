@@ -948,6 +948,7 @@ def delete_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_b_delete(selected_brnch)
     if success:
+        print_curr_branch()
         draw_tree()
     show_message(message)
        
