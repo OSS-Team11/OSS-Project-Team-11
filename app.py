@@ -538,6 +538,7 @@ def update_files(orig_dirname: str):
 
 
         print_curr_branch()
+        draw_tree()
                 
             
     #################################################################
@@ -904,16 +905,18 @@ def print_curr_branch(): # 현재 브랜치 출력 함수
         label_curr_branch.pack()
 
 def draw_tree(): # branch list 출력
-   
-    treeview.delete(*treeview.get_children())
-    branch_list = get_branches()
-    for i in range(len(branch_list[1])):
-        treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
-   
+    success, curr_branch = get_current_branch()
+    if success == True:
+        treeview.delete(*treeview.get_children())
+        branch_list = get_branches()
+        for i in range(len(branch_list[1])):
+            treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
+    elif success == False:
+        treeview.delete(*treeview.get_children())
  
 # create
 def create_bttn_clicked(input):
-    branch_name=input.get() # 입력받은 commit message commit_message에 저장
+    branch_name=input.get() 
     success, message = git_b_create(branch_name)
     crt_new_win.destroy()
     show_message(message)
@@ -1010,7 +1013,7 @@ def merge_bttn_clicked():
 
 def merge_new_window():
     success, message = get_current_branch()
-    if success == True: # .git이 없는 디렉토리에서 버튼 클릭
+    if success == True: # .git이 있는 디렉토리에서 버튼 클릭
         global mrg_new_win
         mrg_new_win = Toplevel()
         mrg_new_win.title("Merge")
@@ -1042,7 +1045,7 @@ def merge_new_window():
 
         m_treeview.bind('<ButtonRelease-1>', select_branch)
 
-    elif success == False:
+    elif success == False: # .git이 없는 디렉토리에서 버튼 클릭
         show_message(message)
 
 merge_bttn = tk.Button(frame_branch_command, text="merge", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=merge_new_window)
@@ -1125,10 +1128,6 @@ def tab_changed(event):
                 pos_y += 30
         canvas.update_idletasks()
         canvas.configure(scrollregion=canvas.bbox("all"))
-
-    elif tab_text == "Branch management":
-        draw_tree()
-
 
        
 tab.bind("<<NotebookTabChanged>>", tab_changed)
