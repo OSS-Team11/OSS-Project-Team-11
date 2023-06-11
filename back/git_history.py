@@ -3,21 +3,27 @@ import subprocess
 def git_history_list():
     try:
         result_lst = []
-        command = ['git', 'log', '--graph', '--pretty=format:%C(auto)[[%d][%s][%an]!!!%h']
+        command = ['git', 'log', '--graph', '--pretty=format:{%d}{%s}{%an}{%h}']
         result = subprocess.run(command, capture_output=True, text=True, check=True)
 
         if result.stdout is not None:
             output = result.stdout.strip()
             for line in output.split('\n'):
-                result = list(line.split('!!!'))
-                result_lst.append(result)
-        
-        print(result_lst)
+                history_detail = []
+                history = line.replace('{', '^').replace('}', '^').split('^')
+                cnt = 0
+                for word in history:
+                    cnt += 1
+                    if cnt == 2 and word == '':
+                        history_detail.append(word)
+                    if word != '':
+                        history_detail.append(word)
+                result_lst.append(history_detail)
+        # print(result_lst)
         return 0, result_lst
 
     except subprocess.CalledProcessError as e:
         error = e.stderr.strip()
-        print(e.returncode, [error])
         return e.returncode, [error]
 
 
@@ -30,16 +36,26 @@ def git_history_detail(checksum):
         if result.stdout is not None:
             output = result.stdout.strip()
             for line in output.split('\n'):
-                result_lst.append(line)
-
+                if "commit" in line:
+                    result_lst.append(line[7:])
+                elif "Author" in line:
+                    result_lst.append(line[8:])
+                elif "Date" in line:
+                    result_lst.append(line[8:])
+                elif line == '' or ("file changed" in line and ("insertions" in line or "deletions" in line)):
+                    pass
+                else:
+                    if "+" in line or "-" in line:
+                        result_lst.append(line[1:])
+                    else:
+                        result_lst.append(line[4:])
         print(result_lst)
         return 0, result_lst
 
     except subprocess.CalledProcessError as e:
         error = e.stderr.strip()
-        print(e.returncode, [error])
         return e.returncode, [error]
 
 
 #git_history_list()    
-# git_history_detail('e9a04c57')
+#git_history_detail('62d881117692eaa1c9f10003eb3aec7497e0f8c5')
