@@ -1008,47 +1008,9 @@ def merge_bttn_clicked():
     success, message = git_merge(selected_brnch)
     if success:
         update_files(entry.get())
-    mrg_new_win.destroy() # 새 창 닫기
     show_message(message)
 
-def merge_new_window():
-    success, message = get_current_branch()
-    if success == True: # .git이 있는 디렉토리에서 버튼 클릭
-        global mrg_new_win
-        mrg_new_win = Toplevel()
-        mrg_new_win.title("Merge")
-        mrg_new_win.attributes("-topmost", True)
-
-        frame_branch_list = Frame(mrg_new_win, border=2, relief="groove", bg="white")
-        frame_branch_list.pack(side="top", fill="both", expand=True)
-        global m_treeview
-        m_treeview = ttk.Treeview(frame_branch_list, selectmode="extended", show="tree headings", style="mystyle.Treeview")
-        m_treeview.pack(side="left", expand=1, fill="both")
-        m_treeview.heading("#0", text="branch list")
-        style = ttk.Style()
-        style.configure("Treeview", rowheight=30, font=("Arial", 12))
-        style.configure("Treeview.Heading", font=("Arial", 12), foreground="grey")
-        style.layout("mystyle.Treeview", [("mystyle.Treeview.treearea", {"sticky":"nswe"})])
-        scrollbar = ttk.Scrollbar(frame_branch_list, orient="vertical", command=m_treeview.yview)
-        m_treeview.configure(yscroll=scrollbar.set)
-        scrollbar.pack(side="right",fill="y")
-        
-        cnfrm_button = Button(mrg_new_win, text="merge", relief="flat", bg="white", command=merge_bttn_clicked)
-        cnfrm_button.pack(side="bottom")
-
-        m_treeview.delete(*m_treeview.get_children())
-        success, curr_branch = get_current_branch()
-        branch_list = get_branches()
-        for i in range(len(branch_list[1])):
-            if branch_list[1][i] != curr_branch: # 현재 branch는 제외
-                m_treeview.insert("", tk.END, text=branch_list[1][i], values= "", open=False, image=branch_icon)
-
-        m_treeview.bind('<ButtonRelease-1>', select_branch)
-
-    elif success == False: # .git이 없는 디렉토리에서 버튼 클릭
-        show_message(message)
-
-merge_bttn = tk.Button(frame_branch_command, text="merge", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=merge_new_window)
+merge_bttn = tk.Button(frame_branch_command, text="merge", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=merge_bttn_clicked)
 merge_bttn.pack(side="left", expand=1)
 
 #################################################
