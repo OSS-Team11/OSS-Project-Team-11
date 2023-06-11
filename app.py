@@ -863,7 +863,7 @@ if hidden == True:
     hidden_menu.set(1)
 
 
-############# branch 영역 #############
+################## branch 영역 #################
 frame_branch_up = tk.Frame(frame_branch, border=1, bg="white")
 frame_branch_up.pack(fill="x", side="top")
 frame_branch_command = tk.Frame(frame_branch_up, border=2, relief="groove", bg="white")
@@ -983,8 +983,7 @@ def checkout_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_b_checkout(selected_brnch)
     if success:
-        update_files(entry.get())
-        print_curr_branch()
+        update_files(entry.get()) 
     show_message(message)
     
 
@@ -1004,7 +1003,7 @@ treeview.bind('<ButtonRelease-1>', select_branch)
 
 #################################
 
-########## merge 영역 ##############
+################## merge 영역 ####################
 def merge_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_merge(selected_brnch)
@@ -1053,9 +1052,9 @@ def merge_new_window():
 merge_bttn = tk.Button(frame_branch_command, text="merge", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=merge_new_window)
 merge_bttn.pack(side="left", expand=1)
 
-#######################################
+#################################################
 
-
+################# history 영역 ###################
 def _on_mousewheel(event):
     canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
@@ -1073,8 +1072,9 @@ def history_clicked(sum):
     global mv_new_win
     mv_new_win = Toplevel()
     mv_new_win.title("Commit History Detail")
-    label=tk.Label(mv_new_win, text=result_lst, bg="white", wraplength = 700, font=("Arial", 12))
-    label.pack(expand=1)
+    for i in range(len(result_lst)):
+        label=tk.Label(mv_new_win, text=result_lst[i], wraplength = 700, font=("Arial", 12))
+        label.pack(side="top", expand=1)
    
 def tab_changed(event):
     selected_tab = event.widget.select()
@@ -1082,17 +1082,13 @@ def tab_changed(event):
     if tab_text == "Commit History":
         canvas.delete("all") # canvas 비우기
         return_code, history_list = git_history_list()
-        
         if(return_code == 128):
             print("Error")           
         else:
             pos_y = 15
             for i in range(len(history_list)):
-                pos_x = 15
-                if '[' in history_list[i][0]: # 그래프만 존재하는 경우 pass
-                    graph = history_list[i][0].split('[', maxsplit = 1)[0]
-                else:
-                    graph = history_list[i][0]         
+                pos_x = 15              
+                graph = history_list[i][0]                   
                 for j in graph:
                     if(j == '*'):
                         if(pos_x==15):
@@ -1127,27 +1123,25 @@ def tab_changed(event):
                     elif(j == ' '):
                         canvas.create_line(pos_x-4, pos_y-10, pos_x+4, pos_y-10, fill="white")
                         pos_x += 10
-                if '[' in history_list[i][0]: # 그래프만 존재하는 경우 pass
-                    commit_objects = history_list[i][0].split('[', maxsplit = 1)[1]
-                    text = canvas.create_text(pos_x, pos_y, text= commit_objects, fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
-                    canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= history_list[i][1]: history_clicked(sum))
+                if(len(history_list[i]) != 1): # 그래프만 있는 경우 제외
+                    text = canvas.create_text(pos_x, pos_y, text= history_list[i][1], fill="black",anchor="w", font=("Arial", 12), tags = "history" + str(i))
+                    canvas.tag_bind("history" + str(i), "<Button-1>", lambda event, sum= history_list[i][2]: history_clicked(sum))
                 pos_y += 30
         canvas.update_idletasks()
         canvas.configure(scrollregion=canvas.bbox("all"))
 
        
 tab.bind("<<NotebookTabChanged>>", tab_changed)
-######################################
+################################################
 
 
-############ clone 영역 ############
+################### clone 영역 ##################
 
 def clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry):
     rad_selected = rad_var.get()
     addr=addr_entry.get() # 입력받은 commit message commit_message에 저장
     id=id_entry.get()
     token=token_entry.get()
-    print(rad_selected)
     
     success, message = git_clone(rad_selected, addr, id, token)
     if success:
@@ -1219,6 +1213,7 @@ def clone_new_window():
 clone_bttn = tk.Button(frame_vc_command, text="clone", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 8, command=clone_new_window)
 clone_bttn.pack(side="right", expand=1)   
 
+####################################
 
 # Right click menu
 right_menu = tk.Menu(tree_frame, tearoff=0, font=("Arial", 12))
