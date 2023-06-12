@@ -1006,10 +1006,9 @@ treeview.bind('<ButtonRelease-1>', select_branch)
 def merge_bttn_clicked():
     selected_brnch = select_branch("<ButtonRelease-1>")
     success, message = git_merge(selected_brnch)
-    show_message(message)
     if success:
         update_files(entry.get())
-    mrg_new_win.destroy() # 새 창 닫기
+    show_message(message)
 
 merge_bttn = tk.Button(frame_branch_command, text="merge", font=("Arial", 12), relief="flat", bg="white", fg="black", width = 15, command=merge_bttn_clicked)
 merge_bttn.pack(side="left", expand=1)
