@@ -960,8 +960,8 @@ def rename_bttn_clicked(input):
     show_message(message)
     if success:
         print_curr_branch()
-        draw_tree() # update tree
-    rn_new_win.destroy()
+        draw_tree() # update branch list
+    rn_new_win.destroy() #close new win
 
 def rename_new_window():
     global rn_new_win
@@ -1108,10 +1108,10 @@ def clone_bttn_clicked(rad_var, addr_entry, id_entry, token_entry):
     show_message(message)
     if success:
         update_files(entry.get())
-    clone_new_window.destroy()
+    cln_new_win.destroy() # close new window
 
 def clone_new_window():
-   
+    global cln_new_win
     cln_new_win = tk.Toplevel()
     cln_new_win.title("Clone")
     rad_var = tk.IntVar(value=0)
