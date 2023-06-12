@@ -1,4 +1,4 @@
-# 📌 Git Version Control for MacOS
+# 📌 Git Version Control on MacOS
 
 - This program is developed based in **MacOS**.
     - It also works in **Windows**, but the UI may break or cause unexpected errors.
@@ -34,12 +34,44 @@
             - `git rm —cached`
             - `git restore`
             - `git restore —staged`
+    - **Feature #4: Branch management**
+        
+        > The service supports the branch management of a git repository
+        > 
+        - This program supports the following functionalities relate with branches.
+            - `git branch {branch_name}`
+            - `git branch -D {branch_name}`
+            - `git branch -m {old_name} {new_name}`
+            - `git checkout {branch_name}`
+            - `git merge {branch_name}`
+    - **Feature #5: Branch merge**
+        
+        > The service supports to merge two branches
+        > 
+        - It provides a menu to merge a target branch to the current branch.
+            - It provides branch list to user and asks to select one of the branches
+            - It then attempts to merge the selected branches
+                - If success, It provides the user with a success message
+                - Otherwise, It provides the user with an error message
+                    - If the merge is failed due to conflict, it provides the user with unmerged paths and simply aborts the merge process
+    - **Feature #6: Commit history**
+        
+        > The service shows the commit history of a project in the form of a simplified graph
+        > 
+        - Each commit object in the graph includes its author name and message.
+        - If a user chooses a commit object, then it provides the detailed information about the commit
+    - **Featire #7: Git clone from Github**
+        
+        > The service provides a functionality to clone a git repository from Github to local
+        > 
+        - When cloning public repositories, just ask a user a Github repository address.
+        - When cloning private repositories, ask a user a Github repository address, ID, and access token.
+            - The ID and token infomation are stored in secrets.json for the future use.
 
 # ⚙️ How to execute this program
-
-- **`Python 3.9 or later` must be installed**
+- `**Python 3.9 or later` must be installed**
 - Depending on the version install: `Tkinter`
-- **Please run the program in `zsh`, not bash**
+- **Please run the program in zsh, not bash**
 
 <aside>
 📌 Follow the instructions belows if you want to execute this program
@@ -49,7 +81,9 @@
 3. `python3 app.py`
 </aside>
 
+
 # 📍Features
+
 ## 🚥 Git status
 
 - *untracked*
@@ -96,7 +130,7 @@
     
     - directory
         
-        ![commited_folder.png](readme_png/commited_folder.png)
+        ![commited_folder.png](/readme_png/commited_folder.png)
         
     
     - file
@@ -108,4 +142,3 @@
 **→ How does one file/directory represent if it has multiple statuses (e.g. staged & untracked, staged & modified, etc.)?**
 
 **It is expressed by setting priorities in the order of untracked > modified > staged > committed.**
-
