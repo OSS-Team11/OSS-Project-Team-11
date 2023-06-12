@@ -10,7 +10,8 @@ def git_merge(branch):
             if e.returncode == 1 and 'Automatic merge failed' in error_message:
                 unmerged_paths = get_unmerged_paths()
                 print(f"Merge conflict occurred. Unmerged paths: {', '.join(unmerged_paths)}")
-                return False, f"Merge conflict occurred. Unmerged paths: {', '.join(unmerged_paths)}"
+                subprocess.run(['git', 'merge', '--abort'], capture_output=True, text=True)
+                return False, f"Merge conflict occurred. Unmerged paths: {', '.join(unmerged_paths)}.\n aborts the merge process."
             else:
                 print(error_message)
                 return False, error_message
